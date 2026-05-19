@@ -1,0 +1,43 @@
+[project]
+name = "perfil-egreso-backend"
+version = "0.1.0"
+description = "Backend para validacion trazable del perfil de egreso mediante analisis documental."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic-settings>=2.4.0",
+  "SQLAlchemy>=2.0.0",
+  "python-multipart>=0.0.9",
+  "pypdf>=4.0.0",
+  "python-docx>=1.1.0",
+  "psycopg[binary]>=3.2.0",
+]
+
+[project.optional-dependencies]
+ai = [
+  "sentence-transformers>=3.0.0",
+  "openai>=2.0.0",
+  "google-genai>=1.0.0",
+]
+dev = [
+  "pytest>=8.0.0",
+  "httpx>=0.27.0",
+  "ruff>=0.6.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["data*", "storage*", "tests*"]

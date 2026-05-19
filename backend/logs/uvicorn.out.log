@@ -1,0 +1,1624 @@
+INFO:     127.0.0.1:58650 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58677 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58759 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58761 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58813 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58813 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58833 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "POST /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: inicio de analisis (2 tesis, device=cuda).
+INFO:     127.0.0.1:58839 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Verificando tesis 1/2: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 (0%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 1/2 - Extrayendo texto de Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43. (3%).
+INFO:     127.0.0.1:58839 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 1/2 - Segmentando tesis Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43. (10%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 1/2 - Generando embeddings de Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 en cuda. (19%).
+INFO:     127.0.0.1:58840 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58840 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 1/2 - Tesis lista: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43. (30%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Verificando tesis 2/2: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 (30%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 2/2 - Extrayendo texto de Memoria Maria Catalina Vergara1029362025 08 03 20 04 35. (33%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 2/2 - Segmentando tesis Memoria Maria Catalina Vergara1029362025 08 03 20 04 35. (40%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 2/2 - Generando embeddings de Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 en cuda. (49%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Tesis 2/2 - Tesis lista: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35. (60%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Cargando embeddings del periodo para evaluar la matriz. (65%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 1/19: U1 (70%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 2/19: U2 (71%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 4/19: U4 (73%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:58838 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:59174 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59174 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59174 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 11/19: LCC2 (83%).
+INFO:     127.0.0.1:59174 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:59174 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:59174 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59174 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 14/19: TIC3 (87%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 15/19: TIC4 (88%).
+INFO:     127.0.0.1:59174 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 16/19: TIC5 (89%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 17/19: TCC1 (91%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Evaluando competencia 19/19: TCC3 (93%).
+[IAAPLICADA] Periodo 60a9fd2b-f8a4-479d-aabf-905b6f988492: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/evidence?period_id=60a9fd2b-f8a4-479d-aabf-905b6f988492&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59259 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59262 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=333c7b2a-10d5-4344-96ba-e0b0aea25b1a&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=333c7b2a-10d5-4344-96ba-e0b0aea25b1a&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59270 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=03732fe6-3c3b-4f0c-8d78-3bebe1f018fa&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59270 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=03732fe6-3c3b-4f0c-8d78-3bebe1f018fa&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59178 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59304 - "OPTIONS /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=03732fe6-3c3b-4f0c-8d78-3bebe1f018fa&competency_id=4bd73ebf-08dd-4227-99ca-c468b22ef6f2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59304 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=03732fe6-3c3b-4f0c-8d78-3bebe1f018fa&competency_id=4bd73ebf-08dd-4227-99ca-c468b22ef6f2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59262 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59259 - "GET /api/v1/periods/60a9fd2b-f8a4-479d-aabf-905b6f988492/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59929 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60044 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=333c7b2a-10d5-4344-96ba-e0b0aea25b1a&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60046 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60046 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60040 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60046 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=333c7b2a-10d5-4344-96ba-e0b0aea25b1a&competency_id=d96855a0-f4ee-45b9-b6ce-ccf8f2f4c6ea HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60143 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=7550aaa9-f33e-4b64-b0fe-bb9f8b447e3d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60149 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=16409db2-08de-4200-a8c5-ac46375a2785 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60143 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=7550aaa9-f33e-4b64-b0fe-bb9f8b447e3d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60143 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=3f104c79-64b3-49ba-92a8-f3010b9c0349&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60152 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=ae9e94ed-1f92-4a1d-a5bf-10e63b4885e3&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60159 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60143 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=3f104c79-64b3-49ba-92a8-f3010b9c0349&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60044 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60152 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=ae9e94ed-1f92-4a1d-a5bf-10e63b4885e3&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60159 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60151 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=16409db2-08de-4200-a8c5-ac46375a2785 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60149 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=d1680dc5-3ac6-48b6-a710-ca183300e043&competency_id=0c074e58-792f-4f1e-85d4-6cd463abf6c5 HTTP/1.1" 200 OK
+     INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "POST /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61687 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61686 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61687 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61687 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61687 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: inicio de analisis (6 tesis, device=cuda).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 1/6: tesis gutierrez hirmas883382025 07 30 23 11 48 (0%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 1/6 ya tenia embeddings vigentes: tesis gutierrez hirmas883382025 07 30 23 11 48 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 2/6: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 2/6 ya tenia embeddings vigentes: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 3/6: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 3/6 ya tenia embeddings vigentes: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 4/6: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 4/6 ya tenia embeddings vigentes: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 5/6: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 5/6 ya tenia embeddings vigentes: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 6/6: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 6/6 ya tenia embeddings vigentes: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (60%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Cargando embeddings del periodo para evaluar la matriz. (65%).
+INFO:     127.0.0.1:61687 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61686 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 1/19: U1 (70%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 2/19: U2 (71%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:61686 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 4/19: U4 (73%).
+INFO:     127.0.0.1:61686 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:61686 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61714 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61714 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61716 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61716 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61716 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61716 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:61718 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61718 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61723 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61723 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61725 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61725 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61725 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61725 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61727 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61727 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61730 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61730 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61731 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:61731 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61731 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61731 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61734 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61734 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61735 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61735 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:61738 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61739 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:61739 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61742 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61742 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61743 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61743 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61753 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:61753 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61754 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61754 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61757 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61757 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61758 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 11/19: LCC2 (83%).
+INFO:     127.0.0.1:61758 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61769 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61769 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61770 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61770 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61776 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:61776 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61776 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61776 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:61777 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 14/19: TIC3 (87%).
+INFO:     127.0.0.1:61777 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61780 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61780 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61780 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61780 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 15/19: TIC4 (88%).
+INFO:     127.0.0.1:61781 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:61781 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61781 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61781 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61788 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 17/19: TCC1 (91%).
+INFO:     127.0.0.1:61788 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61790 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:61790 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61793 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61793 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61793 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 19/19: TCC3 (93%).
+INFO:     127.0.0.1:61793 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61794 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "POST /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: inicio de analisis (6 tesis, device=cuda).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 1/6: tesis gutierrez hirmas883382025 07 30 23 11 48 (0%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 1/6 ya tenia embeddings vigentes: tesis gutierrez hirmas883382025 07 30 23 11 48 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 2/6: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 2/6 ya tenia embeddings vigentes: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 3/6: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 3/6 ya tenia embeddings vigentes: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 4/6: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 4/6 ya tenia embeddings vigentes: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 5/6: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 5/6 ya tenia embeddings vigentes: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 6/6: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 6/6 ya tenia embeddings vigentes: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (60%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Cargando embeddings del periodo para evaluar la matriz. (65%).
+INFO:     127.0.0.1:61850 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61850 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 1/19: U1 (70%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 2/19: U2 (71%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 3/19: U3 (72%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 4/19: U4 (73%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:61854 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 6/19: LIC2 (76%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 7/19: LIC3 (77%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 8/19: LIC4 (79%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 9/19: LIC5 (80%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 10/19: LCC1 (81%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 11/19: LCC2 (83%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 12/19: TIC1 (84%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 13/19: TIC2 (85%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 14/19: TIC3 (87%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 15/19: TIC4 (88%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:61975 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61975 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61979 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61979 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 17/19: TCC1 (91%).
+INFO:     127.0.0.1:61980 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=auto HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:61980 - "POST /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=auto HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61980 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: inicio de analisis (6 tesis, device=cuda).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 1/6: tesis gutierrez hirmas883382025 07 30 23 11 48 (0%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 1/6 ya tenia embeddings vigentes: tesis gutierrez hirmas883382025 07 30 23 11 48 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 2/6: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (10%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 2/6 ya tenia embeddings vigentes: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 3/6: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (20%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 3/6 ya tenia embeddings vigentes: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 4/6: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (30%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 4/6 ya tenia embeddings vigentes: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 5/6: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (40%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 5/6 ya tenia embeddings vigentes: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 6/6: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (50%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 6/6 ya tenia embeddings vigentes: TDT MartinGalmezGatica1021402025 12 29 00 05 14 (60%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Cargando embeddings del periodo para evaluar la matriz. (65%).
+INFO:     127.0.0.1:61980 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 1/19: U1 (70%).
+INFO:     127.0.0.1:61980 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 2/19: U2 (71%).
+INFO:     127.0.0.1:61981 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:61981 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 4/19: U4 (73%).
+INFO:     127.0.0.1:61981 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:61981 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61982 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 19/19: TCC3 (93%).
+INFO:     127.0.0.1:61982 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61993 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61993 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:61995 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61995 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:61995 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:61979 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61979 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61999 - "OPTIONS /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62002 - "DELETE /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62004 - "OPTIONS /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62002 - "OPTIONS /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62002 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62004 - "DELETE /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62002 - "DELETE /api/v1/documents/eaa69b4d-30ad-4956-ab22-2c8a828a82f5 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62004 - "GET /api/v1/periods HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 8/19: LIC4 (79%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 9/19: LIC5 (80%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 10/19: LCC1 (81%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 11/19: LCC2 (83%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 12/19: TIC1 (84%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 13/19: TIC2 (85%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 14/19: TIC3 (87%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 15/19: TIC4 (88%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 16/19: TIC5 (89%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 17/19: TCC1 (91%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 18/19: TCC2 (92%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 19/19: TCC3 (93%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:61979 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "POST /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: inicio de analisis (5 tesis, device=cuda).
+INFO:     127.0.0.1:62147 - "GET /api/v1/periods HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 1/5: tesis gutierrez hirmas883382025 07 30 23 11 48 (0%).
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 1/5 ya tenia embeddings vigentes: tesis gutierrez hirmas883382025 07 30 23 11 48 (12%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 2/5: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (12%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 2/5 ya tenia embeddings vigentes: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (24%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 3/5: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (24%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 3/5 ya tenia embeddings vigentes: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (36%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 4/5: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (36%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 4/5 ya tenia embeddings vigentes: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (48%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 5/5: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (48%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 5/5 ya tenia embeddings vigentes: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (60%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Cargando embeddings del periodo para evaluar la matriz. (65%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 1/19: U1 (70%).
+INFO:     127.0.0.1:62147 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 2/19: U2 (71%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 3/19: U3 (72%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 4/19: U4 (73%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:62148 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62148 - "POST /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62148 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62148 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: inicio de analisis (5 tesis, device=cuda).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 1/5: tesis gutierrez hirmas883382025 07 30 23 11 48 (0%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 1/5 ya tenia embeddings vigentes: tesis gutierrez hirmas883382025 07 30 23 11 48 (12%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 2/5: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (12%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 2/5 ya tenia embeddings vigentes: 2025   Memoria   Josefina de la Carrera1013272025 12 18 21 01 12 (24%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 3/5: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (24%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 3/5 ya tenia embeddings vigentes: Memoria rev1 GianlucaCompagnoni PabloZamorano956522025 08 04 17 51 16 (36%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 4/5: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (36%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 4/5 ya tenia embeddings vigentes: Memoria Novoa Álvarez   Soto Pavez 995782025 08 02 22 58 30 (48%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Verificando tesis 5/5: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (48%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Tesis 5/5 ya tenia embeddings vigentes: Memoria Witting Lopez   Final1011922025 08 04 11 17 21 (60%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Cargando embeddings del periodo para evaluar la matriz. (65%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 1/19: U1 (70%).
+INFO:     127.0.0.1:62148 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 2/19: U2 (71%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:62155 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 4/19: U4 (73%).
+INFO:     127.0.0.1:62155 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62155 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 5/19: LIC1 (75%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:62155 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62158 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62158 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62178 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62178 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62178 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62178 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62202 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:62202 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62204 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62209 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62209 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62218 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62218 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:62220 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:62258 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62258 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62278 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62278 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:62297 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:62297 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62297 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62310 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62310 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62317 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62317 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62320 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62320 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62321 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 11/19: LCC2 (83%).
+INFO:     127.0.0.1:62321 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62354 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:62354 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62355 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:62355 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62355 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62355 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62355 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62355 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62358 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:62358 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62359 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62359 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62363 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62363 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62364 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:62364 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 14/19: TIC3 (87%).
+INFO:     127.0.0.1:62370 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62370 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62370 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62370 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 15/19: TIC4 (88%).
+INFO:     127.0.0.1:62371 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62371 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 11/19: LCC2 (83%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:62371 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62391 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62391 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62391 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62391 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 17/19: TCC1 (91%).
+INFO:     127.0.0.1:62395 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:62405 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:62405 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 19/19: TCC3 (93%).
+INFO:     127.0.0.1:62406 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:62406 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:62406 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 14/19: TIC3 (87%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 15/19: TIC4 (88%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:62412 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 17/19: TCC1 (91%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:62413 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=872a99a5-743a-4a52-8d51-610626b5bd98&competency_id=e76504ff-f64c-4722-b106-0b520434dc1a HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Evaluando competencia 19/19: TCC3 (93%).
+[IAAPLICADA] Periodo 5640867e-d048-41a7-9983-c7d7379c26f9: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "POST /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62447 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62447 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62447 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62447 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62489 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62489 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62446 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=f274719c-25ab-47a1-a9f0-3bfd55892c5c&competency_id=f00c7090-d35e-4e3c-8248-da098beafdf7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62512 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62512 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62512 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62512 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62516 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62493 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/a19273b6-f6c9-4930-84fe-b018c29a8899 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/a19273b6-f6c9-4930-84fe-b018c29a8899 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/2a00d9a0-05e9-49e2-ba17-a6d529eff21c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/2a00d9a0-05e9-49e2-ba17-a6d529eff21c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/ab92ddeb-6f4e-4d76-b9e2-8c99c63480a1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/ab92ddeb-6f4e-4d76-b9e2-8c99c63480a1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/e3a08f13-370f-4c1a-8dd8-a8a4b70515da HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/e3a08f13-370f-4c1a-8dd8-a8a4b70515da HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/35beda19-7e53-47c5-93c5-5ddc7b471bd0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/35beda19-7e53-47c5-93c5-5ddc7b471bd0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/0d03b3cf-a245-49cd-b727-87f9c68f62e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/0d03b3cf-a245-49cd-b727-87f9c68f62e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/e961ad4a-bccf-4176-a931-470704045d99 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/e961ad4a-bccf-4176-a931-470704045d99 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/documents/644ebdda-e029-4662-b1ef-a7bee2bea182 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "DELETE /api/v1/documents/644ebdda-e029-4662-b1ef-a7bee2bea182 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62518 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62561 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62561 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62561 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62561 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62561 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62563 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62563 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62517 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62577 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62635 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62636 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62636 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62654 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62655 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62694 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62697 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62697 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62697 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62698 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62722 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62722 - "POST /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/run?background=true&device=gpu HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62722 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62722 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: inicio de analisis (16 tesis, device=cuda).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 1/16: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 (0%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 1/16 ya tenia embeddings vigentes: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 (3%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 2/16: documento memoria v1.1 AGUSTIN BALLIVIAN941182025 08 04 08 58 34 (3%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 2/16 ya tenia embeddings vigentes: documento memoria v1.1 AGUSTIN BALLIVIAN941182025 08 04 08 58 34 (7%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 3/16: Memoria Lucas Grez 2958532025 08 04 11 14 55 (7%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 3/16 ya tenia embeddings vigentes: Memoria Lucas Grez 2958532025 08 04 11 14 55 (11%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 4/16: Memoria José Tomás Queirolo944182025 08 04 10 11 16 (11%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 4/16 ya tenia embeddings vigentes: Memoria José Tomás Queirolo944182025 08 04 10 11 16 (15%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 5/16: Memoria PIEPER762742025 08 04 10 07 31 (15%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 5/16 ya tenia embeddings vigentes: Memoria PIEPER762742025 08 04 10 07 31 (18%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 6/16: PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29 (18%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 6/16 - Extrayendo texto de PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29. (19%).
+INFO:     127.0.0.1:62722 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 6/16 - Segmentando tesis PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29. (20%).
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 6/16 - Generando embeddings de PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29 en cuda. (21%).
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 7/16: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 (22%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 7/16 ya tenia embeddings vigentes: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 (26%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 8/16: Tesis FINAL JPMorales899462025 08 04 20 44 54 (26%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 8/16 ya tenia embeddings vigentes: Tesis FINAL JPMorales899462025 08 04 20 44 54 (30%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 9/16: Thesis final stretch final947432025 09 22 23 56 05 (30%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 9/16 - Extrayendo texto de Thesis final stretch final947432025 09 22 23 56 05. (30%).
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 9/16 - Segmentando tesis Thesis final stretch final947432025 09 22 23 56 05. (31%).
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 9/16 - Generando embeddings de Thesis final stretch final947432025 09 22 23 56 05 en cuda. (32%).
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62726 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 10/16: Memoria final sin comentarios947512025 08 04 20 55 44 (33%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 10/16 ya tenia embeddings vigentes: Memoria final sin comentarios947512025 08 04 20 55 44 (37%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 11/16: Memoria 2025 Rodrigo Vildosola1037332025 09 21 23 41 36 (37%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 11/16 ya tenia embeddings vigentes: Memoria 2025 Rodrigo Vildosola1037332025 09 21 23 41 36 (41%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 12/16: Framework IAG Data Consulting Memoria Gonzalo Vicente999412025 08 01 22 41 42 (41%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 12/16 ya tenia embeddings vigentes: Framework IAG Data Consulting Memoria Gonzalo Vicente999412025 08 01 22 41 42 (45%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 13/16: Título Memoria892622025 09 22 16 07 41 (45%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 13/16 ya tenia embeddings vigentes: Título Memoria892622025 09 22 16 07 41 (48%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 14/16: Trabajo de titulo FINAL ANDREA1033682025 08 04 23 34 11 (48%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 14/16 ya tenia embeddings vigentes: Trabajo de titulo FINAL ANDREA1033682025 08 04 23 34 11 (52%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 15/16: TituloV2894342025 11 07 19 03 08 (52%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 15/16 ya tenia embeddings vigentes: TituloV2894342025 11 07 19 03 08 (56%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Verificando tesis 16/16: Tesis Nicolás Brito 2025 v2950552025 11 03 09 56 28 (56%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Tesis 16/16 ya tenia embeddings vigentes: Tesis Nicolás Brito 2025 v2950552025 11 03 09 56 28 (60%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Cargando embeddings del periodo para evaluar la matriz. (65%).
+INFO:     127.0.0.1:62726 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 1/19: U1 (70%).
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 2/19: U2 (71%).
+INFO:     127.0.0.1:62753 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62753 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:62754 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 4/19: U4 (73%).
+INFO:     127.0.0.1:62754 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:62754 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62754 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62754 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62754 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62761 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62761 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62762 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62762 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62766 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62766 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62767 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62767 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62770 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62770 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62771 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62771 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62775 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62775 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62776 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:62776 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62782 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62782 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62784 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62784 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62789 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62789 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62790 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62790 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62793 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62793 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62794 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62794 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62802 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62802 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62803 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62803 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62806 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62806 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62807 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62807 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62811 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62811 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62812 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62812 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62812 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62812 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62815 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62815 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62816 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62816 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62819 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62819 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62820 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62820 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62823 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62823 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:62824 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62824 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62827 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62827 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62827 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62827 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62828 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62828 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62833 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62833 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62834 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62834 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62839 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62840 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62840 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62840 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62840 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62851 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62851 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62852 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62852 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:62856 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62856 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62856 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62856 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62858 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62858 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62867 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62867 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62868 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62868 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62872 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62872 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62873 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62873 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62880 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62880 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62881 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:62881 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62884 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62884 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62885 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62885 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62888 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 11/19: LCC2 (83%).
+INFO:     127.0.0.1:62888 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62889 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62889 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62897 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62897 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62900 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62900 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62905 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62905 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62906 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62906 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62909 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62909 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62910 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:62910 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62913 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62913 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62914 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62914 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62917 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62917 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62918 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:62918 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62923 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62923 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62924 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62924 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62947 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62947 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62947 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62947 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62948 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62948 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 14/19: TIC3 (87%).
+INFO:     127.0.0.1:62961 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62963 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62963 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62961 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62965 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62965 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62973 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62973 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62974 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62974 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62977 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62977 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62978 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62978 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62985 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62985 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62986 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62964 - "GET /index.html HTTP/1.1" 404 Not Found
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 15/19: TIC4 (88%).
+INFO:     127.0.0.1:62986 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62995 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62995 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62996 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62996 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:63002 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63002 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63003 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62970 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63003 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62970 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63010 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63010 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63011 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63011 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63018 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63018 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63018 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63018 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 17/19: TCC1 (91%).
+INFO:     127.0.0.1:63019 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63019 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63008 - "GET /static/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63022 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63022 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63023 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63023 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:63028 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63028 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63030 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63030 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63008 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63038 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63038 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63039 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63039 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Evaluando competencia 19/19: TCC3 (93%).
+INFO:     127.0.0.1:63044 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63044 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63050 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63050 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63053 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63053 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo d96ca74d-a3a4-4507-b1ec-42a8ca26545a: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:63061 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63061 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63025 - "GET /public/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63112 - "GET /ui HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63137 - "GET /app.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63284 - "GET /client/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63305 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63305 - "GET /api/v1/ai-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63309 - "GET /app/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63309 - "GET /frontend/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63536 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "OPTIONS /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/evidence?period_id=5640867e-d048-41a7-9983-c7d7379c26f9&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "OPTIONS /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63537 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63537 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63537 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/periods/5640867e-d048-41a7-9983-c7d7379c26f9/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63537 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63660 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63660 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63746 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63750 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63750 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63750 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63750 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "OPTIONS /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "GET /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63868 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63869 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63885 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63927 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "OPTIONS /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "POST /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63982 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63982 - "OPTIONS /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63982 - "GET /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63982 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63982 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "OPTIONS /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "GET /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64055 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/run?background=true&device=auto HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "POST /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/run?background=true&device=auto HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: inicio de analisis (16 tesis, device=cuda).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 1/16: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 (0%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 1/16 ya tenia embeddings vigentes: Felipe Flores Camerati   Tesis de memoria928392025 09 22 21 14 43 (3%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 2/16: documento memoria v1.1 AGUSTIN BALLIVIAN941182025 08 04 08 58 34 (3%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 2/16 ya tenia embeddings vigentes: documento memoria v1.1 AGUSTIN BALLIVIAN941182025 08 04 08 58 34 (7%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 3/16: PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29 (7%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 3/16 - Extrayendo texto de PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29. (7%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 3/16 - Segmentando tesis PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29. (8%).
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 3/16 - Generando embeddings de PDT SEBASTIAN GARCIA GUTIERREZ1013412025 09 22 23 59 29 en cuda. (9%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 4/16: Memoria Lucas Grez 2958532025 08 04 11 14 55 (11%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 4/16 ya tenia embeddings vigentes: Memoria Lucas Grez 2958532025 08 04 11 14 55 (15%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 5/16: Memoria José Tomás Queirolo944182025 08 04 10 11 16 (15%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 5/16 ya tenia embeddings vigentes: Memoria José Tomás Queirolo944182025 08 04 10 11 16 (18%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 6/16: Memoria PIEPER762742025 08 04 10 07 31 (18%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 6/16 ya tenia embeddings vigentes: Memoria PIEPER762742025 08 04 10 07 31 (22%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 7/16: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 (22%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 7/16 ya tenia embeddings vigentes: Memoria Maria Catalina Vergara1029362025 08 03 20 04 35 (26%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 8/16: Thesis final stretch final947432025 09 22 23 56 05 (26%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 8/16 - Extrayendo texto de Thesis final stretch final947432025 09 22 23 56 05. (26%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 8/16 - Segmentando tesis Thesis final stretch final947432025 09 22 23 56 05. (27%).
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 8/16 - Generando embeddings de Thesis final stretch final947432025 09 22 23 56 05 en cuda. (28%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 9/16: Memoria 2025 Rodrigo Vildosola1037332025 09 21 23 41 36 (30%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 9/16 ya tenia embeddings vigentes: Memoria 2025 Rodrigo Vildosola1037332025 09 21 23 41 36 (33%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 10/16: Título Memoria892622025 09 22 16 07 41 (33%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 10/16 ya tenia embeddings vigentes: Título Memoria892622025 09 22 16 07 41 (37%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 11/16: Memoria final sin comentarios947512025 08 04 20 55 44 (37%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 11/16 ya tenia embeddings vigentes: Memoria final sin comentarios947512025 08 04 20 55 44 (41%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 12/16: Tesis FINAL JPMorales899462025 08 04 20 44 54 (41%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 12/16 ya tenia embeddings vigentes: Tesis FINAL JPMorales899462025 08 04 20 44 54 (45%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 13/16: Framework IAG Data Consulting Memoria Gonzalo Vicente999412025 08 01 22 41 42 (45%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 13/16 ya tenia embeddings vigentes: Framework IAG Data Consulting Memoria Gonzalo Vicente999412025 08 01 22 41 42 (48%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 14/16: TituloV2894342025 11 07 19 03 08 (48%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 14/16 ya tenia embeddings vigentes: TituloV2894342025 11 07 19 03 08 (52%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 15/16: Tesis Nicolás Brito 2025 v2950552025 11 03 09 56 28 (52%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 15/16 ya tenia embeddings vigentes: Tesis Nicolás Brito 2025 v2950552025 11 03 09 56 28 (56%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Verificando tesis 16/16: Trabajo de titulo FINAL ANDREA1033682025 08 04 23 34 11 (56%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Tesis 16/16 ya tenia embeddings vigentes: Trabajo de titulo FINAL ANDREA1033682025 08 04 23 34 11 (60%).
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Cargando embeddings del periodo para evaluar la matriz. (65%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 1/19: U1 (70%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 2/19: U2 (71%).
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 3/19: U3 (72%).
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 4/19: U4 (73%).
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 5/19: LIC1 (75%).
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 6/19: LIC2 (76%).
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64056 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 7/19: LIC3 (77%).
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 8/19: LIC4 (79%).
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 9/19: LIC5 (80%).
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 10/19: LCC1 (81%).
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 11/19: LCC2 (83%).
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 12/19: TIC1 (84%).
+INFO:     127.0.0.1:64077 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 13/19: TIC2 (85%).
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 14/19: TIC3 (87%).
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 15/19: TIC4 (88%).
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 16/19: TIC5 (89%).
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 17/19: TCC1 (91%).
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 18/19: TCC2 (92%).
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Evaluando competencia 19/19: TCC3 (93%).
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64081 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+[IAAPLICADA] Periodo 0fd1c588-17e5-47b4-926d-63e7da9b835e: Analisis listo: 173 celdas evaluadas y 865 evidencias. (100%).
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/evidence?period_id=0fd1c588-17e5-47b4-926d-63e7da9b835e&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "OPTIONS /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64117 - "GET /api/v1/periods/0fd1c588-17e5-47b4-926d-63e7da9b835e/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+  INFO:     127.0.0.1:64677 - "GET /api/v1/reports/excel HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64774 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64824 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64824 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64824 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64824 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64824 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64829 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "OPTIONS /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "OPTIONS /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64832 - "OPTIONS /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64832 - "GET /api/v1/curricula/current/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/v1/periods HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "OPTIONS /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/v1/evidence?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "OPTIONS /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64851 - "GET /api/v1/reports/excel?period_id=d96ca74d-a3a4-4507-b1ec-42a8ca26545a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/v1/periods/d96ca74d-a3a4-4507-b1ec-42a8ca26545a/analysis/cell-detail?course_id=6b662e0b-fe8e-4b04-b451-830be0b46d5d&competency_id=8a59c9a1-06dc-4969-8940-98686845552d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65401 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65401 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65401 - "GET /index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65402 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65402 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65407 - "GET /index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65407 - "GET /static/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65472 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65472 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49157 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49157 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49158 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49158 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49175 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49175 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49184 - "GET /app.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49186 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49186 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49186 - "GET /static/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49217 - "GET /static/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49351 - "OPTIONS /api/v1/health HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:49388 - "OPTIONS /api/v1/health HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:49380 - "GET /static/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49380 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49380 - "GET /index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49413 - "GET /static/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49413 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49355 - "OPTIONS /api/v1/health HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:49414 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49461 - "GET /static/index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49461 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49461 - "GET /app.js HTTP/1.1" 404 Not Found

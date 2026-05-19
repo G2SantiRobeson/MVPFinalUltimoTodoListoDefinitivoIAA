@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Validación Perfil de Egreso</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navegación principal">
+      <div class="brand">
+        <div class="brand-mark">PE</div>
+        <div>
+          <p>Validación</p>
+          <strong>Perfil de Egreso</strong>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="dashboard" type="button">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="periodos" type="button">
+          <i data-lucide="folder-input"></i>
+          <span>Períodos y tesis</span>
+        </button>
+        <button class="nav-item" data-view="evidencia" type="button">
+          <i data-lucide="file-search"></i>
+          <span>Evidencia</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <span class="dot ready"></span>
+        <div>
+          <strong>Backend desconectado</strong>
+          <p>No hay datos reales disponibles para mostrar.</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Ingeniería Civil en Ciencias de la Computación</p>
+          <h1>Sistema de validación del perfil de egreso</h1>
+        </div>
+        <div class="topbar-actions">
+          <label class="field compact">
+            <span>Período</span>
+            <select id="periodSelect"></select>
+          </label>
+          <label class="field compact device-field">
+            <span>Procesamiento</span>
+            <select id="computeDevice">
+              <option value="auto">Auto</option>
+              <option value="cpu">CPU</option>
+              <option value="gpu">GPU si disponible</option>
+            </select>
+          </label>
+          <button class="secondary-button" id="exportExcel" type="button" title="Exportar reporte a Excel">
+            <i data-lucide="download"></i>
+            <span>Exportar</span>
+          </button>
+          <button class="primary-button" id="runAnalysis" type="button">
+            <i data-lucide="refresh-cw"></i>
+            <span>Analizar con API</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboard">
+        <div class="summary-grid" id="summaryGrid"></div>
+
+        <div class="content-grid dashboard-grid">
+          <section class="panel matrix-panel" aria-labelledby="matrixTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Matriz de tributación</p>
+                <h2 id="matrixTitle">Mapa de calor por ramo y competencia</h2>
+              </div>
+              <div class="legend" aria-label="Leyenda del mapa de calor">
+                <span><b class="level blank"></b>Sin tributación</span>
+                <span><b class="level low"></b>Baja</span>
+                <span><b class="level mid"></b>Media</span>
+                <span><b class="level high"></b>Alta</span>
+              </div>
+            </div>
+            <div class="group-filter" id="groupFilter" aria-label="Separar competencias por bloque"></div>
+            <div class="heatmap-wrap">
+              <div class="heatmap" id="heatmap" role="grid" aria-label="Mapa de calor de evidencia"></div>
+            </div>
+          </section>
+
+          <aside class="panel detail-panel" aria-labelledby="detailTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Detalle trazable</p>
+                <h2 id="detailTitle">Justificación de celda</h2>
+              </div>
+            </div>
+            <div id="cellDetail" class="detail-empty">
+              Selecciona una celda con color para ver su explicación, evidencia asociada y acción sugerida.
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="periodos">
+        <div class="content-grid periods-grid">
+          <section class="panel" aria-labelledby="periodsTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Administración</p>
+                <h2 id="periodsTitle">Períodos académicos</h2>
+              </div>
+            </div>
+
+            <form class="inline-form" id="newPeriodForm">
+              <label class="field">
+                <span>Nuevo período</span>
+                <input id="newPeriodName" name="periodo" type="text" placeholder="Ej: 2026-1" autocomplete="off" />
+              </label>
+              <button class="secondary-button" type="submit">
+                <i data-lucide="plus"></i>
+                <span>Crear</span>
+              </button>
+            </form>
+
+            <div class="metric-value" id="metricTraceability">--</div>
+            <p>Porcentaje promedio de tesis con evidencia explícita por criterio.</p>
+            <div class="period-list" id="periodList"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="thesisTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Carga documental</p>
+                <h2 id="thesisTitle">Tesis del período seleccionado</h2>
+              </div>
+            </div>
+
+            <label class="upload-box" id="uploadBox">
+              <input id="fileInput" type="file" accept=".pdf,.docx,.txt" multiple />
+              <i data-lucide="upload-cloud"></i>
+              <strong>Arrastra o selecciona tesis</strong>
+              <span>Suelta varios archivos PDF, DOCX o TXT en este bloque, o haz clic para seleccionarlos.</span>
+            </label>
+
+            <div id="uploadProgress" class="upload-progress" aria-live="polite"></div>
+
+            <div id="analysisProgress" class="analysis-progress" aria-live="polite"></div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tesis</th>
+                    <th>Autor</th>
+                    <th>Estado</th>
+                    <th>Páginas</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="thesisTable"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel pipeline-panel" aria-labelledby="pipelineTitle">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Flujo MVP</p>
+              <h2 id="pipelineTitle">Preparación y reutilización de resultados</h2>
+            </div>
+          </div>
+          <div class="pipeline" id="pipeline"></div>
+        </section>
+      </section>
+
+      <section class="view" id="evidencia">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Fragmentos recuperados</p>
+              <h2>Evidencia relevante por criterio</h2>
+            </div>
+            <label class="field compact">
+              <span>Competencia</span>
+              <select id="criterionFilter"></select>
+            </label>
+          </div>
+
+          <div class="evidence-list" id="evidenceList"></div>
+        </section>
+      </section>
+
+      <section class="view" id="kpis">
+        <div class="content-grid kpi-grid">
+          <section class="panel" aria-labelledby="kpiTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Medición del MVP</p>
+                <h2 id="kpiTitle">Indicadores definidos</h2>
+              </div>
+            </div>
+            <div class="kpi-bars" id="kpiBars"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="assumptionsTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Supuestos críticos</p>
+                <h2 id="assumptionsTitle">Criterios de revisión</h2>
+              </div>
+            </div>
+            <div class="assumption-list">
+              <article>
+                <i data-lucide="scan-text"></i>
+                <div>
+                  <strong>Evidencia textual suficiente</strong>
+                  <p>La interfaz muestra resultados agregados cuando existen tesis procesadas.</p>
+                </div>
+              </article>
+              <article>
+                <i data-lucide="map"></i>
+                <div>
+                  <strong>Interpretación visual</strong>
+                  <p>El mapa de calor permite detectar fortalezas y brechas curriculares por período.</p>
+                </div>
+              </article>
+              <article>
+                <i data-lucide="database"></i>
+                <div>
+                  <strong>Reutilización de resultados</strong>
+                  <p>Los estados informan caché, recálculo y cambios en tesis asociadas.</p>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+
+</html>

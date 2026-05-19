@@ -1,0 +1,50 @@
+services:
+  api:
+    build:
+      context: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://perfil:perfil@db:5432/perfil_egreso
+      STORAGE_DIR: /app/storage
+      CURRICULUM_XLSX_PATH: /workspace/Matriz Tributación PE 2025 COMPUTACION.xlsx
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/storage:/app/storage
+      - ./:/workspace:ro
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: perfil
+      POSTGRES_PASSWORD: perfil
+      POSTGRES_DB: perfil_egreso
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+
+volumes:
+  pgdata:
+  miniodata:
