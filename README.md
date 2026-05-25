@@ -21,8 +21,9 @@ evidencia textual trazable y resultados agregados en un dashboard.
 
 - Python 3.11 o superior.
 - Docker Desktop, si se quiere usar PostgreSQL, Redis y MinIO con `docker compose`.
+- GPU NVIDIA con controladores compatibles y acceso GPU habilitado en Docker para acelerar BGE.
 - Navegador moderno.
-- Opcional: dependencias IA locales con `sentence-transformers`.
+- Dependencias IA locales con `sentence-transformers` para ejecutar embeddings BGE.
 - Opcional: API key de Gemini u OpenAI para comentarios generados por LLM.
 
 ## Estructura del proyecto
@@ -59,7 +60,7 @@ Luego instala y ejecuta la API:
 cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -e .
+python -m pip install -e ".[ai]"
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -88,6 +89,11 @@ Desde la raiz del repositorio:
 ```powershell
 docker compose up --build
 ```
+
+La primera ejecucion descarga `BAAI/bge-m3`. Docker conserva esa descarga en el
+volumen `huggingface_cache` para reutilizarla al recrear la API.
+La API solicita la GPU NVIDIA del host y ejecuta BGE en CUDA. Puedes comprobarlo
+consultando `/api/v1/ai-status`, que debe informar `device: cuda`.
 
 Servicios principales:
 
@@ -226,8 +232,9 @@ La implementacion inicial no entrena un modelo propio. Usa un pipeline reemplaza
 2. Extraccion de texto desde PDF, DOCX o TXT.
 3. Estado `ocr_required` cuando no hay texto seleccionable.
 4. Segmentacion en chunks con pagina y offsets.
-5. Embeddings reales con Sentence-Transformers cuando el extra IA esta instalado.
-   Si no esta disponible, usa embeddings locales deterministicos para desarrollo.
+5. Embeddings semanticos locales con `BAAI/bge-m3` mediante Sentence-Transformers.
+   La ejecucion normal exige que este proveedor pueda cargarse; el embedding hash
+   queda reservado para pruebas o configuraciones explicitas de desarrollo.
 6. Scoring hibrido: similitud vectorial, coincidencia lexica normalizada, frases
    clave y senales de secciones academicas.
 7. Evidencia trazable por curso, competencia, criterio, documento, pagina y fragmento.
@@ -236,7 +243,7 @@ La implementacion inicial no entrena un modelo propio. Usa un pipeline reemplaza
 Modelo configurado por defecto:
 
 ```text
-sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+BAAI/bge-m3
 ```
 
 Para instalar las dependencias IA:
@@ -251,6 +258,9 @@ Puedes verificar el proveedor activo en:
 ```text
 http://localhost:8000/api/v1/ai-status
 ```
+
+Una ejecucion lista para analisis debe informar `provider: sentence-transformers`,
+`model: BAAI/bge-m3` e `is_real_ai: true`.
 
 ## Comentarios generados por LLM
 

@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     max_upload_mb: int = 40
     chunk_words: int = 220
     chunk_overlap_words: int = 45
-    embedding_provider: str = "auto"
+    embedding_provider: str = "bge-m3"
     embedding_model_name: str = "BAAI/bge-m3"
     embedding_dimensions: int = 1024
     embedding_max_sequence_length: int = 8192

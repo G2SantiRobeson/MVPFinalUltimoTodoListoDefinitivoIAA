@@ -6,7 +6,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY pyproject.toml ./
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cu130 torch==2.11.0 \
+    && pip install --no-cache-dir ".[ai]"
 
 COPY app ./app
 

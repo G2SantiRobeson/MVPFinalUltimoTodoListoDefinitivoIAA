@@ -30,14 +30,13 @@ flowchart LR
 - Extraccion de texto seleccionable en PDF, DOCX y TXT.
 - Estado `ocr_required` cuando no se puede extraer texto.
 - Chunking con pagina y offsets por palabra.
-- Embeddings reales con Sentence-Transformers en modo `auto`, con fallback local deterministico.
+- Embeddings semanticos locales con `BAAI/bge-m3` mediante Sentence-Transformers.
 - Scoring hibrido por similitud vectorial, cobertura lexica, frases clave y senales de seccion academica.
 - Evidencia con fragmento de origen y razones de coincidencia.
 - API para matriz, periodos, documentos, analisis, evidencia, reportes y usuario demo.
 
 ## Pendiente para produccion
 
-- Sustituir `local-hash-embedding` por embeddings reales.
 - Agregar OCR efectivo con Tesseract, Azure Document Intelligence, Textract o equivalente.
 - Agregar migraciones Alembic.
 - Reemplazar BackgroundTasks por Celery/RQ cuando el volumen lo requiera.
