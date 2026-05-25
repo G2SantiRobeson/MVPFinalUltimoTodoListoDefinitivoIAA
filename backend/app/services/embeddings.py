@@ -106,7 +106,7 @@ class EmbeddingService:
 
                 return ("cuda" if torch.cuda.is_available() else "cpu", None)
             except Exception:
-                return None, "No se pudo consultar PyTorch; Sentence-Transformers elegira el dispositivo."
+                return "cpu", "No se pudo consultar PyTorch; se usara CPU."
         if normalized in {"gpu", "cuda"}:
             try:
                 import torch
@@ -117,7 +117,7 @@ class EmbeddingService:
             return "cuda", None
         if normalized == "cpu":
             return "cpu", None
-        raise ValueError("Dispositivo de embeddings invalido. Usa auto, cpu o gpu.")
+        raise ValueError("Dispositivo de embeddings invalido. Usa auto, cpu, gpu o cuda.")
 
     def embed(self, text: str) -> list[float]:
         if self.model is not None:

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 
 <head>
@@ -38,6 +38,10 @@
           <i data-lucide="bar-chart-2"></i>
           <span>Indicadores</span>
         </button>
+        <!-- <button class="nav-item" data-view="kpis" type="button">
+          <i data-lucide="file-search"></i>
+          <span>KPI</span>
+        </button> -->
       </nav>
 
       <div class="sidebar-note">
@@ -60,14 +64,6 @@
             <span>Período</span>
             <select id="periodSelect"></select>
           </label>
-          <label class="field compact device-field">
-            <span>Procesamiento</span>
-            <select id="computeDevice">
-              <option value="auto">Auto</option>
-              <option value="cpu">CPU</option>
-              <option value="gpu">GPU si disponible</option>
-            </select>
-          </label>
           <button class="secondary-button" id="exportExcel" type="button" title="Exportar reporte a Excel">
             <i data-lucide="download"></i>
             <span>Exportar</span>
@@ -81,6 +77,26 @@
 
       <section class="view active" id="dashboard">
         <div class="summary-grid" id="summaryGrid"></div>
+
+        <section class="panel competency-overview-panel" aria-labelledby="competencyOverviewTitle">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Vista general</p>
+              <h2 id="competencyOverviewTitle">Promedio por competencia</h2>
+            </div>
+            <p class="competency-overview-note">
+              Promedia los scores por competencia y los colorea con la misma escala del mapa de calor.
+            </p>
+          </div>
+          <div class="competency-overview-layout">
+            <div class="competency-average-grid" id="competencyOverview"></div>
+            <aside class="competency-overview-detail" aria-label="Definici&oacute;n de competencia seleccionada">
+              <div id="competencyOverviewDetail" class="overview-detail-empty">
+                Selecciona una competencia para ver su definici&oacute;n.
+              </div>
+            </aside>
+          </div>
+        </section>
 
         <div class="content-grid dashboard-grid">
           <section class="panel matrix-panel" aria-labelledby="matrixTitle">
@@ -97,7 +113,7 @@
               </div>
             </div>
             <div class="group-filter" id="groupFilter" aria-label="Separar competencias por bloque"></div>
-            <div class="heatmap-wrap">
+            <div class="heatmap-wrap" id="heatmapWrap" aria-label="Arrastra para recorrer el mapa de calor">
               <div class="heatmap" id="heatmap" role="grid" aria-label="Mapa de calor de evidencia"></div>
             </div>
           </section>

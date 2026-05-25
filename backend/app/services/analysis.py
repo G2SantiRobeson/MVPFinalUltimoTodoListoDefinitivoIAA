@@ -62,6 +62,17 @@ def _score_to_percent(score: float, threshold: float = 0.22) -> int:
     return round(94 + ((score - 0.80) / 0.20) * 4)
 
 
+def _evidence_candidate_limit(total_candidates: int, ratio: float = 0.30) -> int:
+    if total_candidates <= 0:
+        return 0
+    ratio = max(0.01, min(1.0, ratio))
+    return min(total_candidates, max(1, round(total_candidates * ratio)))
+
+
+def _ranked_above_threshold(ranked_chunks: list[RankedChunk], threshold: float) -> list[RankedChunk]:
+    return [item for item in ranked_chunks if item.hybrid_score >= threshold]
+
+
 def _observation(course: Course, competency: Competency, score: int, ranked: RankedChunk) -> str:
     if score >= 75:
         level = "alta"
@@ -99,7 +110,7 @@ def _weighted_topk_signal(ranked_chunks: list[RankedChunk]) -> float:
 
 
 def _curricular_alignment(course: Course, criterion: EvaluationCriterion) -> float:
-    course_tokens = expand_tokens(tokenize(f"{course.code} {course.title}"))
+    course_tokens = expand_tokens(tokenize(course.title))
     criterion_tokens = expand_tokens(
         tokenize(f"{criterion.name} {criterion.description} {criterion.competency.description}")
     )
@@ -309,7 +320,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
             competency_query_text,
             competency_query_vector,
             chunks,
-        )[: settings.top_k_evidence]
+        )
 
         for link in links_by_competency.get(criterion.competency_id, []):
             course_query_text = "\n".join(
@@ -317,7 +328,6 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                     criterion.description,
                     criterion.competency.description,
                     link.course.title,
-                    link.course.code,
                 ]
             )
             course_query_vector = embedding_service.embed(course_query_text)
@@ -325,8 +335,12 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                 course_query_text,
                 course_query_vector,
                 chunks,
-            )[: settings.top_k_evidence]
-            threshold = max(criterion.threshold, settings.evidence_threshold)
+            )
+            threshold = max(
+                criterion.threshold,
+                settings.evidence_threshold,
+                settings.evidence_relevance_threshold,
+            )
             best_competency = competency_ranked_chunks[0]
             adjusted_score = _cell_adjusted_score(
                 best_competency.hybrid_score,
@@ -336,25 +350,14 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                 criterion,
             )
 
-            valid_chunks_by_id = {
-                item.chunk.id: item
-                for item in [*competency_ranked_chunks, *course_ranked_chunks]
-                if item.hybrid_score >= threshold
-            }
-            best_course = course_ranked_chunks[0] if course_ranked_chunks else None
-            if best_course and best_course.chunk.id not in valid_chunks_by_id:
-                # Keep at least one course-specific candidate so the cell detail
-                # does not always fall back to the same competency-level fragment.
-                valid_chunks_by_id[best_course.chunk.id] = best_course
-            valid_chunks = sorted(
-                valid_chunks_by_id.values(),
-                key=lambda item: item.hybrid_score,
-                reverse=True,
-            )[: settings.top_k_evidence]
-            if not valid_chunks:
-                valid_chunks = [best_competency]
+            relevant_course_chunks = _ranked_above_threshold(course_ranked_chunks, threshold)
+            evidence_limit = _evidence_candidate_limit(
+                len(relevant_course_chunks),
+                settings.evidence_sample_ratio,
+            )
+            valid_chunks = relevant_course_chunks[:evidence_limit]
 
-            best_ranked = valid_chunks[0]
+            best_ranked = valid_chunks[0] if valid_chunks else course_ranked_chunks[0]
             percent = _score_to_percent(adjusted_score, threshold)
             confidence = max(0.0, min(1.0, adjusted_score))
             observation = _observation(link.course, criterion.competency, percent, best_ranked)
@@ -383,7 +386,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                         course_id=link.course_id,
                         semantic_score=chunk_score,
                         confidence=max(0.0, min(1.0, chunk_score)),
-                        verdict="supporting" if chunk_score >= threshold else "candidate",
+                        verdict="supporting",
                         observation=_observation(
                             link.course,
                             criterion.competency,
@@ -497,7 +500,11 @@ def _competency_evidence_summary(
     criterion: EvaluationCriterion,
 ) -> CompetencyEvidenceSummary:
     settings = get_settings()
-    threshold = max(criterion.threshold, settings.evidence_threshold)
+    threshold = max(
+        criterion.threshold,
+        settings.evidence_threshold,
+        settings.evidence_relevance_threshold,
+    )
     reviewed_documents = (
         db.query(Document)
         .filter(Document.period_id == period_id, Document.status != "deleted")
@@ -653,7 +660,7 @@ def _best_cell_ranked_chunk(
 
     query_text = "\n".join(
         [
-            f"Curso {course.code}: {course.title}",
+            f"Curso: {course.title}",
             f"Competencia {competency.code}: {competency.group}",
             competency.description,
             criterion.name,
@@ -750,7 +757,7 @@ def build_cell_detail(
     if evidence_text:
         justification = (
             f"El analisis IA clasifica este cruce con evidencia {level} ({score}%). "
-            f"Para justificarlo comparo la competencia {competency.code}, el curso {course.code} "
+            f"Para justificarlo comparo la competencia {competency.code}, el curso {course.title} "
             f"y el criterio academico mediante embeddings y ranking hibrido. "
             f"La evidencia principal proviene de un fragmento con confianza "
             f"{(evidence_confidence or confidence or 0):.2f}; por eso la conclusion queda ligada "
@@ -914,11 +921,18 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
                 "evidence_count": ev_count,
             }
         )
-        # Coverage is based on the course-specific evaluated result reaching the
-        # evidence threshold, not merely on having a saved candidate fragment.
-        threshold = max(criterion.threshold, settings.evidence_threshold)
+        # Coverage requires a course-specific result plus at least one saved
+        # evidence fragment that passed the relevance threshold.
+        threshold = max(
+            criterion.threshold,
+            settings.evidence_threshold,
+            settings.evidence_relevance_threshold,
+        )
         has_sufficient_evidence = bool(
-            result and result.confidence is not None and result.confidence >= threshold
+            ev_count > 0
+            and result
+            and result.confidence is not None
+            and result.confidence >= threshold
         )
 
         # Accumulate per-competency data

@@ -13,16 +13,17 @@ const pipelineSteps = [
 const state = {
   currentPeriodId: null,
   selectedCell: null,
+  selectedOverviewCompetencyIndex: null,
   currentGroup: "all",
   criterionFilter: "all",
   running: false,
   activeStep: -1,
-  computeDevice: "auto",
   apiReady: false,
   analysisScores: {},
   analysisMetrics: {},
   apiEvidence: [],
   cellDetails: {},
+  expandedOverviewCourses: {},
   expandedComments: {},
   expandedFragments: {},
   loadingCellDetail: null,
@@ -36,6 +37,18 @@ const DEMO_TOKEN = "demo-academic-admin";
 const ACCEPTED_FILE_EXTENSIONS = [".pdf", ".docx", ".txt"];
 const HIDDEN_GROUP_FILTERS = new Set(["Universidad", "UNIVERSIDAD"]);
 const HIDDEN_HEATMAP_COMPETENCY_CODES = new Set(["U1", "U2", "U3", "U4"]);
+const COMPETENCY_OVERVIEW_GROUP_ORDER = ["LIC", "TIC", "TCC"];
+const HEATMAP_DRAG_THRESHOLD = 5;
+const heatmapDrag = {
+  active: false,
+  moved: false,
+  pointerId: null,
+  startX: 0,
+  startY: 0,
+  scrollLeft: 0,
+  scrollTop: 0,
+  suppressClick: false
+};
 
 function fixMojibake(value) {
   if (typeof value !== "string" || !/[ÃÂ]/.test(value)) return value;
@@ -68,12 +81,6 @@ async function apiRequest(path, options = {}) {
     throw new Error(`API ${response.status}: ${await response.text()}`);
   }
   return response.json();
-}
-
-function deviceLabel(device) {
-  if (device === "gpu" || device === "cuda") return "GPU";
-  if (device === "cpu") return "CPU";
-  return "Auto";
 }
 
 function progressSignature(progress) {
@@ -167,6 +174,7 @@ function openEvidenceCell(courseId, competencyCode) {
 
   state.currentGroup = "all";
   state.selectedCell = { courseIndex, criterionIndex };
+  state.selectedOverviewCompetencyIndex = null;
   setView("dashboard");
   renderAll();
   requestAnimationFrame(() => {
@@ -192,12 +200,14 @@ async function hydrateFromApi() {
     state.apiReady = true;
     state.currentPeriodId = periods[0]?.id || null;
     state.selectedCell = firstTributedCell();
+    state.selectedOverviewCompetencyIndex = null;
     await refreshApiAnalysis();
     renderAll();
   } catch (error) {
     state.apiReady = false;
     state.currentPeriodId = null;
     state.selectedCell = null;
+    state.selectedOverviewCompetencyIndex = null;
     renderAll();
   }
 }
@@ -357,6 +367,69 @@ function periodStats(period = currentPeriod()) {
   };
 }
 
+function competencyAverageItems(period = currentPeriod(), groupName = state.currentGroup) {
+  const visibleIndexes = visibleCompetencyIndexesFor(groupName);
+
+  return visibleIndexes.map((criterionIndex) => {
+    const competency = competencies[criterionIndex];
+    const scores = [];
+    let totalTributed = 0;
+
+    curriculumCourses.forEach((_course, courseIndex) => {
+      if (!isTributed(courseIndex, criterionIndex)) return;
+      totalTributed += 1;
+      const score = scoreFor(courseIndex, criterionIndex, period);
+      if (score !== null) scores.push(score);
+    });
+
+    const average = scores.length
+      ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length)
+      : null;
+
+    return {
+      criterionIndex,
+      competency,
+      average,
+      evaluated: scores.length,
+      totalTributed
+    };
+  });
+}
+
+function competencyCodePrefix(code) {
+  const match = String(code || "").toUpperCase().match(/^[A-Z]+/);
+  return match ? match[0] : "OTRAS";
+}
+
+function groupedCompetencyAverageItems(items) {
+  const groups = new Map();
+  items.forEach((item) => {
+    const prefix = competencyCodePrefix(item.competency.id);
+    if (!groups.has(prefix)) groups.set(prefix, []);
+    groups.get(prefix).push(item);
+  });
+
+  return [...groups.entries()]
+    .map(([prefix, groupItems]) => {
+      const scoredItems = groupItems.filter((item) => item.average !== null);
+      return {
+        prefix,
+        items: groupItems,
+        average: scoredItems.length
+          ? Math.round(scoredItems.reduce((sum, item) => sum + item.average, 0) / scoredItems.length)
+          : null
+      };
+    })
+    .sort((a, b) => {
+      const indexA = COMPETENCY_OVERVIEW_GROUP_ORDER.indexOf(a.prefix);
+      const indexB = COMPETENCY_OVERVIEW_GROUP_ORDER.indexOf(b.prefix);
+      if (indexA >= 0 && indexB >= 0) return indexA - indexB;
+      if (indexA >= 0) return -1;
+      if (indexB >= 0) return 1;
+      return a.prefix.localeCompare(b.prefix);
+    });
+}
+
 function firstTributedCell(groupName = state.currentGroup) {
   const visible = new Set(visibleCompetencyIndexesFor(groupName));
   const courseIndex = visibleCourseIndexes(groupName)[0] ?? 0;
@@ -377,6 +450,54 @@ function renderIcons() {
   }
 }
 
+function bindHeatmapDrag() {
+  const wrap = $("#heatmapWrap");
+  if (!wrap) return;
+
+  wrap.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    heatmapDrag.active = true;
+    heatmapDrag.moved = false;
+    heatmapDrag.pointerId = event.pointerId;
+    heatmapDrag.startX = event.clientX;
+    heatmapDrag.startY = event.clientY;
+    heatmapDrag.scrollLeft = wrap.scrollLeft;
+    heatmapDrag.scrollTop = wrap.scrollTop;
+    wrap.classList.add("dragging");
+    wrap.setPointerCapture?.(event.pointerId);
+  });
+
+  wrap.addEventListener("pointermove", (event) => {
+    if (!heatmapDrag.active || heatmapDrag.pointerId !== event.pointerId) return;
+    const deltaX = event.clientX - heatmapDrag.startX;
+    const deltaY = event.clientY - heatmapDrag.startY;
+    if (Math.abs(deltaX) > HEATMAP_DRAG_THRESHOLD || Math.abs(deltaY) > HEATMAP_DRAG_THRESHOLD) {
+      heatmapDrag.moved = true;
+    }
+    if (!heatmapDrag.moved) return;
+    event.preventDefault();
+    wrap.scrollLeft = heatmapDrag.scrollLeft - deltaX;
+    wrap.scrollTop = heatmapDrag.scrollTop - deltaY;
+  });
+
+  const finishDrag = (event) => {
+    if (!heatmapDrag.active || heatmapDrag.pointerId !== event.pointerId) return;
+    heatmapDrag.active = false;
+    heatmapDrag.pointerId = null;
+    wrap.classList.remove("dragging");
+    wrap.releasePointerCapture?.(event.pointerId);
+    if (heatmapDrag.moved) {
+      heatmapDrag.suppressClick = true;
+      window.setTimeout(() => {
+        heatmapDrag.suppressClick = false;
+      }, 80);
+    }
+  };
+
+  wrap.addEventListener("pointerup", finishDrag);
+  wrap.addEventListener("pointercancel", finishDrag);
+}
+
 function renderRuntimeState() {
   const runButton = $("#runAnalysis");
   const buttonLabel = $("#runAnalysis span");
@@ -387,12 +508,6 @@ function renderRuntimeState() {
   }
   if (buttonLabel && !state.running) {
     buttonLabel.textContent = state.apiReady ? "Analizar con API" : "Sin backend";
-  }
-
-  const deviceSelect = $("#computeDevice");
-  if (deviceSelect) {
-    deviceSelect.value = state.computeDevice;
-    deviceSelect.disabled = state.running;
   }
 
   const note = $(".sidebar-note");
@@ -468,6 +583,69 @@ function renderSummary() {
         </article>
       `
     )
+    .join("");
+}
+
+function renderCompetencyOverview() {
+  const overview = $("#competencyOverview");
+  if (!overview) return;
+
+  const period = currentPeriod();
+  const items = competencyAverageItems(period, "all");
+
+  if (!period || !items.length) {
+    overview.innerHTML = `<div class="compact-empty">No hay competencias visibles para resumir.</div>`;
+    return;
+  }
+
+  const hasScores = items.some((item) => item.average !== null);
+  if (!hasScores) {
+    overview.innerHTML = `<div class="compact-empty">Ejecuta el analisis para ver promedios por competencia.</div>`;
+    return;
+  }
+
+  overview.innerHTML = groupedCompetencyAverageItems(items)
+    .map((group) => {
+      const groupAverage = group.average !== null ? `${group.average}% promedio` : "Sin promedio";
+      const cells = group.items.map((item) => {
+        const average = item.average;
+        const hasAverage = average !== null;
+        const color = hasAverage ? cellColor(average) : "";
+        const level = hasAverage ? scoreClass(average) : "pending";
+        const label = hasAverage ? scoreLabel(average) : "Pendiente";
+        const selected = state.selectedOverviewCompetencyIndex === item.criterionIndex;
+
+        return `
+          <button
+            class="competency-average-cell ${level} ${selected ? "selected" : ""}"
+            ${hasAverage ? `style="background:${color}"` : ""}
+            data-col="${item.criterionIndex}"
+            title="${escapeHtml(item.competency.name)} - ${label} - ${item.evaluated}/${item.totalTributed} celdas"
+            type="button"
+            role="gridcell"
+            aria-pressed="${selected}"
+            aria-label="${escapeHtml(item.competency.id)}, ${hasAverage ? `${average}%` : "pendiente"}"
+          >
+            <strong>${escapeHtml(item.competency.id)}</strong>
+            <span>${hasAverage ? `${average}%` : "Pend."}</span>
+            <small>${item.evaluated}/${item.totalTributed}</small>
+          </button>
+        `;
+      }).join("");
+
+      return `
+        <section class="competency-average-row" aria-label="Competencias ${escapeHtml(group.prefix)}">
+          <div class="competency-average-row-label">
+            <strong>${escapeHtml(group.prefix)}</strong>
+            <span>${groupAverage}</span>
+            <small>${group.items.length} competencia${group.items.length !== 1 ? "s" : ""}</small>
+          </div>
+          <div class="competency-average-cells" role="grid">
+            ${cells}
+          </div>
+        </section>
+      `;
+    })
     .join("");
 }
 
@@ -598,13 +776,86 @@ async function loadCellDetail(courseIndex, criterionIndex) {
       state.loadingCellDetail = null;
     }
     const selected = state.selectedCell;
-    if (selected.courseIndex === courseIndex && selected.criterionIndex === criterionIndex) {
+    if (selected && selected.courseIndex === courseIndex && selected.criterionIndex === criterionIndex) {
       renderCellDetail();
     }
   }
 }
 
+function renderCompetencyOverviewDetail() {
+  const detail = $("#competencyOverviewDetail");
+  if (!detail) return;
+
+  const criterionIndex = state.selectedOverviewCompetencyIndex;
+
+  if (criterionIndex === null) {
+    detail.className = "overview-detail-empty";
+    detail.innerHTML = "Selecciona una competencia para ver su definici&oacute;n.";
+    return;
+  }
+
+  const competency = competencies[criterionIndex];
+  if (!competency) {
+    detail.className = "overview-detail-empty";
+    detail.innerHTML = "No hay definici&oacute;n disponible para esta competencia.";
+    return;
+  }
+
+  const item = competencyAverageItems(currentPeriod(), "all")
+    .find((candidate) => candidate.criterionIndex === criterionIndex);
+  const average = item?.average ?? null;
+  const levelClass = average === null ? "mid" : scoreClass(average);
+  const label = average === null ? "Sin promedio" : scoreLabel(average);
+  const linkedCourses = curriculumCourses.filter((_course, courseIndex) => isTributed(courseIndex, criterionIndex));
+  const coursesExpanded = Boolean(state.expandedOverviewCourses[criterionIndex]);
+  const visibleCourses = coursesExpanded ? linkedCourses : linkedCourses.slice(0, 8);
+  const hiddenCourseCount = Math.max(linkedCourses.length - visibleCourses.length, 0);
+  const summary = average === null
+    ? "Todav&iacute;a no hay resultados evaluados para calcular el promedio de esta competencia."
+    : `${label}: promedio calculado desde ${item.evaluated}/${item.totalTributed} celdas curso-competencia tributadas.`;
+
+  detail.className = "overview-detail-content";
+  detail.innerHTML = `
+    <div class="score-line">
+      <div>
+        <span class="eyebrow">Definici&oacute;n de competencia</span>
+        <h3>${escapeHtml(competency.id)} &middot; ${escapeHtml(competency.group)}</h3>
+      </div>
+      <span class="score-badge ${levelClass}">${average === null ? "Pend." : `${average}%`}</span>
+    </div>
+
+    <div class="quote-box">
+      <strong>Definici&oacute;n</strong>
+      <p>${escapeHtml(competency.name)}</p>
+    </div>
+
+    <div class="quote-box">
+      <strong>Promedio agregado</strong>
+      <p>${summary}</p>
+    </div>
+
+    <div class="quote-box">
+      <strong>Ramos tributados</strong>
+      <div class="definition-course-list">
+        ${visibleCourses.map((course) => `
+          <span title="${escapeHtml(course.title)}">
+            ${escapeHtml(course.code || "S/C")} &middot; ${escapeHtml(course.title)}
+          </span>
+        `).join("")}
+        ${linkedCourses.length > 8 ? `
+          <button class="definition-course-toggle" type="button" aria-expanded="${coursesExpanded}">
+            ${coursesExpanded ? "Ver menos" : `+${hiddenCourseCount} ramos m&aacute;s`}
+          </button>
+        ` : ""}
+      </div>
+    </div>
+  `;
+}
+
 function renderCellDetail() {
+  const detailTitle = $("#detailTitle");
+  if (detailTitle) detailTitle.innerHTML = "Justificaci&oacute;n de celda";
+
   if (!state.selectedCell || !currentPeriod()) {
     $("#cellDetail").className = "detail-empty";
     $("#cellDetail").textContent = "No hay una celda seleccionada.";
@@ -778,7 +1029,6 @@ function renderAnalysisProgress() {
     <div>
       <strong>${escapeHtml(title)}</strong>
       <p>${escapeHtml(progress.error || progress.message || "Procesando analisis documental.")}</p>
-      <p>Dispositivo: ${escapeHtml(deviceLabel(progress.device))}</p>
     </div>
     <div class="progress-track" aria-hidden="true">
       <div class="progress-fill" style="width:${Math.max(0, Math.min(100, progress.progress || 0))}%"></div>
@@ -1106,6 +1356,8 @@ function renderAll() {
   renderRuntimeState();
   renderPeriodOptions();
   renderSummary();
+  renderCompetencyOverview();
+  renderCompetencyOverviewDetail();
   renderGroupFilter();
   renderHeatmap();
   renderCellDetail();
@@ -1121,6 +1373,7 @@ function renderAll() {
 async function setPeriod(periodId) {
   state.currentPeriodId = periodId;
   state.selectedCell = firstTributedCell();
+  state.selectedOverviewCompetencyIndex = null;
   await refreshApiAnalysis();
   renderAll();
 }
@@ -1339,6 +1592,7 @@ async function createPeriod(name) {
       periods = apiPeriods.map(normalizePeriodFromApi);
       state.currentPeriodId = created.id;
       state.selectedCell = firstTributedCell();
+      state.selectedOverviewCompetencyIndex = null;
       await refreshApiAnalysis();
       renderAll();
       return;
@@ -1369,16 +1623,16 @@ async function simulateAnalysis() {
         step: "starting",
         ui_step: 0,
         progress: 0,
-        device: state.computeDevice,
+        device: "cuda",
         current_document_id: null,
         current_document_title: "",
         current_index: 0,
         total_documents: period.thesis.length,
-        message: `Iniciando analisis en ${deviceLabel(state.computeDevice)}.`
+        message: "Iniciando analisis."
       };
       renderAll();
       await apiRequest(
-        `/periods/${period.id}/analysis/run?background=true&device=${encodeURIComponent(state.computeDevice)}`,
+        `/periods/${period.id}/analysis/run?background=true`,
         { method: "POST" }
       );
       startAnalysisProgressPolling(period.id);
@@ -1396,14 +1650,16 @@ async function simulateAnalysis() {
 document.addEventListener("DOMContentLoaded", () => {
   renderAll();
   hydrateFromApi();
+  bindHeatmapDrag();
 
   $("#periodSelect").addEventListener("change", (event) => setPeriod(event.target.value));
-  $("#computeDevice").addEventListener("change", (event) => {
-    state.computeDevice = event.target.value;
-    renderRuntimeState();
-  });
-
   $("#heatmap").addEventListener("click", (event) => {
+    if (heatmapDrag.suppressClick) {
+      event.preventDefault();
+      event.stopPropagation();
+      heatmapDrag.suppressClick = false;
+      return;
+    }
     const button = event.target.closest(".heatmap-cell:not(.blank)");
     if (!button) return;
     state.selectedCell = {
@@ -1412,6 +1668,22 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     renderHeatmap();
     renderCellDetail();
+  });
+
+  $("#competencyOverview").addEventListener("click", (event) => {
+    const button = event.target.closest(".competency-average-cell");
+    if (!button) return;
+    state.selectedOverviewCompetencyIndex = Number(button.dataset.col);
+    renderCompetencyOverview();
+    renderCompetencyOverviewDetail();
+  });
+
+  $("#competencyOverviewDetail").addEventListener("click", (event) => {
+    const button = event.target.closest(".definition-course-toggle");
+    if (!button || state.selectedOverviewCompetencyIndex === null) return;
+    const key = state.selectedOverviewCompetencyIndex;
+    state.expandedOverviewCourses[key] = !state.expandedOverviewCourses[key];
+    renderCompetencyOverviewDetail();
   });
 
   $("#cellDetail").addEventListener("click", (event) => {

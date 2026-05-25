@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     embedding_model_name: str = "BAAI/bge-m3"
     embedding_dimensions: int = 1024
     embedding_max_sequence_length: int = 8192
-    embedding_device: str = "auto"
+    embedding_device: str = "cuda"
     llm_comments_enabled: bool = True
     llm_provider: str = "gemini"
     gemini_api_key: str | None = None
@@ -40,7 +40,8 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-5.5"
     openai_timeout_seconds: int = 20
     evidence_threshold: float = 0.22
-    top_k_evidence: int = 5
+    evidence_sample_ratio: float = 0.30
+    evidence_relevance_threshold: float = 0.25
 
     demo_auth_enabled: bool = True
 

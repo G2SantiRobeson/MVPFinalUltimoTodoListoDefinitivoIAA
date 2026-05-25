@@ -14,10 +14,10 @@ from app.services.progress import get_analysis_progress
 router = APIRouter()
 
 
-def _run_analysis_in_background(period_id: str, device: str) -> None:
+def _run_analysis_in_background(period_id: str) -> None:
     db = SessionLocal()
     try:
-        run_period_analysis(db, period_id, embedding_device=device)
+        run_period_analysis(db, period_id)
     except Exception as exc:
         db.rollback()
         period = db.get(AcademicPeriod, period_id)
@@ -112,7 +112,6 @@ def get_cell_detail(
 def run_analysis(
     period_id: str,
     background_tasks: BackgroundTasks,
-    device: str = Query(default="auto", pattern="^(auto|cpu|gpu|cuda)$"),
     background: bool = Query(default=False),
     db: Session = Depends(get_db),
     _user=Depends(require_roles("evaluator", "academic_admin", "technical_admin")),
@@ -124,14 +123,14 @@ def run_analysis(
         period.status = "processing"
         period.updated_at = datetime.utcnow()
         db.commit()
-        background_tasks.add_task(_run_analysis_in_background, period_id, device)
+        background_tasks.add_task(_run_analysis_in_background, period_id)
         return {
             "period_id": period_id,
             "status": "processing",
-            "message": f"Analisis iniciado en modo {device}.",
+            "message": "Analisis iniciado.",
             "metrics": {},
         }
-    metrics = run_period_analysis(db, period_id, embedding_device=device)
+    metrics = run_period_analysis(db, period_id)
     return {
         "period_id": period_id,
         "status": "ready" if metrics["evaluated_cells"] else "warning",
