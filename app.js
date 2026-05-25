@@ -20,9 +20,11 @@ const state = {
   computeDevice: "auto",
   apiReady: false,
   analysisScores: {},
+  analysisMetrics: {},
   apiEvidence: [],
   cellDetails: {},
   expandedComments: {},
+  expandedFragments: {},
   loadingCellDetail: null,
   analysisProgress: null,
   progressTimer: null,
@@ -191,14 +193,18 @@ async function refreshApiAnalysis() {
       scores[`${cell.course_id}::${cell.competency_id}`] = cell.score;
     });
     state.analysisScores[state.currentPeriodId] = scores;
+    state.analysisMetrics[state.currentPeriodId] = analysis.metrics || {};
     state.apiEvidence = await apiRequest(`/evidence?period_id=${state.currentPeriodId}&limit=50`);
     state.cellDetails = {};
     state.expandedComments = {};
+    state.expandedFragments = {};
   } catch (error) {
     state.analysisScores[state.currentPeriodId] = {};
+    state.analysisMetrics[state.currentPeriodId] = {};
     state.apiEvidence = [];
     state.cellDetails = {};
     state.expandedComments = {};
+    state.expandedFragments = {};
   }
 }
 
@@ -394,18 +400,32 @@ function renderSummary() {
   const visibleCompetencies = visibleCompetencyIndexes();
   const visibleCourses = visibleCourseIndexes();
   const visibleTributated = groupTributatedCount(state.currentGroup);
-  const visibleBlank = visibleCourses.length * visibleCompetencies.length - visibleTributated;
-  const cards = [
-    ["Tesis analizadas", period?.metrics?.thesis ?? 0, period ? `${period.thesis.length} registradas` : "Sin periodo seleccionado"],
-    ["Bloque visible", currentGroupLabel, `${visibleCompetencies.length} competencias en la vista`],
-    ["Ramos visibles", visibleCourses.length, `${visibleTributated} cruces ramo-competencia con X`],
-    ["Celdas en blanco", visibleBlank, "Dentro de los ramos que aportan al bloque"]
-  ];
+  const metrics = state.apiReady ? (state.analysisMetrics[state.currentPeriodId] || {}) : {};
+  const hasMetrics = metrics.evaluated_cells > 0;
+
+  let cards;
+  if (hasMetrics) {
+    const coverageColor = metrics.coverage_rate >= 70 ? "var(--green)" : metrics.coverage_rate >= 40 ? "var(--amber)" : "var(--coral)";
+    const confidenceColor = metrics.avg_confidence >= 60 ? "var(--teal)" : metrics.avg_confidence >= 40 ? "var(--amber)" : "var(--coral)";
+    cards = [
+      ["Cobertura del período", `${metrics.coverage_rate ?? 0}%`, "Celdas tributadas con al menos un fragmento de evidencia.", coverageColor],
+      ["Evidencia alta", metrics.high ?? 0, "Celdas con score ≥ 75% (cumplimiento fuerte).", "var(--green)"],
+      ["Brechas detectadas", metrics.gaps ?? 0, "Celdas con evidencia bajo el umbral esperado (< 55%).", "var(--coral)"],
+      ["Confianza del sistema", `${metrics.avg_confidence ?? 0}%`, "Promedio de confianza en los veredictos generados.", confidenceColor]
+    ];
+  } else {
+    cards = [
+      ["Tesis analizadas", period?.metrics?.thesis ?? 0, period ? `${period.thesis.length} registradas` : "Sin periodo seleccionado", "var(--teal)"],
+      ["Bloque visible", currentGroupLabel, `${visibleCompetencies.length} competencias en la vista`, "var(--blue)"],
+      ["Ramos visibles", visibleCourses.length, `${visibleTributated} cruces ramo-competencia con X`, "var(--muted)"],
+      ["Celdas en blanco", visibleCourses.length * visibleCompetencies.length - visibleTributated, "Dentro de los ramos que aportan al bloque", "var(--muted)"]
+    ];
+  }
 
   $("#summaryGrid").innerHTML = cards
     .map(
-      ([label, value, detail]) => `
-        <article class="metric-card">
+      ([label, value, detail, color]) => `
+        <article class="metric-card" style="border-top: 3px solid ${color}">
           <span>${label}</span>
           <strong>${value}</strong>
           <p>${detail}</p>
@@ -585,10 +605,32 @@ function renderCellDetail() {
   const commentMeta = aiDetail
     ? `${aiDetail.general_evidence_document_count || 0} de ${aiDetail.general_document_count || 0} tesis con evidencia - ${aiDetail.general_evidence_count || 0} evidencias`
     : "";
-  const origin = aiDetail
-    ? [aiDetail.evidence_origin, aiDetail.evidence_page ? `Pagina ${aiDetail.evidence_page}` : ""]
-        .filter(Boolean)
-        .join(" · ")
+
+  const fragments = aiDetail?.evidence_fragments || [];
+  const fragmentsExpanded = Boolean(state.expandedFragments[detailKey]);
+  const showAllFragments = fragmentsExpanded || fragments.length <= 1;
+  const visibleFragments = showAllFragments ? fragments : fragments.slice(0, 1);
+
+  const fragmentsHtml = fragments.length > 0
+    ? `
+      <div class="quote-box evidence-fragments-box">
+        <strong>Evidencia textual (${fragments.length} fragmento${fragments.length > 1 ? "s" : ""} recuperado${fragments.length > 1 ? "s" : ""})</strong>
+        ${visibleFragments.map((frag, i) => `
+          <div class="evidence-fragment ${frag.verdict === 'supporting' ? 'supporting' : 'candidate'}">
+            <div class="fragment-meta">
+              <span class="fragment-origin">${escapeHtml(frag.origin)}${frag.page ? ` · Pág. ${frag.page}` : ""}</span>
+              <span class="fragment-confidence ${frag.confidence >= 60 ? 'conf-high' : frag.confidence >= 35 ? 'conf-mid' : 'conf-low'}">${frag.confidence}% confianza</span>
+            </div>
+            <p class="fragment-text">${escapeHtml(frag.text)}</p>
+          </div>
+        `).join("")}
+        ${fragments.length > 1 ? `
+          <button class="text-toggle toggle-fragments" type="button" data-detail-key="${escapeHtml(detailKey)}">
+            ${showAllFragments ? "Ver menos" : `Ver ${fragments.length - 1} fragmento${fragments.length - 1 > 1 ? "s" : ""} más`}
+          </button>
+        ` : ""}
+      </div>
+    `
     : "";
 
   $("#cellDetail").className = "detail-content";
@@ -627,6 +669,8 @@ function renderCellDetail() {
             <strong>Justificacion IA trazable</strong>
             <p>${escapeHtml(aiDetail.justification)}</p>
           </div>
+
+          ${fragmentsHtml}
 
           <div class="quote-box general-comment-box">
             <strong>Comentario general</strong>
@@ -785,10 +829,6 @@ function renderEvidence() {
 
   const filter = state.criterionFilter;
   const filterCode = selectedCompetencyCode(filter);
-  const criterionOptions = [
-    `<option value="all">Todas las competencias</option>`,
-    ...competencies.map((competency, index) => `<option value="${index}">${competency.id} · ${competency.group}</option>`)
-  ];
   const usefulCriterionOptions = [
     `<option value="all">Todas las competencias</option>`,
     ...availableCompetencies.map((competency) => {
@@ -812,24 +852,36 @@ function renderEvidence() {
       return item.competency_code === filterCode;
     });
 
+    const confidenceClass = (conf) => {
+      const pct = Math.round((conf || 0) * 100);
+      if (pct >= 60) return "conf-high";
+      if (pct >= 35) return "conf-mid";
+      return "conf-low";
+    };
+
     $("#evidenceList").innerHTML =
       apiItems
-        .slice(0, 12)
+        .slice(0, 25)
         .map(
-          (item) => `
-            <article class="evidence-item">
-              <div>
-                <h3>${escapeHtml(item.course_code) || "S/C"} · ${escapeHtml(item.course_title)}</h3>
-                <p>${escapeHtml(item.text)}</p>
-                <div class="evidence-meta">
-                  <span>${escapeHtml(item.competency_code)}</span>
-                  <span>Página ${escapeHtml(item.page)}</span>
-                  <span>${escapeHtml(item.document_title)}</span>
+          (item) => {
+            const confPct = Math.round((item.confidence || 0) * 100);
+            return `
+              <article class="evidence-item">
+                <div>
+                  <div class="evidence-header">
+                    <h3>${escapeHtml(item.course_code) || "S/C"} · ${escapeHtml(item.course_title)}</h3>
+                    <span class="evidence-badge ${confidenceClass(item.confidence)}">${confPct}% confianza</span>
+                  </div>
+                  <p class="evidence-text">${escapeHtml(item.text)}</p>
+                  <div class="evidence-meta">
+                    <span class="evidence-tag">${escapeHtml(item.competency_code)}</span>
+                    <span>📄 ${escapeHtml(item.document_title)}</span>
+                    ${item.page ? `<span>Pág. ${escapeHtml(String(item.page))}</span>` : ""}
+                  </div>
                 </div>
-              </div>
-              <span class="similarity">${Math.round(item.confidence * 100)}%</span>
-            </article>
-          `
+              </article>
+            `;
+          }
         )
         .join("") || `<article class="evidence-item"><p>No hay evidencia real procesada para este filtro.</p></article>`;
     return;
@@ -838,45 +890,148 @@ function renderEvidence() {
 
 function renderKpis() {
   const period = currentPeriod();
-  const stats = periodStats(period);
-  if (!period) {
-    $("#kpiBars").innerHTML = `<article class="evidence-item"><p>No hay indicadores disponibles.</p></article>`;
-    return;
-  }
-  const kpis = [
-    [
-      "Trazabilidad por criterio",
-      stats.traceability ?? stats.average,
-      "Porcentaje promedio de tesis con evidencia explicita por criterio."
-    ],
-    [
-      "Brechas detectadas",
-      stats.gaps,
-      "Celdas tributadas con evidencia bajo el umbral esperado."
-    ],
-    [
-      "Evidencias recuperadas",
-      state.apiEvidence.length,
-      "Fragmentos trazables cargados desde el backend para el periodo."
-    ]
-  ];
+  const metrics = state.apiReady ? (state.analysisMetrics[state.currentPeriodId] || {}) : {};
+  const hasMetrics = (metrics.evaluated_cells || 0) > 0;
 
-  $("#kpiBars").innerHTML = kpis
-    .map(
-      ([title, value, description]) => `
-        <article class="kpi-bar">
-          <div class="kpi-row">
-            <span>${title}</span>
-            <strong>${value === null ? "Sin datos" : value}</strong>
+  // ── 4 KPI summary cards ──
+  const kpiSummaryGrid = $("#kpiSummaryGrid");
+  if (kpiSummaryGrid) {
+    if (!period) {
+      kpiSummaryGrid.innerHTML = `<article class="kpi-summary-card"><p>No hay período seleccionado.</p></article>`;
+    } else {
+      const summaryCards = [
+        {
+          icon: "shield-check",
+          label: "Cobertura del período",
+          value: hasMetrics ? `${metrics.coverage_rate ?? 0}%` : "Sin datos",
+          desc: "Celdas tributadas con al menos 1 fragmento de evidencia recuperado.",
+          color: hasMetrics ? (metrics.coverage_rate >= 70 ? "kpi-green" : metrics.coverage_rate >= 40 ? "kpi-amber" : "kpi-red") : "kpi-muted"
+        },
+        {
+          icon: "brain",
+          label: "Confianza del sistema",
+          value: hasMetrics ? `${metrics.avg_confidence ?? 0}%` : "Sin datos",
+          desc: "Promedio de confianza en los veredictos de la IA para este período.",
+          color: hasMetrics ? (metrics.avg_confidence >= 60 ? "kpi-green" : metrics.avg_confidence >= 40 ? "kpi-amber" : "kpi-red") : "kpi-muted"
+        },
+        {
+          icon: "alert-triangle",
+          label: "Brechas detectadas",
+          value: hasMetrics ? (metrics.gaps ?? 0) : "Sin datos",
+          desc: "Celdas con score menor al 55%, que requieren atención curricular prioritaria.",
+          color: hasMetrics ? (metrics.gaps === 0 ? "kpi-green" : metrics.gaps <= 3 ? "kpi-amber" : "kpi-red") : "kpi-muted"
+        },
+        {
+          icon: "trending-up",
+          label: "Celdas con evidencia alta",
+          value: hasMetrics ? (metrics.high ?? 0) : "Sin datos",
+          desc: "Celdas con score ≥ 75%: demuestran cumplimiento sólido del criterio.",
+          color: hasMetrics ? (metrics.high > 0 ? "kpi-green" : "kpi-muted") : "kpi-muted"
+        }
+      ];
+      kpiSummaryGrid.innerHTML = summaryCards.map(c => `
+        <article class="kpi-summary-card ${c.color}">
+          <div class="kpi-card-icon"><i data-lucide="${c.icon}"></i></div>
+          <div>
+            <span class="kpi-card-label">${c.label}</span>
+            <strong class="kpi-card-value">${c.value}</strong>
+            <p class="kpi-card-desc">${c.desc}</p>
           </div>
-          <div class="bar-track" aria-hidden="true">
-            <div class="bar-fill" style="width:${value === null ? 0 : Math.min(100, value)}%"></div>
-          </div>
-          <p>${description}</p>
         </article>
-      `
-    )
-    .join("");
+      `).join("");
+    }
+  }
+
+  // ── Distribution bars ──
+  const kpiBarsEl = $("#kpiBars");
+  if (kpiBarsEl) {
+    if (!hasMetrics) {
+      kpiBarsEl.innerHTML = `<p style="color:var(--muted);font-size:.9rem">Ejecuta el análisis para ver la distribución de evidencia.</p>`;
+    } else {
+      const total = metrics.evaluated_cells || 1;
+      const bars = [
+        { label: "Evidencia alta (≥ 75%)", value: metrics.high ?? 0, total, color: "var(--green)", icon: "✓" },
+        { label: "Evidencia media (55–74%)", value: metrics.medium ?? 0, total, color: "var(--amber)", icon: "~" },
+        { label: "Evidencia baja / brecha (< 55%)", value: metrics.low ?? 0, total, color: "var(--coral)", icon: "!" },
+      ];
+      kpiBarsEl.innerHTML = bars.map(b => {
+        const pct = Math.round((b.value / total) * 100);
+        return `
+          <article class="kpi-bar">
+            <div class="kpi-row">
+              <span>${b.icon} ${b.label}</span>
+              <strong>${b.value} <small style="font-weight:500;color:var(--muted)">(${pct}%)</small></strong>
+            </div>
+            <div class="bar-track" aria-hidden="true">
+              <div class="bar-fill" style="width:${pct}%;background:${b.color}"></div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+  }
+
+  // ── Top gaps table ──
+  const topGapsEl = $("#topGapsTable");
+  if (topGapsEl) {
+    const gaps = metrics.top_gaps || [];
+    if (!hasMetrics || !gaps.length) {
+      topGapsEl.innerHTML = `<p style="color:var(--muted);font-size:.9rem">No hay brechas calculadas para este período.</p>`;
+    } else {
+      topGapsEl.innerHTML = `
+        <div class="gaps-table">
+          <div class="gaps-header">
+            <span>Ramo</span><span>Competencia</span><span>Score</span><span>Fragmentos</span>
+          </div>
+          ${gaps.map(g => `
+            <div class="gaps-row">
+              <span class="gaps-course" title="${escapeHtml(g.course_title)}">
+                <strong>${escapeHtml(g.course_code)}</strong>
+                <small>${escapeHtml(g.course_title)}</small>
+              </span>
+              <span class="gaps-comp">
+                <strong>${escapeHtml(g.competency_code)}</strong>
+                <small>${escapeHtml(g.competency_group)}</small>
+              </span>
+              <span class="score-badge ${g.score >= 55 ? "mid" : "low"}">${g.score}%</span>
+              <span style="color:var(--muted);font-size:.82rem">${g.evidence_count} fragmento${g.evidence_count !== 1 ? 's' : ''}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+  }
+
+  // ── Competency coverage list ──
+  const compCoverageEl = $("#competencyCoverageList");
+  if (compCoverageEl) {
+    const coverageList = metrics.competency_coverage || [];
+    if (!hasMetrics || !coverageList.length) {
+      compCoverageEl.innerHTML = `<p style="color:var(--muted);font-size:.9rem">No hay datos de cobertura calculados para este período.</p>`;
+    } else {
+      compCoverageEl.innerHTML = coverageList.map(c => {
+        const color = c.coverage_pct >= 70 ? "var(--green)" : c.coverage_pct >= 40 ? "var(--amber)" : "var(--coral)";
+        return `
+          <div class="comp-coverage-row">
+            <div class="comp-coverage-header">
+              <div>
+                <strong>${escapeHtml(c.code)}</strong>
+                <small>${escapeHtml(c.group)}</small>
+              </div>
+              <span class="comp-coverage-pct" style="color:${color}">${c.coverage_pct}%</span>
+            </div>
+            <div class="bar-track" aria-hidden="true" style="height:7px">
+              <div class="bar-fill" style="width:${c.coverage_pct}%;background:${color};transition:width .4s ease"></div>
+            </div>
+            <div class="comp-coverage-meta">
+              <span>${c.cells_with_evidence}/${c.total_cells} cursos con evidencia</span>
+              ${c.avg_score !== null ? `<span>Score promedio: ${c.avg_score}%</span>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  }
 }
 
 function renderAll() {
@@ -1192,11 +1347,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $("#cellDetail").addEventListener("click", (event) => {
-    const button = event.target.closest(".toggle-general-comment");
-    if (!button) return;
-    const key = button.dataset.detailKey;
-    state.expandedComments[key] = !state.expandedComments[key];
-    renderCellDetail();
+    const commentBtn = event.target.closest(".toggle-general-comment");
+    if (commentBtn) {
+      const key = commentBtn.dataset.detailKey;
+      state.expandedComments[key] = !state.expandedComments[key];
+      renderCellDetail();
+      return;
+    }
+    const fragBtn = event.target.closest(".toggle-fragments");
+    if (fragBtn) {
+      const key = fragBtn.dataset.detailKey;
+      state.expandedFragments[key] = !state.expandedFragments[key];
+      renderCellDetail();
+    }
   });
 
   $(".nav-list").addEventListener("click", (event) => {

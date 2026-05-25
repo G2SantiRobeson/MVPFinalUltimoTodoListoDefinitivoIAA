@@ -799,6 +799,39 @@ def build_cell_detail(
         suggested_action = llm_comment.suggested_action
         source = llm_comment.source
 
+    # Build multiple evidence fragments (up to 3) for analyst review
+    evidence_fragments: list[dict] = []
+    all_cell_evidence = (
+        db.query(Evidence, DocumentChunk)
+        .join(DocumentChunk, Evidence.chunk_id == DocumentChunk.id)
+        .filter(
+            Evidence.period_id == period_id,
+            Evidence.course_id == course_id,
+            Evidence.criterion_id == criterion.id,
+        )
+        .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
+        .limit(3)
+        .all()
+    )
+    seen_frag_ids: set[str] = set()
+    for ev, ch in all_cell_evidence:
+        if ch.id in seen_frag_ids:
+            continue
+        seen_frag_ids.add(ch.id)
+        frag_origin = "Desconocido"
+        frag_page: int | None = ch.page
+        if ch.version and ch.version.document:
+            frag_origin = ch.version.document.title
+        evidence_fragments.append(
+            {
+                "text": _trim_text(ch.text),
+                "origin": frag_origin,
+                "page": frag_page,
+                "confidence": round((ev.confidence or 0) * 100),
+                "verdict": ev.verdict or "candidate",
+            }
+        )
+
     return {
         "period_id": period_id,
         "course_id": course.id,
@@ -819,6 +852,7 @@ def build_cell_detail(
         or "No hay fragmento textual suficientemente confiable para esta celda.",
         "evidence_origin": evidence_origin,
         "evidence_page": evidence_page,
+        "evidence_fragments": evidence_fragments,
         "suggested_action": suggested_action,
         "source": source,
     }
@@ -856,12 +890,15 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     cells = []
     links = db.query(CourseCompetency).join(Course).join(Competency).all()
     criteria_evaluated = set()
+    # Track per-competency stats for the new competency_coverage metric
+    competency_cells: dict[str, dict] = {}  # competency_id -> {total, with_evidence, scores}
     for link in links:
         criterion = link.competency.criteria[0] if link.competency.criteria else None
         if not criterion:
             continue
         criteria_evaluated.add(criterion.id)
         result = result_by_cell.get((link.course_id, criterion.id))
+        ev_count = evidence_counts.get((link.course_id, criterion.id), 0)
         cells.append(
             {
                 "course_id": link.course_id,
@@ -869,12 +906,28 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
                 "course_title": link.course.title,
                 "competency_id": link.competency_id,
                 "competency_code": link.competency.code,
+                "competency_group": link.competency.group,
                 "score": round(result.score) if result else None,
                 "confidence": result.confidence if result else None,
                 "status": "ready" if result else "pending",
-                "evidence_count": evidence_counts.get((link.course_id, criterion.id), 0),
+                "evidence_count": ev_count,
             }
         )
+        # Accumulate per-competency data
+        comp_key = link.competency_id
+        if comp_key not in competency_cells:
+            competency_cells[comp_key] = {
+                "code": link.competency.code,
+                "group": link.competency.group,
+                "total": 0,
+                "with_evidence": 0,
+                "scores": [],
+            }
+        competency_cells[comp_key]["total"] += 1
+        if ev_count > 0:
+            competency_cells[comp_key]["with_evidence"] += 1
+        if result and result.score is not None:
+            competency_cells[comp_key]["scores"].append(result.score)
 
     if criteria_evaluated and total_docs > 0:
         sum_traceability = sum(
@@ -886,6 +939,47 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         avg_traceability = 0
 
     scores = [cell["score"] for cell in cells if cell["score"] is not None]
+    confidences = [result.confidence for result in results if result.confidence is not None]
+
+    # coverage_rate: % of tributed cells that have at least 1 evidence fragment
+    cells_with_evidence = sum(1 for cell in cells if cell["evidence_count"] > 0)
+    total_cells = len(cells)
+    coverage_rate = round((cells_with_evidence / total_cells) * 100) if total_cells > 0 else 0
+
+    # avg_confidence: mean confidence of all EvaluationResults
+    avg_confidence = round((sum(confidences) / len(confidences)) * 100) if confidences else 0
+
+    # top_gaps: the 5 lowest-scoring cells (most critical gaps)
+    scored_cells = [c for c in cells if c["score"] is not None]
+    top_gaps = sorted(scored_cells, key=lambda c: c["score"])[:5]
+    top_gaps_out = [
+        {
+            "course_code": g["course_code"],
+            "course_title": g["course_title"],
+            "competency_code": g["competency_code"],
+            "competency_group": g["competency_group"],
+            "score": g["score"],
+            "evidence_count": g["evidence_count"],
+        }
+        for g in top_gaps
+    ]
+
+    # competency_coverage: per-competency summary sorted by coverage ascending
+    competency_coverage_out = sorted(
+        [
+            {
+                "code": v["code"],
+                "group": v["group"],
+                "total_cells": v["total"],
+                "cells_with_evidence": v["with_evidence"],
+                "coverage_pct": round((v["with_evidence"] / v["total"]) * 100) if v["total"] > 0 else 0,
+                "avg_score": round(sum(v["scores"]) / len(v["scores"])) if v["scores"] else None,
+            }
+            for v in competency_cells.values()
+        ],
+        key=lambda x: x["coverage_pct"],
+    )
+
     metrics = {
         "average": round(sum(scores) / len(scores)) if scores else 0,
         "traceability": avg_traceability,
@@ -894,6 +988,10 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         "high": len([score for score in scores if score >= 75]),
         "medium": len([score for score in scores if 55 <= score < 75]),
         "low": len([score for score in scores if score < 55]),
+        "coverage_rate": coverage_rate,
+        "avg_confidence": avg_confidence,
+        "top_gaps": top_gaps_out,
+        "competency_coverage": competency_coverage_out,
     }
 
     return {

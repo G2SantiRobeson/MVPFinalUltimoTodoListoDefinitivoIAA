@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 
 <head>
@@ -34,10 +34,10 @@
           <i data-lucide="file-search"></i>
           <span>Evidencia</span>
         </button>
-        <!-- <button class="nav-item" data-view="kpis" type="button">
-          <i data-lucide="file-search"></i>
-          <span>KPI</span>
-        </button> -->
+        <button class="nav-item" data-view="kpis" type="button">
+          <i data-lucide="bar-chart-2"></i>
+          <span>Indicadores</span>
+        </button>
       </nav>
 
       <div class="sidebar-note">
@@ -207,47 +207,38 @@
       </section>
 
       <section class="view" id="kpis">
-        <div class="content-grid kpi-grid">
-          <section class="panel" aria-labelledby="kpiTitle">
+        <!-- Resumen de 4 KPIs grandes -->
+        <div class="kpi-summary-grid" id="kpiSummaryGrid"></div>
+
+        <div class="content-grid kpi-main-grid">
+          <!-- Panel izquierdo: distribución + brechas críticas -->
+          <section class="panel" aria-labelledby="kpiDistTitle">
             <div class="panel-header">
               <div>
-                <p class="eyebrow">Medición del MVP</p>
-                <h2 id="kpiTitle">Indicadores definidos</h2>
+                <p class="eyebrow">Distribución de evidencia</p>
+                <h2 id="kpiDistTitle">Niveles de cumplimiento por celda</h2>
               </div>
             </div>
             <div class="kpi-bars" id="kpiBars"></div>
-          </section>
 
-          <section class="panel" aria-labelledby="assumptionsTitle">
-            <div class="panel-header">
+            <div class="panel-header" style="margin-top:24px">
               <div>
-                <p class="eyebrow">Supuestos críticos</p>
-                <h2 id="assumptionsTitle">Criterios de revisión</h2>
+                <p class="eyebrow">Brechas críticas</p>
+                <h2>Las 5 celdas con menor evidencia</h2>
               </div>
             </div>
-            <div class="assumption-list">
-              <article>
-                <i data-lucide="scan-text"></i>
-                <div>
-                  <strong>Evidencia textual suficiente</strong>
-                  <p>La interfaz muestra resultados agregados cuando existen tesis procesadas.</p>
-                </div>
-              </article>
-              <article>
-                <i data-lucide="map"></i>
-                <div>
-                  <strong>Interpretación visual</strong>
-                  <p>El mapa de calor permite detectar fortalezas y brechas curriculares por período.</p>
-                </div>
-              </article>
-              <article>
-                <i data-lucide="database"></i>
-                <div>
-                  <strong>Reutilización de resultados</strong>
-                  <p>Los estados informan caché, recálculo y cambios en tesis asociadas.</p>
-                </div>
-              </article>
+            <div id="topGapsTable"></div>
+          </section>
+
+          <!-- Panel derecho: cobertura por competencia -->
+          <section class="panel" aria-labelledby="kpiCompTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Cobertura por competencia</p>
+                <h2 id="kpiCompTitle">Respaldo documental por área</h2>
+              </div>
             </div>
+            <div id="competencyCoverageList"></div>
           </section>
         </div>
       </section>
