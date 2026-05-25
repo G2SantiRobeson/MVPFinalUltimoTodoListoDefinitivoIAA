@@ -118,14 +118,12 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
             
             ws.write("A4", "Promedio global:")
             ws.write("B4", f"{metrics.get('average', 0)}%")
-            ws.write("A5", "Celdas evaluadas:")
-            ws.write("B5", metrics.get("evaluated_cells", 0))
-            ws.write("A6", "Evidencia Alta:")
-            ws.write("B6", metrics.get("high", 0))
-            ws.write("A7", "Evidencia Media:")
-            ws.write("B7", metrics.get("medium", 0))
-            ws.write("A8", "Brechas (Baja):")
-            ws.write("B8", metrics.get("gaps", 0))
+            ws.write("A5", "Evidencia Alta:")
+            ws.write("B5", metrics.get("high", 0))
+            ws.write("A6", "Evidencia Media:")
+            ws.write("B6", metrics.get("medium", 0))
+            ws.write("A7", "Brechas (Baja):")
+            ws.write("B7", metrics.get("gaps", 0))
 
             # 3. Build Heatmap Matrix
             ws.write("A10", "Mapa de Calor de Tributación", subtitle_format)

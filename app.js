@@ -463,16 +463,16 @@ function bindHeatmapDrag() {
     heatmapDrag.startY = event.clientY;
     heatmapDrag.scrollLeft = wrap.scrollLeft;
     heatmapDrag.scrollTop = wrap.scrollTop;
-    wrap.classList.add("dragging");
-    wrap.setPointerCapture?.(event.pointerId);
   });
 
   wrap.addEventListener("pointermove", (event) => {
     if (!heatmapDrag.active || heatmapDrag.pointerId !== event.pointerId) return;
     const deltaX = event.clientX - heatmapDrag.startX;
     const deltaY = event.clientY - heatmapDrag.startY;
-    if (Math.abs(deltaX) > HEATMAP_DRAG_THRESHOLD || Math.abs(deltaY) > HEATMAP_DRAG_THRESHOLD) {
+    if (!heatmapDrag.moved && (Math.abs(deltaX) > HEATMAP_DRAG_THRESHOLD || Math.abs(deltaY) > HEATMAP_DRAG_THRESHOLD)) {
       heatmapDrag.moved = true;
+      wrap.classList.add("dragging");
+      wrap.setPointerCapture?.(event.pointerId);
     }
     if (!heatmapDrag.moved) return;
     event.preventDefault();
@@ -485,7 +485,9 @@ function bindHeatmapDrag() {
     heatmapDrag.active = false;
     heatmapDrag.pointerId = null;
     wrap.classList.remove("dragging");
-    wrap.releasePointerCapture?.(event.pointerId);
+    if (wrap.hasPointerCapture?.(event.pointerId)) {
+      wrap.releasePointerCapture(event.pointerId);
+    }
     if (heatmapDrag.moved) {
       heatmapDrag.suppressClick = true;
       window.setTimeout(() => {
@@ -557,19 +559,16 @@ function renderSummary() {
   let cards;
   if (hasMetrics) {
     const coverageColor = metrics.coverage_rate >= 70 ? "var(--green)" : metrics.coverage_rate >= 40 ? "var(--amber)" : "var(--coral)";
-    const confidenceColor = metrics.avg_confidence >= 60 ? "var(--teal)" : metrics.avg_confidence >= 40 ? "var(--amber)" : "var(--coral)";
     cards = [
       ["Cobertura del período", `${metrics.coverage_rate ?? 0}%`, "Celdas tributadas cuyo resultado alcanza el umbral de evidencia.", coverageColor],
       ["Evidencia alta", metrics.high ?? 0, "Celdas con score ≥ 75% (cumplimiento fuerte).", "var(--green)"],
-      ["Brechas detectadas", metrics.gaps ?? 0, "Celdas con evidencia bajo el umbral esperado (< 55%).", "var(--coral)"],
-      ["Confianza del sistema", `${metrics.avg_confidence ?? 0}%`, "Promedio de confianza en los veredictos generados.", confidenceColor]
+      ["Brechas detectadas", metrics.gaps ?? 0, "Celdas con evidencia bajo el umbral esperado (< 55%).", "var(--coral)"]
     ];
   } else {
     cards = [
       ["Tesis analizadas", period?.metrics?.thesis ?? 0, period ? `${period.thesis.length} registradas` : "Sin periodo seleccionado", "var(--teal)"],
       ["Bloque visible", currentGroupLabel, `${visibleCompetencies.length} competencias en la vista`, "var(--blue)"],
-      ["Ramos visibles", visibleCourses.length, `${visibleTributated} cruces ramo-competencia con X`, "var(--muted)"],
-      ["Celdas en blanco", visibleCourses.length * visibleCompetencies.length - visibleTributated, "Dentro de los ramos que aportan al bloque", "var(--muted)"]
+      ["Ramos visibles", visibleCourses.length, `${visibleTributated} cruces ramo-competencia con X`, "var(--muted)"]
     ];
   }
 
@@ -1226,13 +1225,6 @@ function renderKpis() {
           color: hasMetrics ? (metrics.coverage_rate >= 70 ? "kpi-green" : metrics.coverage_rate >= 40 ? "kpi-amber" : "kpi-red") : "kpi-muted"
         },
         {
-          icon: "brain",
-          label: "Confianza del sistema",
-          value: hasMetrics ? `${metrics.avg_confidence ?? 0}%` : "Sin datos",
-          desc: "Promedio de confianza en los veredictos de la IA para este período.",
-          color: hasMetrics ? (metrics.avg_confidence >= 60 ? "kpi-green" : metrics.avg_confidence >= 40 ? "kpi-amber" : "kpi-red") : "kpi-muted"
-        },
-        {
           icon: "alert-triangle",
           label: "Brechas detectadas",
           value: hasMetrics ? (metrics.gaps ?? 0) : "Sin datos",
@@ -1312,7 +1304,7 @@ function renderKpis() {
                 <small>${escapeHtml(g.competency_group)}</small>
               </span>
               <span class="score-badge ${g.score >= 55 ? "mid" : "low"}">${g.score}%</span>
-              <span style="color:var(--muted);font-size:.82rem">${g.evidence_count} fragmento${g.evidence_count !== 1 ? 's' : ''}</span>
+              <span style="color:var(--muted);font-size:.82rem">${g.evidence_count} fragmento${g.evidence_count !== 1 ? 's' : ''} con evidencia suficiente</span>
             </div>
           `).join("")}
         </div>

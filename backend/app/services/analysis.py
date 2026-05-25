@@ -961,15 +961,11 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         avg_traceability = 0
 
     scores = [cell["score"] for cell in cells if cell["score"] is not None]
-    confidences = [result.confidence for result in results if result.confidence is not None]
 
     # coverage_rate: % of tributed cells whose evaluated result reaches the threshold.
     cells_with_evidence = sum(value["with_evidence"] for value in competency_cells.values())
     total_cells = len(cells)
     coverage_rate = round((cells_with_evidence / total_cells) * 100) if total_cells > 0 else 0
-
-    # avg_confidence: mean confidence of all EvaluationResults
-    avg_confidence = round((sum(confidences) / len(confidences)) * 100) if confidences else 0
 
     # top_gaps: the 5 lowest-scoring cells (most critical gaps)
     scored_cells = [c for c in cells if c["score"] is not None]
@@ -1011,7 +1007,6 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         "medium": len([score for score in scores if 55 <= score < 75]),
         "low": len([score for score in scores if score < 55]),
         "coverage_rate": coverage_rate,
-        "avg_confidence": avg_confidence,
         "top_gaps": top_gaps_out,
         "competency_coverage": competency_coverage_out,
     }
