@@ -194,7 +194,7 @@
           <div class="panel-header">
             <div>
               <p class="eyebrow">Fragmentos recuperados</p>
-              <h2>Evidencia relevante por criterio</h2>
+              <h2>Evidencia relevante por competencia</h2>
             </div>
             <label class="field compact">
               <span>Competencia</span>
@@ -202,6 +202,17 @@
             </label>
           </div>
 
+          <div class="section-help" role="note">
+            <strong>¿Qué significa evidencia?</strong>
+            <p>
+              Son fragmentos concretos extraídos de las tesis que el sistema relaciona con la
+              competencia seleccionada. Cada fragmento conserva su documento y página de origen
+              para revisión manual. Un fragmento puede sugerir relación sin demostrar por sí solo
+              que la competencia esté cubierta. Usa los cruces asociados para abrir la celda
+              correspondiente en el mapa de calor.
+            </p>
+          </div>
+          <p class="evidence-results-summary" id="evidenceResultsSummary" aria-live="polite"></p>
           <div class="evidence-list" id="evidenceList"></div>
         </section>
       </section>
@@ -237,6 +248,15 @@
                 <p class="eyebrow">Cobertura por competencia</p>
                 <h2 id="kpiCompTitle">Respaldo documental por área</h2>
               </div>
+            </div>
+            <div class="section-help" role="note">
+              <strong>¿Qué significa cobertura?</strong>
+              <p>
+                Indica en cuántos ramos asociados a cada competencia el resultado alcanzó el
+                umbral mínimo de evidencia suficiente. Por ejemplo, 2/7 significa que 2 de los
+                7 ramos vinculados cuentan con respaldo automático suficiente; puede haber
+                fragmentos candidatos en los demás, pero requieren revisión.
+              </p>
             </div>
             <div id="competencyCoverageList"></div>
           </section>

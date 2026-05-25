@@ -35,6 +35,7 @@ const API_BASE_URL = "http://localhost:8000/api/v1";
 const DEMO_TOKEN = "demo-academic-admin";
 const ACCEPTED_FILE_EXTENSIONS = [".pdf", ".docx", ".txt"];
 const HIDDEN_GROUP_FILTERS = new Set(["Universidad", "UNIVERSIDAD"]);
+const HIDDEN_HEATMAP_COMPETENCY_CODES = new Set(["U1", "U2", "U3", "U4"]);
 
 function fixMojibake(value) {
   if (typeof value !== "string" || !/[ÃÂ]/.test(value)) return value;
@@ -159,6 +160,23 @@ function cellDetailKey(periodId, course, competency) {
   return `${periodId}::${scoreKey(course, competency)}`;
 }
 
+function openEvidenceCell(courseId, competencyCode) {
+  const courseIndex = curriculumCourses.findIndex((course) => course.db_id === courseId);
+  const criterionIndex = competencies.findIndex((competency) => competency.id === competencyCode);
+  if (courseIndex < 0 || criterionIndex < 0 || !isTributed(courseIndex, criterionIndex)) return;
+
+  state.currentGroup = "all";
+  state.selectedCell = { courseIndex, criterionIndex };
+  setView("dashboard");
+  renderAll();
+  requestAnimationFrame(() => {
+    const selectedButton = $("#heatmap .heatmap-cell.selected");
+    if (!selectedButton) return;
+    selectedButton.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    selectedButton.focus();
+  });
+}
+
 async function hydrateFromApi() {
   try {
     await apiRequest("/health");
@@ -194,7 +212,7 @@ async function refreshApiAnalysis() {
     });
     state.analysisScores[state.currentPeriodId] = scores;
     state.analysisMetrics[state.currentPeriodId] = analysis.metrics || {};
-    state.apiEvidence = await apiRequest(`/evidence?period_id=${state.currentPeriodId}&limit=50`);
+    await refreshApiEvidence();
     state.cellDetails = {};
     state.expandedComments = {};
     state.expandedFragments = {};
@@ -205,6 +223,23 @@ async function refreshApiAnalysis() {
     state.cellDetails = {};
     state.expandedComments = {};
     state.expandedFragments = {};
+  }
+}
+
+async function refreshApiEvidence() {
+  if (!state.apiReady || !state.currentPeriodId) {
+    state.apiEvidence = [];
+    return;
+  }
+
+  const competencyCode = selectedCompetencyCode(state.criterionFilter);
+  const competencyQuery = competencyCode ? `&competency_code=${encodeURIComponent(competencyCode)}` : "";
+  try {
+    state.apiEvidence = await apiRequest(
+      `/evidence?period_id=${state.currentPeriodId}&limit=50${competencyQuery}`
+    );
+  } catch (_error) {
+    state.apiEvidence = [];
   }
 }
 
@@ -264,6 +299,7 @@ function visibleCompetencyIndexes() {
 function visibleCompetencyIndexesFor(groupName) {
   return competencies
     .map((competency, index) => ({ competency, index }))
+    .filter(({ competency }) => !HIDDEN_HEATMAP_COMPETENCY_CODES.has(competency.id.toUpperCase()))
     .filter(({ competency }) => groupName === "all" || competency.group === groupName)
     .map(({ index }) => index);
 }
@@ -408,7 +444,7 @@ function renderSummary() {
     const coverageColor = metrics.coverage_rate >= 70 ? "var(--green)" : metrics.coverage_rate >= 40 ? "var(--amber)" : "var(--coral)";
     const confidenceColor = metrics.avg_confidence >= 60 ? "var(--teal)" : metrics.avg_confidence >= 40 ? "var(--amber)" : "var(--coral)";
     cards = [
-      ["Cobertura del período", `${metrics.coverage_rate ?? 0}%`, "Celdas tributadas con al menos un fragmento de evidencia.", coverageColor],
+      ["Cobertura del período", `${metrics.coverage_rate ?? 0}%`, "Celdas tributadas cuyo resultado alcanza el umbral de evidencia.", coverageColor],
       ["Evidencia alta", metrics.high ?? 0, "Celdas con score ≥ 75% (cumplimiento fuerte).", "var(--green)"],
       ["Brechas detectadas", metrics.gaps ?? 0, "Celdas con evidencia bajo el umbral esperado (< 55%).", "var(--coral)"],
       ["Confianza del sistema", `${metrics.avg_confidence ?? 0}%`, "Promedio de confianza en los veredictos generados.", confidenceColor]
@@ -812,16 +848,8 @@ function renderPipeline() {
 }
 
 function renderEvidence() {
-  const evidenceCounts = new Map();
-  state.apiEvidence.forEach((item) => {
-    if (isHiddenGroup(item.competency_group)) return;
-    evidenceCounts.set(item.competency_code, (evidenceCounts.get(item.competency_code) || 0) + 1);
-  });
-
-  const availableCompetencies = visibleEvidenceCompetencies().filter((competency) => {
-    if (!state.apiReady || !state.apiEvidence.length) return true;
-    return evidenceCounts.has(competency.id);
-  });
+  const summary = $("#evidenceResultsSummary");
+  const availableCompetencies = visibleEvidenceCompetencies();
   const validFilters = new Set(["all", ...availableCompetencies.map(competencyFilterValue)]);
   if (!validFilters.has(state.criterionFilter)) {
     state.criterionFilter = "all";
@@ -831,16 +859,15 @@ function renderEvidence() {
   const filterCode = selectedCompetencyCode(filter);
   const usefulCriterionOptions = [
     `<option value="all">Todas las competencias</option>`,
-    ...availableCompetencies.map((competency) => {
-      const count = evidenceCounts.get(competency.id);
-      const suffix = count ? ` (${count})` : "";
-      return `<option value="${competencyFilterValue(competency)}">${competency.id} · ${competency.group}${suffix}</option>`;
-    })
+    ...availableCompetencies.map(
+      (competency) => `<option value="${competencyFilterValue(competency)}">${competency.id} · ${competency.group}</option>`
+    )
   ];
   $("#criterionFilter").innerHTML = usefulCriterionOptions.join("");
   $("#criterionFilter").value = filter;
 
   if (!state.apiReady || !currentPeriod()) {
+    if (summary) summary.textContent = "";
     $("#evidenceList").innerHTML = `<article class="evidence-item"><p>No hay evidencia cargada desde el backend.</p></article>`;
     return;
   }
@@ -851,6 +878,13 @@ function renderEvidence() {
       if (!filterCode) return true;
       return item.competency_code === filterCode;
     });
+    const displayedItems = apiItems.slice(0, 25);
+    if (summary) {
+      const scope = filterCode ? ` para ${filterCode}` : " destacadas del período";
+      summary.textContent = displayedItems.length
+        ? `Mostrando ${displayedItems.length} evidencias${scope}. Selecciona un cruce para ver su celda y justificación.`
+        : `No se encontraron evidencias${scope}.`;
+    }
 
     const confidenceClass = (conf) => {
       const pct = Math.round((conf || 0) * 100);
@@ -860,23 +894,57 @@ function renderEvidence() {
     };
 
     $("#evidenceList").innerHTML =
-      apiItems
-        .slice(0, 25)
+      displayedItems
         .map(
           (item) => {
             const confPct = Math.round((item.confidence || 0) * 100);
+            const sourceTitle = item.source_document_title || item.document_title || "Documento sin título";
+            const relatedCells = item.related_cells?.length
+              ? item.related_cells
+              : item.course_id
+                ? [{
+                    course_id: item.course_id,
+                    course_code: item.course_code,
+                    course_title: item.course_title
+                  }]
+                : [];
+            const isGrouped = item.occurrence_count > 1;
+            const hasManyCrossings = relatedCells.length > 6;
+            const verdictLabel = item.verdict === "supporting" ? "Evidencia suficiente" : "Candidato para revisión";
             return `
-              <article class="evidence-item">
-                <div>
-                  <div class="evidence-header">
-                    <h3>${escapeHtml(item.course_code) || "S/C"} · ${escapeHtml(item.course_title)}</h3>
+              <article class="evidence-item ${isGrouped ? "grouped" : ""}">
+                <div class="evidence-header">
+                  <div class="evidence-title">
+                    <span class="evidence-tag">${escapeHtml(item.competency_code)}</span>
+                    <h3>${escapeHtml(sourceTitle)}</h3>
+                  </div>
+                  <div class="evidence-status">
+                    <span class="evidence-verdict ${item.verdict === "supporting" ? "supporting" : "candidate"}">${verdictLabel}</span>
                     <span class="evidence-badge ${confidenceClass(item.confidence)}">${confPct}% confianza</span>
                   </div>
-                  <p class="evidence-text">${escapeHtml(item.text)}</p>
-                  <div class="evidence-meta">
-                    <span class="evidence-tag">${escapeHtml(item.competency_code)}</span>
-                    <span>📄 ${escapeHtml(item.document_title)}</span>
-                    ${item.page ? `<span>Pág. ${escapeHtml(String(item.page))}</span>` : ""}
+                </div>
+                <div class="evidence-meta">
+                  <span>Documento de origen</span>
+                  ${item.page ? `<span>Pág. ${escapeHtml(String(item.page))}</span>` : ""}
+                  <span>${isGrouped ? `${item.occurrence_count} cruces asociados` : "1 cruce asociado"}</span>
+                </div>
+                <p class="evidence-text">${escapeHtml(item.text)}</p>
+                <div class="evidence-crossings">
+                  <span class="evidence-crossings-label">${isGrouped ? "Cruces asociados" : "Cruce asociado"} · abrir en el mapa de calor</span>
+                  <div class="evidence-crossing-actions ${hasManyCrossings ? "is-scrollable" : ""}">
+                    ${relatedCells.map((cell) => `
+                      <button
+                        class="evidence-cell-link"
+                        type="button"
+                        data-course-id="${escapeHtml(cell.course_id)}"
+                        data-competency-code="${escapeHtml(item.competency_code)}"
+                        title="Abrir celda ${escapeHtml(cell.course_code)} - ${escapeHtml(item.competency_code)}"
+                      >
+                        <strong>${escapeHtml(cell.course_code || "S/C")}</strong>
+                        <span>${escapeHtml(cell.course_title || "Ramo sin nombre")}</span>
+                        <small>Ver celda</small>
+                      </button>
+                    `).join("")}
                   </div>
                 </div>
               </article>
@@ -904,7 +972,7 @@ function renderKpis() {
           icon: "shield-check",
           label: "Cobertura del período",
           value: hasMetrics ? `${metrics.coverage_rate ?? 0}%` : "Sin datos",
-          desc: "Celdas tributadas con al menos 1 fragmento de evidencia recuperado.",
+          desc: "Celdas tributadas cuyo resultado alcanza el umbral de evidencia.",
           color: hasMetrics ? (metrics.coverage_rate >= 70 ? "kpi-green" : metrics.coverage_rate >= 40 ? "kpi-amber" : "kpi-red") : "kpi-muted"
         },
         {
@@ -1024,7 +1092,7 @@ function renderKpis() {
               <div class="bar-fill" style="width:${c.coverage_pct}%;background:${color};transition:width .4s ease"></div>
             </div>
             <div class="comp-coverage-meta">
-              <span>${c.cells_with_evidence}/${c.total_cells} cursos con evidencia</span>
+              <span>${c.cells_with_evidence}/${c.total_cells} cursos con evidencia suficiente</span>
               ${c.avg_score !== null ? `<span>Score promedio: ${c.avg_score}%</span>` : ""}
             </div>
           </div>
@@ -1436,9 +1504,16 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAll();
   });
 
-  $("#criterionFilter").addEventListener("change", (event) => {
+  $("#criterionFilter").addEventListener("change", async (event) => {
     state.criterionFilter = event.target.value;
+    await refreshApiEvidence();
     renderEvidence();
+  });
+
+  $("#evidenceList").addEventListener("click", (event) => {
+    const button = event.target.closest(".evidence-cell-link");
+    if (!button) return;
+    openEvidenceCell(button.dataset.courseId, button.dataset.competencyCode);
   });
 
   $("#runAnalysis").addEventListener("click", simulateAnalysis);

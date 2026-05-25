@@ -859,6 +859,7 @@ def build_cell_detail(
 
 
 def build_period_analysis(db: Session, period_id: str) -> dict:
+    settings = get_settings()
     period = db.get(AcademicPeriod, period_id)
     if not period:
         raise ValueError(f"No existe el periodo {period_id}")
@@ -913,6 +914,13 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
                 "evidence_count": ev_count,
             }
         )
+        # Coverage is based on the course-specific evaluated result reaching the
+        # evidence threshold, not merely on having a saved candidate fragment.
+        threshold = max(criterion.threshold, settings.evidence_threshold)
+        has_sufficient_evidence = bool(
+            result and result.confidence is not None and result.confidence >= threshold
+        )
+
         # Accumulate per-competency data
         comp_key = link.competency_id
         if comp_key not in competency_cells:
@@ -924,7 +932,7 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
                 "scores": [],
             }
         competency_cells[comp_key]["total"] += 1
-        if ev_count > 0:
+        if has_sufficient_evidence:
             competency_cells[comp_key]["with_evidence"] += 1
         if result and result.score is not None:
             competency_cells[comp_key]["scores"].append(result.score)
@@ -941,8 +949,8 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     scores = [cell["score"] for cell in cells if cell["score"] is not None]
     confidences = [result.confidence for result in results if result.confidence is not None]
 
-    # coverage_rate: % of tributed cells that have at least 1 evidence fragment
-    cells_with_evidence = sum(1 for cell in cells if cell["evidence_count"] > 0)
+    # coverage_rate: % of tributed cells whose evaluated result reaches the threshold.
+    cells_with_evidence = sum(value["with_evidence"] for value in competency_cells.values())
     total_cells = len(cells)
     coverage_rate = round((cells_with_evidence / total_cells) * 100) if total_cells > 0 else 0
 

@@ -16,8 +16,14 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
         key = (item["period_id"], item["criterion_id"], item["_chunk_id"])
         existing = grouped.get(key)
         course_label = item["course_code"] or item["course_title"]
+        related_cell = {
+            "course_id": item["course_id"],
+            "course_code": item["course_code"],
+            "course_title": item["course_title"],
+        }
         if not existing:
             item["related_courses"] = [course_label] if course_label else []
+            item["related_cells"] = [related_cell]
             item["occurrence_count"] = 1
             grouped[key] = item
             continue
@@ -25,6 +31,8 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
         existing["occurrence_count"] += 1
         if course_label and course_label not in existing["related_courses"]:
             existing["related_courses"].append(course_label)
+        if not any(cell["course_id"] == item["course_id"] for cell in existing["related_cells"]):
+            existing["related_cells"].append(related_cell)
         if item["confidence"] > existing["confidence"]:
             for field in [
                 "id",
@@ -55,6 +63,7 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
 def list_evidence(
     period_id: str | None = None,
     criterion_id: str | None = None,
+    competency_code: str | None = None,
     course_id: str | None = None,
     limit: int = 50,
     db: Session = Depends(get_db),
@@ -64,6 +73,12 @@ def list_evidence(
         query = query.filter(Evidence.period_id == period_id)
     if criterion_id:
         query = query.filter(Evidence.criterion_id == criterion_id)
+    if competency_code:
+        query = (
+            query.join(EvaluationCriterion, Evidence.criterion_id == EvaluationCriterion.id)
+            .join(Competency, EvaluationCriterion.competency_id == Competency.id)
+            .filter(Competency.code == competency_code)
+        )
     if course_id:
         query = query.filter(Evidence.course_id == course_id)
 
@@ -93,12 +108,14 @@ def list_evidence(
                 "course_code": course.code if course else "",
                 "course_title": course.title if course else "",
                 "related_courses": [],
+                "related_cells": [],
                 "occurrence_count": 1,
                 "competency_code": competency.code if competency else "",
                 "competency_group": competency.group if competency else "",
                 "criterion_id": evidence.criterion_id,
                 "criterion_name": criterion.name if criterion else "",
                 "document_title": document_title,
+                "source_document_title": document_title,
                 "page": chunk.page if chunk else 0,
                 "text": chunk.text if chunk else "",
                 "semantic_score": evidence.semantic_score,

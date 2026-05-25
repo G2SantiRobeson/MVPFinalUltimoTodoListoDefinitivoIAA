@@ -32,3 +32,4 @@ def test_merge_duplicate_fragments_groups_same_chunk_across_courses():
     assert merged[0]["confidence"] == 0.4
     assert merged[0]["course_code"] == "Evidencia"
     assert "2 cruces asociados" in merged[0]["document_title"]
+    assert [cell["course_id"] for cell in merged[0]["related_cells"]] == ["course-1", "course-2"]

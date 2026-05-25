@@ -85,12 +85,14 @@ class EvidenceOut(BaseModel):
     course_code: str
     course_title: str
     related_courses: list[str] = []
+    related_cells: list[dict] = []
     occurrence_count: int = 1
     competency_code: str
     competency_group: str
     criterion_id: str
     criterion_name: str
     document_title: str
+    source_document_title: str = ""
     page: int
     text: str
     semantic_score: float
