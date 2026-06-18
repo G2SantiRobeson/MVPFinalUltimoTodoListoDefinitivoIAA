@@ -85,9 +85,19 @@ class EmbeddingService:
                 return
             except Exception as exc:
                 if self.provider in SENTENCE_TRANSFORMER_PROVIDERS - {"auto"}:
+                    if isinstance(exc, ModuleNotFoundError) and exc.name == "sentence_transformers":
+                        raise RuntimeError(
+                            "No esta instalado Sentence-Transformers. Desde la carpeta backend, "
+                            'ejecuta: python -m pip install -e ".[ai]" y reinicia la API.'
+                        ) from exc
+
+                    detail = f"{type(exc).__name__}: {exc}" if str(exc) else type(exc).__name__
                     raise RuntimeError(
-                        "No se pudo cargar Sentence-Transformers. "
-                        "Instala el extra IA con: python -m pip install -e .[ai]"
+                        f"No se pudo iniciar el modelo de embeddings "
+                        f"{settings.embedding_model_name} en {self.device or 'auto'}. "
+                        f"Detalle: {detail}. Si el detalle menciona CUDA, configura "
+                        "EMBEDDING_DEVICE=cpu o habilita una GPU compatible; si menciona "
+                        "la descarga del modelo, verifica el acceso a Hugging Face."
                     ) from exc
                 self.fallback_reason = str(exc)
 
