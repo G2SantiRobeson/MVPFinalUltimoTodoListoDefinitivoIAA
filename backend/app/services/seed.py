@@ -2,19 +2,13 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from app.core.config import get_settings
 from app.db.models import (
     AcademicPeriod,
-    Competency,
-    Course,
-    CourseCompetency,
     Curriculum,
-    EvaluationCriterion,
-    Program,
     Role,
     User,
 )
-from app.services.curriculum_loader import load_matrix_from_xlsx
+from app.services.curriculum_matrices import import_initial_curricula
 
 
 ROLE_DESCRIPTIONS = {
@@ -52,69 +46,27 @@ def seed_demo_data(db: Session) -> None:
             user.roles.append(roles[role_name])
             db.add(user)
 
+    curricula = import_initial_curricula(db)
+    default_curriculum = _default_curriculum(db, curricula)
+
     for period_name in PERIODS:
-        if not db.query(AcademicPeriod).filter(AcademicPeriod.name == period_name).first():
-            db.add(AcademicPeriod(name=period_name, status="empty", updated_at=datetime.utcnow()))
-
-    program = db.query(Program).filter(Program.name == "Ingenieria Civil en Computacion").first()
-    if not program:
-        program = Program(name="Ingenieria Civil en Computacion")
-        db.add(program)
-        db.flush()
-
-    curriculum = (
-        db.query(Curriculum)
-        .filter(
-            Curriculum.program_id == program.id,
-            Curriculum.year == 2025,
-            Curriculum.version == "PE 2025 COMPUTACION",
-        )
-        .first()
-    )
-    if not curriculum:
-        curriculum = Curriculum(program_id=program.id, year=2025, version="PE 2025 COMPUTACION")
-        db.add(curriculum)
-        db.flush()
-
-    if db.query(Competency).filter(Competency.curriculum_id == curriculum.id).count() == 0:
-        matrix = load_matrix_from_xlsx(get_settings().curriculum_xlsx_path)
-        competencies: list[Competency] = []
-        for item in matrix.competencies:
-            competency = Competency(
-                curriculum_id=curriculum.id,
-                code=item.code,
-                group=item.group,
-                description=item.description,
-                sort_order=item.sort_order,
+        period = db.query(AcademicPeriod).filter(AcademicPeriod.name == period_name).first()
+        if not period:
+            period = AcademicPeriod(
+                name=period_name,
+                curriculum_id=default_curriculum.id if default_curriculum else None,
+                status="empty",
+                updated_at=datetime.utcnow(),
             )
-            db.add(competency)
-            db.flush()
-            db.add(
-                EvaluationCriterion(
-                    competency_id=competency.id,
-                    name=f"Evidencia para {item.code}",
-                    description=item.description,
-                    threshold=get_settings().evidence_threshold,
-                )
-            )
-            competencies.append(competency)
-
-        for item in matrix.courses:
-            course = Course(
-                curriculum_id=curriculum.id,
-                code=item.code,
-                title=item.title,
-                semester=item.semester,
-                sort_order=item.sort_order,
-            )
-            db.add(course)
-            db.flush()
-            for competency_index in item.competency_indexes:
-                db.add(
-                    CourseCompetency(
-                        course_id=course.id,
-                        competency_id=competencies[competency_index].id,
-                    )
-                )
+            db.add(period)
+        elif not period.curriculum_id and default_curriculum:
+            period.curriculum_id = default_curriculum.id
 
     db.commit()
+
+
+def _default_curriculum(db: Session, imported: list[Curriculum]) -> Curriculum | None:
+    for curriculum in imported:
+        if "COMPUTACION" in (curriculum.version or "").upper():
+            return curriculum
+    return db.query(Curriculum).order_by(Curriculum.year.desc()).first()

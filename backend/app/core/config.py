@@ -15,7 +15,8 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso"
     storage_dir: Path = BACKEND_DIR / "storage"
-    curriculum_xlsx_path: Path = PROJECT_DIR / "Matriz Tributación PE 2025 COMPUTACION.xlsx"
+    matrices_dir: Path = PROJECT_DIR / "matrices_tributacion"
+    curriculum_xlsx_path: Path = matrices_dir / "Matriz Tributacion PE 2025 COMPUTACION.xlsx"
 
     cors_origins: list[str] = [
         "http://localhost:5173",
@@ -56,5 +57,6 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     settings = Settings()
     settings.storage_dir.mkdir(parents=True, exist_ok=True)
+    settings.matrices_dir.mkdir(parents=True, exist_ok=True)
     (BACKEND_DIR / "data").mkdir(parents=True, exist_ok=True)
     return settings

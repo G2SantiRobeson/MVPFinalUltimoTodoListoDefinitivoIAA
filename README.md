@@ -9,7 +9,7 @@ evidencia textual trazable y resultados agregados en un dashboard.
 
 - Frontend web en `index.html`, `styles.css` y `app.js`.
 - Backend FastAPI en `backend/app`.
-- Carga de matriz curricular desde `Matriz Tributacion PE 2025 COMPUTACION.xlsx`.
+- Carga de matrices curriculares desde `matrices_tributacion/` y desde la interfaz web.
 - Subida de documentos PDF, DOCX o TXT.
 - Extraccion de texto, segmentacion en chunks y generacion de embeddings.
 - Analisis semantico de evidencia por criterio, curso y periodo academico.
@@ -213,7 +213,10 @@ La API usa autenticacion demo mediante `Authorization: Bearer <token>`.
 
 - `GET /api/v1/health`
 - `GET /api/v1/auth/me`
+- `GET /api/v1/curricula`
+- `POST /api/v1/curricula`
 - `GET /api/v1/curricula/current/matrix`
+- `GET /api/v1/curricula/{id}/matrix`
 - `GET /api/v1/periods`
 - `POST /api/v1/periods`
 - `POST /api/v1/documents`
@@ -222,6 +225,7 @@ La API usa autenticacion demo mediante `Authorization: Bearer <token>`.
 - `GET /api/v1/periods/{id}/analysis`
 - `GET /api/v1/periods/{id}/analysis/cell-detail?course_id=...&competency_id=...`
 - `GET /api/v1/evidence`
+- `PATCH /api/v1/evidence/{id}`
 - `GET /api/v1/reports`
 
 ## Estrategia IA

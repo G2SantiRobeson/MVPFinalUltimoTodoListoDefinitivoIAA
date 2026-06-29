@@ -15,7 +15,8 @@ services:
       EMBEDDING_MAX_SEQUENCE_LENGTH: 8192
       EMBEDDING_DEVICE: cuda
       HF_HOME: /root/.cache/huggingface
-      CURRICULUM_XLSX_PATH: /workspace/Matriz Tributación PE 2025 COMPUTACION.xlsx
+      MATRICES_DIR: /workspace/matrices_tributacion
+      CURRICULUM_XLSX_PATH: /workspace/matrices_tributacion/Matriz Tributación PE 2025 COMPUTACION.xlsx
     volumes:
       - ./backend/app:/app/app
       - ./backend/storage:/app/storage

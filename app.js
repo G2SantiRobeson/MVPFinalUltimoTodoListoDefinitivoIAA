@@ -1,6 +1,7 @@
 let competencies = [];
 let curriculumCourses = [];
 let competencyGroupNames = [];
+let curricula = [];
 let periods = [];
 const pipelineSteps = [
   ["Carga PDF", "Registro de tesis, período académico y metadatos."],
@@ -22,6 +23,8 @@ const state = {
   analysisScores: {},
   analysisMetrics: {},
   apiEvidence: [],
+  currentCurriculumId: null,
+  newPeriodCurriculumId: null,
   cellDetails: {},
   expandedOverviewCourses: {},
   expandedComments: {},
@@ -35,6 +38,7 @@ const state = {
 const API_BASE_URL = "http://localhost:8000/api/v1";
 const DEMO_TOKEN = "demo-academic-admin";
 const ACCEPTED_FILE_EXTENSIONS = [".pdf", ".docx", ".txt"];
+const ACCEPTED_MATRIX_EXTENSIONS = [".xlsx"];
 const HIDDEN_GROUP_FILTERS = new Set(["Universidad", "UNIVERSIDAD"]);
 const HIDDEN_HEATMAP_COMPETENCY_CODES = new Set(["U1", "U2", "U3", "U4"]);
 const COMPETENCY_OVERVIEW_GROUP_ORDER = ["LIC", "TIC", "TCC"];
@@ -132,11 +136,32 @@ function normalizePeriodFromApi(period) {
   };
 }
 
+function normalizeCurriculumFromApi(curriculum) {
+  return {
+    ...curriculum,
+    display_name: curriculum.display_name || curriculum.version || "Matriz sin nombre",
+    program: curriculum.program || "Carrera no especificada"
+  };
+}
+
 function acceptedThesisFiles(files) {
   return Array.from(files).filter((file) => {
     const name = file.name.toLowerCase();
     return ACCEPTED_FILE_EXTENSIONS.some((extension) => name.endsWith(extension));
   });
+}
+
+function acceptedMatrixFiles(files) {
+  return Array.from(files).filter((file) => {
+    const name = file.name.toLowerCase();
+    return ACCEPTED_MATRIX_EXTENSIONS.some((extension) => name.endsWith(extension));
+  });
+}
+
+function curriculumLabel(curriculum) {
+  if (!curriculum) return "Sin matriz";
+  const year = curriculum.year ? ` · ${curriculum.year}` : "";
+  return `${curriculum.display_name}${year} · ${curriculum.program}`;
 }
 
 function isHiddenGroup(groupName) {
@@ -188,28 +213,51 @@ function openEvidenceCell(courseId, competencyCode) {
 async function hydrateFromApi() {
   try {
     await apiRequest("/health");
-    const [matrix, apiPeriods] = await Promise.all([
-      apiRequest("/curricula/current/matrix"),
+    const [apiCurricula, apiPeriods] = await Promise.all([
+      apiRequest("/curricula"),
       apiRequest("/periods")
     ]);
 
-    competencies = matrix.competencies;
-    curriculumCourses = matrix.courses;
-    competencyGroupNames = [...new Set(competencies.map((competency) => competency.group))];
+    curricula = apiCurricula.map(normalizeCurriculumFromApi);
     periods = apiPeriods.map(normalizePeriodFromApi);
     state.apiReady = true;
     state.currentPeriodId = periods[0]?.id || null;
-    state.selectedCell = firstTributedCell();
+    await loadMatrixForCurrentPeriod();
     state.selectedOverviewCompetencyIndex = null;
     await refreshApiAnalysis();
     renderAll();
   } catch (error) {
     state.apiReady = false;
     state.currentPeriodId = null;
+    state.currentCurriculumId = null;
     state.selectedCell = null;
     state.selectedOverviewCompetencyIndex = null;
     renderAll();
   }
+}
+
+async function loadMatrixForCurrentPeriod() {
+  const period = currentPeriod();
+  const curriculumId = period?.curriculum_id || curricula[0]?.id || null;
+  if (!curriculumId) {
+    competencies = [];
+    curriculumCourses = [];
+    competencyGroupNames = [];
+    state.currentCurriculumId = null;
+    state.selectedCell = null;
+    return;
+  }
+
+  if (state.currentCurriculumId === curriculumId && competencies.length) {
+    return;
+  }
+
+  const matrix = await apiRequest(`/curricula/${encodeURIComponent(curriculumId)}/matrix`);
+  competencies = matrix.competencies;
+  curriculumCourses = matrix.courses;
+  competencyGroupNames = [...new Set(competencies.map((competency) => competency.group))];
+  state.currentCurriculumId = matrix.curriculum_id;
+  state.selectedCell = firstTributedCell();
 }
 
 async function refreshApiAnalysis() {
@@ -542,9 +590,47 @@ function renderPeriodOptions() {
   }
   select.disabled = false;
   select.innerHTML = periods
-    .map((period) => `<option value="${escapeHtml(period.id)}">${escapeHtml(period.name)}</option>`)
+    .map((period) => {
+      const suffix = period.program ? ` · ${period.program}` : "";
+      return `<option value="${escapeHtml(period.id)}">${escapeHtml(period.name)}${escapeHtml(suffix)}</option>`;
+    })
     .join("");
   select.value = state.currentPeriodId || periods[0].id;
+}
+
+function renderCurriculumControls() {
+  const periodSelect = $("#periodCurriculumSelect");
+  const list = $("#curriculumList");
+  if (periodSelect) {
+    periodSelect.innerHTML = curricula.length
+      ? curricula
+        .map((curriculum) => `
+          <option value="${escapeHtml(curriculum.id)}">${escapeHtml(curriculumLabel(curriculum))}</option>
+        `)
+        .join("")
+      : `<option value="">Sin matrices cargadas</option>`;
+    periodSelect.disabled = !curricula.length;
+    const selectedCurriculumId =
+      state.newPeriodCurriculumId || currentPeriod()?.curriculum_id || curricula[0]?.id || "";
+    if (selectedCurriculumId) {
+      periodSelect.value = selectedCurriculumId;
+    }
+  }
+
+  if (!list) return;
+  list.innerHTML = curricula.length
+    ? curricula
+      .map((curriculum) => `
+        <article class="curriculum-item ${curriculum.id === state.currentCurriculumId ? "active" : ""}">
+          <div>
+            <strong>${escapeHtml(curriculum.display_name)}</strong>
+            <span>${escapeHtml(curriculum.program)}${curriculum.year ? ` · ${curriculum.year}` : ""}</span>
+          </div>
+          <small>${escapeHtml(curriculum.source_filename || curriculum.version)}</small>
+        </article>
+      `)
+      .join("")
+    : `<div class="detail-empty">No hay matrices cargadas.</div>`;
 }
 
 function renderSummary() {
@@ -993,6 +1079,8 @@ function renderPeriodList() {
           <strong>${period.name}</strong>
           <span class="status-pill ${meta.className}">${meta.label}</span>
           <span class="period-meta">
+            ${period.program ? `<span>${escapeHtml(period.program)}</span>` : ""}
+            ${period.curriculum_name ? `<span>${escapeHtml(period.curriculum_name)}</span>` : ""}
             <span>${period.metrics.thesis} tesis</span>
             <span>Última actualización: ${period.updatedAt}</span>
           </span>
@@ -1160,6 +1248,8 @@ function renderEvidence() {
             const isGrouped = item.occurrence_count > 1;
             const hasManyCrossings = relatedCells.length > 6;
             const verdictLabel = item.verdict === "supporting" ? "Evidencia suficiente" : "Candidato para revisión";
+            const reviewScore = item.manual_score ?? item.effective_score ?? confPct;
+            const reviewedMeta = item.reviewed_at ? `<span>Revisada manualmente</span>` : "";
             return `
               <article class="evidence-item ${isGrouped ? "grouped" : ""}">
                 <div class="evidence-header">
@@ -1176,8 +1266,23 @@ function renderEvidence() {
                   <span>Documento de origen</span>
                   ${item.page ? `<span>Pág. ${escapeHtml(String(item.page))}</span>` : ""}
                   <span>${isGrouped ? `${item.occurrence_count} cruces asociados` : "1 cruce asociado"}</span>
+                  ${reviewedMeta}
                 </div>
                 <p class="evidence-text">${escapeHtml(item.text)}</p>
+                <form class="evidence-review-form" data-evidence-id="${escapeHtml(item.id)}">
+                  <label>
+                    <span>Puntaje</span>
+                    <input name="manual_score" type="number" min="0" max="100" step="1" value="${escapeHtml(String(reviewScore))}" />
+                  </label>
+                  <label class="review-observation">
+                    <span>Observaci&oacute;n</span>
+                    <input name="manual_observation" type="text" maxlength="1000" value="${escapeHtml(item.manual_observation || "")}" placeholder="Comentario breve" />
+                  </label>
+                  <button class="secondary-button compact-action" type="submit">
+                    <i data-lucide="save"></i>
+                    <span>Guardar opini&oacute;n</span>
+                  </button>
+                </form>
                 <div class="evidence-crossings">
                   <span class="evidence-crossings-label">${isGrouped ? "Cruces asociados" : "Cruce asociado"} · abrir en el mapa de calor</span>
                   <div class="evidence-crossing-actions ${hasManyCrossings ? "is-scrollable" : ""}">
@@ -1347,6 +1452,7 @@ function renderKpis() {
 function renderAll() {
   renderRuntimeState();
   renderPeriodOptions();
+  renderCurriculumControls();
   renderSummary();
   renderCompetencyOverview();
   renderCompetencyOverviewDetail();
@@ -1364,7 +1470,7 @@ function renderAll() {
 
 async function setPeriod(periodId) {
   state.currentPeriodId = periodId;
-  state.selectedCell = firstTributedCell();
+  await loadMatrixForCurrentPeriod();
   state.selectedOverviewCompetencyIndex = null;
   await refreshApiAnalysis();
   renderAll();
@@ -1570,20 +1676,51 @@ async function addFiles(files) {
   }, 8000);
 }
 
+async function uploadMatrix(files) {
+  const selectedFiles = acceptedMatrixFiles(files);
+  const file = selectedFiles[0];
+  const displayName = $("#matrixDisplayName")?.value.trim() || "";
+  const program = $("#matrixProgram")?.value.trim() || "";
+  const yearValue = $("#matrixYear")?.value.trim() || "";
+  if (!file || !displayName || !program || !state.apiReady) return;
+
+  const form = new FormData();
+  form.set("display_name", displayName);
+  form.set("program", program);
+  if (yearValue) form.set("year", yearValue);
+  form.set("file", file);
+
+  const created = await apiRequest("/curricula", {
+    method: "POST",
+    body: form
+  });
+
+  const apiCurricula = await apiRequest("/curricula");
+  curricula = apiCurricula.map(normalizeCurriculumFromApi);
+  const select = $("#periodCurriculumSelect");
+  state.newPeriodCurriculumId = created.id;
+  if (select) select.value = created.id;
+  $("#matrixUploadForm")?.reset();
+  renderAll();
+}
+
 async function createPeriod(name) {
   const clean = name.trim();
   if (!clean) return;
+  const curriculumId = $("#periodCurriculumSelect")?.value || curricula[0]?.id || "";
+  if (!curriculumId) return;
 
   if (state.apiReady) {
     try {
       const created = await apiRequest("/periods", {
         method: "POST",
-        body: JSON.stringify({ name: clean })
+        body: JSON.stringify({ name: clean, curriculum_id: curriculumId })
       });
       const apiPeriods = await apiRequest("/periods");
       periods = apiPeriods.map(normalizePeriodFromApi);
       state.currentPeriodId = created.id;
-      state.selectedCell = firstTributedCell();
+      state.newPeriodCurriculumId = curriculumId;
+      await loadMatrixForCurrentPeriod();
       state.selectedOverviewCompetencyIndex = null;
       await refreshApiAnalysis();
       renderAll();
@@ -1746,6 +1883,19 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#newPeriodName").value = "";
   });
 
+  $("#periodCurriculumSelect")?.addEventListener("change", (event) => {
+    state.newPeriodCurriculumId = event.target.value;
+  });
+
+  $("#matrixUploadForm")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try {
+      await uploadMatrix($("#matrixFileInput").files);
+    } catch (error) {
+      console.error("[Matrices] No se pudo cargar la matriz:", error);
+    }
+  });
+
   $("#thesisTable").addEventListener("click", async (event) => {
     const button = event.target.closest(".delete-thesis");
     if (!button) return;
@@ -1778,6 +1928,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = event.target.closest(".evidence-cell-link");
     if (!button) return;
     openEvidenceCell(button.dataset.courseId, button.dataset.competencyCode);
+  });
+
+  $("#evidenceList").addEventListener("submit", async (event) => {
+    const form = event.target.closest(".evidence-review-form");
+    if (!form) return;
+    event.preventDefault();
+    const evidenceId = form.dataset.evidenceId;
+    const formData = new FormData(form);
+    const manualScore = Number(formData.get("manual_score"));
+    if (!evidenceId || Number.isNaN(manualScore)) return;
+    try {
+      await apiRequest(`/evidence/${encodeURIComponent(evidenceId)}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          manual_score: manualScore,
+          manual_observation: String(formData.get("manual_observation") || "")
+        })
+      });
+      await refreshApiAnalysis();
+      renderAll();
+    } catch (error) {
+      console.error("[Evidencia] No se pudo guardar la revision:", error);
+    }
   });
 
   $("#runAnalysis").addEventListener("click", simulateAnalysis);

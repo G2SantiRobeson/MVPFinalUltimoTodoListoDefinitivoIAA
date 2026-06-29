@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.db.models import (
     AcademicPeriod,
+    AuditLog,
     ChunkEmbedding,
     Competency,
     Course,
@@ -60,6 +61,18 @@ def _score_to_percent(score: float, threshold: float = 0.22) -> int:
     if score < 0.80:
         return round(84 + ((score - 0.55) / 0.25) * 10)
     return round(94 + ((score - 0.80) / 0.20) * 4)
+
+
+def _period_curriculum_id(db: Session, period: AcademicPeriod) -> str:
+    if period.curriculum_id:
+        return period.curriculum_id
+
+    fallback = db.query(Course.curriculum_id).order_by(Course.sort_order).first()
+    if not fallback:
+        raise ValueError("El periodo no tiene matriz de traza asociada.")
+    period.curriculum_id = fallback[0]
+    db.flush()
+    return period.curriculum_id
 
 
 def _evidence_candidate_limit(total_candidates: int, ratio: float = 0.30) -> int:
@@ -166,6 +179,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
     period = db.get(AcademicPeriod, period_id)
     if not period:
         raise ValueError(f"No existe el periodo {period_id}")
+    curriculum_id = _period_curriculum_id(db, period)
 
     period.status = "processing"
     db.query(EvaluationResult).filter(EvaluationResult.period_id == period_id).delete()
@@ -287,8 +301,22 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
         return {"evaluated_cells": 0, "average": 0, "evidence": 0}
 
     ranker = HybridEvidenceRanker(embedding_service)
-    criteria = db.query(EvaluationCriterion).all()
-    course_links = db.query(CourseCompetency).all()
+    criteria = (
+        db.query(EvaluationCriterion)
+        .join(Competency)
+        .filter(Competency.curriculum_id == curriculum_id)
+        .all()
+    )
+    course_links = (
+        db.query(CourseCompetency)
+        .join(Course)
+        .join(Competency, CourseCompetency.competency_id == Competency.id)
+        .filter(
+            Course.curriculum_id == curriculum_id,
+            Competency.curriculum_id == curriculum_id,
+        )
+        .all()
+    )
     links_by_competency: dict[str, list[CourseCompetency]] = defaultdict(list)
     for link in course_links:
         links_by_competency[link.competency_id].append(link)
@@ -629,6 +657,103 @@ def _cell_action(score: int | None, confidence: float | None, has_evidence: bool
     )
 
 
+def review_evidence_score(
+    db: Session,
+    evidence_id: str,
+    manual_score: int,
+    manual_observation: str,
+    actor_id: str | None,
+) -> Evidence:
+    evidence = db.get(Evidence, evidence_id)
+    if not evidence:
+        raise ValueError("Evidencia no encontrada.")
+
+    score = max(0, min(100, manual_score))
+    evidence.manual_score = score
+    evidence.manual_verdict = "supporting" if score >= 55 else "candidate"
+    evidence.manual_observation = manual_observation.strip()
+    evidence.reviewed_by_id = actor_id
+    evidence.reviewed_at = datetime.utcnow()
+    evidence.verdict = evidence.manual_verdict
+    if evidence.manual_observation:
+        evidence.observation = evidence.manual_observation
+
+    _recalculate_reviewed_cell(db, evidence)
+
+    period = db.get(AcademicPeriod, evidence.period_id)
+    if period:
+        period.updated_at = datetime.utcnow()
+
+    db.add(
+        AuditLog(
+            actor_id=actor_id,
+            action="review_evidence_score",
+            entity_type="evidence",
+            entity_id=evidence.id,
+            event_metadata={
+                "period_id": evidence.period_id,
+                "course_id": evidence.course_id,
+                "criterion_id": evidence.criterion_id,
+                "manual_score": score,
+            },
+        )
+    )
+    db.commit()
+    db.refresh(evidence)
+    return evidence
+
+
+def _recalculate_reviewed_cell(db: Session, evidence: Evidence) -> EvaluationResult:
+    reviewed_scores = [
+        row.manual_score
+        for row in db.query(Evidence)
+        .filter(
+            Evidence.period_id == evidence.period_id,
+            Evidence.course_id == evidence.course_id,
+            Evidence.criterion_id == evidence.criterion_id,
+            Evidence.manual_score.isnot(None),
+        )
+        .all()
+        if row.manual_score is not None
+    ]
+    score = round(sum(reviewed_scores) / len(reviewed_scores)) if reviewed_scores else 0
+    confidence = score / 100
+    result = (
+        db.query(EvaluationResult)
+        .filter(
+            EvaluationResult.period_id == evidence.period_id,
+            EvaluationResult.course_id == evidence.course_id,
+            EvaluationResult.criterion_id == evidence.criterion_id,
+            EvaluationResult.document_id.is_(None),
+        )
+        .first()
+    )
+    summary = (
+        "Resultado ajustado por revision manual de evidencia. "
+        f"Promedio de {len(reviewed_scores)} evidencia(s) revisada(s): {score}%."
+    )
+    if not result:
+        result = EvaluationResult(
+            period_id=evidence.period_id,
+            document_id=None,
+            criterion_id=evidence.criterion_id,
+            course_id=evidence.course_id,
+            score=score,
+            confidence=confidence,
+            status="reviewed",
+            summary=summary,
+        )
+        db.add(result)
+        return result
+
+    result.score = score
+    result.confidence = confidence
+    result.status = "reviewed"
+    result.summary = summary
+    result.created_at = datetime.utcnow()
+    return result
+
+
 def _cell_evidence_chunks(
     db: Session,
     period_id: str,
@@ -699,6 +824,9 @@ def build_cell_detail(
     competency = db.get(Competency, competency_id)
     if not period or not course or not competency:
         raise ValueError("Periodo, curso o competencia no encontrado.")
+    curriculum_id = _period_curriculum_id(db, period)
+    if course.curriculum_id != curriculum_id or competency.curriculum_id != curriculum_id:
+        raise ValueError("La celda no pertenece a la matriz de traza del periodo.")
 
     criterion = (
         db.query(EvaluationCriterion)
@@ -870,6 +998,7 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     period = db.get(AcademicPeriod, period_id)
     if not period:
         raise ValueError(f"No existe el periodo {period_id}")
+    curriculum_id = _period_curriculum_id(db, period)
 
     results = db.query(EvaluationResult).filter(EvaluationResult.period_id == period_id).all()
     result_by_cell = {(result.course_id, result.criterion_id): result for result in results}
@@ -896,7 +1025,16 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         docs_by_criterion[criterion_id] += 1
 
     cells = []
-    links = db.query(CourseCompetency).join(Course).join(Competency).all()
+    links = (
+        db.query(CourseCompetency)
+        .join(Course)
+        .join(Competency, CourseCompetency.competency_id == Competency.id)
+        .filter(
+            Course.curriculum_id == curriculum_id,
+            Competency.curriculum_id == curriculum_id,
+        )
+        .all()
+    )
     criteria_evaluated = set()
     # Track per-competency stats for the new competency_coverage metric
     competency_cells: dict[str, dict] = {}  # competency_id -> {total, with_evidence, scores}

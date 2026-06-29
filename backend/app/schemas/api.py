@@ -21,16 +21,29 @@ class UserOut(BaseModel):
 
 class PeriodCreate(BaseModel):
     name: str = Field(min_length=3, max_length=40)
+    curriculum_id: str = Field(min_length=1)
 
 
 class PeriodOut(BaseModel):
     id: str
     name: str
+    curriculum_id: str | None = None
+    curriculum_name: str = ""
+    program: str = ""
     status: str
     analyzedAt: str
     updatedAt: str
     metrics: dict
     thesis: list[list]
+
+
+class CurriculumSummaryOut(BaseModel):
+    id: str
+    display_name: str
+    program: str
+    year: int
+    version: str
+    source_filename: str = ""
 
 
 class CompetencyOut(BaseModel):
@@ -52,6 +65,7 @@ class MatrixOut(BaseModel):
     curriculum_id: str
     program: str
     version: str
+    display_name: str
     competencies: list[CompetencyOut]
     courses: list[CourseOut]
 
@@ -97,8 +111,17 @@ class EvidenceOut(BaseModel):
     text: str
     semantic_score: float
     confidence: float
+    manual_score: int | None = None
+    effective_score: int
     verdict: str
     observation: str
+    manual_observation: str = ""
+    reviewed_at: str | None = None
+
+
+class EvidenceReviewIn(BaseModel):
+    manual_score: int = Field(ge=0, le=100)
+    manual_observation: str = Field(default="", max_length=1000)
 
 
 class HeatmapCellOut(BaseModel):

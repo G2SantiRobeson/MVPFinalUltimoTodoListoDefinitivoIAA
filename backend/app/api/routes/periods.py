@@ -4,7 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.security import require_roles
-from app.db.models import AcademicPeriod, Document
+from app.db.models import AcademicPeriod, Curriculum, Document
 from app.db.session import SessionLocal, get_db
 from app.schemas.api import AnalysisOut, CellDetailOut, PeriodCreate, PeriodOut, RunAnalysisOut
 from app.services.analysis import build_cell_detail, build_period_analysis, run_period_analysis
@@ -51,9 +51,13 @@ def _period_payload(db: Session, period: AcademicPeriod) -> dict:
         ]
         for document in documents
     ]
+    curriculum = db.get(Curriculum, period.curriculum_id) if period.curriculum_id else None
     return {
         "id": period.id,
         "name": period.name,
+        "curriculum_id": curriculum.id if curriculum else None,
+        "curriculum_name": (curriculum.display_name or curriculum.version) if curriculum else "",
+        "program": curriculum.program.name if curriculum else "",
         "status": period.status,
         "analyzedAt": _format_dt(period.analyzed_at),
         "updatedAt": _format_dt(period.updated_at),
@@ -78,10 +82,26 @@ def create_period(
     db: Session = Depends(get_db),
     _user=Depends(require_roles("academic_admin", "technical_admin")),
 ) -> dict:
-    existing = db.query(AcademicPeriod).filter(AcademicPeriod.name == payload.name).first()
+    curriculum = db.get(Curriculum, payload.curriculum_id)
+    if not curriculum:
+        raise HTTPException(status_code=404, detail="Matriz de traza no encontrada.")
+
+    existing = (
+        db.query(AcademicPeriod)
+        .filter(
+            AcademicPeriod.name == payload.name,
+            AcademicPeriod.curriculum_id == payload.curriculum_id,
+        )
+        .first()
+    )
     if existing:
         return _period_payload(db, existing)
-    period = AcademicPeriod(name=payload.name, status="empty", updated_at=datetime.utcnow())
+    period = AcademicPeriod(
+        name=payload.name,
+        curriculum_id=payload.curriculum_id,
+        status="empty",
+        updated_at=datetime.utcnow(),
+    )
     db.add(period)
     db.commit()
     db.refresh(period)

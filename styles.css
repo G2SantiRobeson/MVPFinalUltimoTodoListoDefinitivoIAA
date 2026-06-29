@@ -345,6 +345,10 @@ button {
   gap: 16px;
 }
 
+.content-grid > * {
+  min-width: 0;
+}
+
 .dashboard-grid {
   grid-template-columns: minmax(0, 1.8fr) minmax(320px, 0.9fr);
   align-items: start;
@@ -360,6 +364,7 @@ button {
 }
 
 .panel {
+  min-width: 0;
   padding: 18px;
 }
 
@@ -979,10 +984,56 @@ button {
 
 .inline-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
   align-items: end;
   gap: 10px;
   margin-bottom: 16px;
+}
+
+.matrix-upload-form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.curriculum-list {
+  display: grid;
+  gap: 9px;
+}
+
+.curriculum-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: #fbfcfb;
+}
+
+.curriculum-item.active {
+  border-color: var(--teal);
+  box-shadow: inset 0 0 0 1px var(--teal);
+}
+
+.curriculum-item div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.curriculum-item strong,
+.curriculum-item span,
+.curriculum-item small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.curriculum-item span,
+.curriculum-item small {
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 .period-list {
@@ -1439,6 +1490,7 @@ tr.current-thesis {
 @media (max-width: 1120px) {
   .app-shell {
     grid-template-columns: 1fr;
+    min-width: 0;
   }
 
   .sidebar {
@@ -1449,10 +1501,13 @@ tr.current-thesis {
     grid-template-columns: auto 1fr;
     gap: 14px;
     padding: 14px;
+    min-width: 0;
   }
 
   .nav-list {
     display: flex;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
   }
 
@@ -1859,6 +1914,45 @@ tr.current-thesis {
   line-height: 1.5;
 }
 
+.evidence-review-form {
+  display: grid;
+  grid-template-columns: 110px minmax(180px, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 10px;
+  border: 1px solid #d8e4dd;
+  border-radius: 7px;
+  background: #f8fbfa;
+}
+
+.evidence-review-form label {
+  display: grid;
+  gap: 4px;
+}
+
+.evidence-review-form span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 750;
+}
+
+.evidence-review-form input {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px 9px;
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.compact-action {
+  min-height: 36px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
 .evidence-tag {
   display: inline-flex;
   align-items: center;
@@ -1962,5 +2056,8 @@ tr.current-thesis {
   }
   .evidence-cell-link {
     width: 100%;
+  }
+  .evidence-review-form {
+    grid-template-columns: 1fr;
   }
 }

@@ -67,12 +67,16 @@ class AcademicPeriod(Base):
     __tablename__ = "academic_periods"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uuid_str)
-    name: Mapped[str] = mapped_column(String(40), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(40), index=True)
+    curriculum_id: Mapped[str | None] = mapped_column(ForeignKey("curricula.id"), nullable=True)
     status: Mapped[str] = mapped_column(String(40), default="empty")
     analyzed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     documents: Mapped[list[Document]] = relationship(back_populates="period")
+    curriculum: Mapped[Curriculum | None] = relationship(back_populates="periods")
+
+    __table_args__ = (UniqueConstraint("name", "curriculum_id"),)
 
 
 class Program(Base):
@@ -91,10 +95,14 @@ class Curriculum(Base):
     program_id: Mapped[str] = mapped_column(ForeignKey("programs.id"))
     year: Mapped[int] = mapped_column(Integer)
     version: Mapped[str] = mapped_column(String(80), default="PE 2025 COMPUTACION")
+    display_name: Mapped[str] = mapped_column(String(160), default="")
+    source_filename: Mapped[str] = mapped_column(String(260), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     program: Mapped[Program] = relationship(back_populates="curricula")
     courses: Mapped[list[Course]] = relationship(back_populates="curriculum")
     competencies: Mapped[list[Competency]] = relationship(back_populates="curriculum")
+    periods: Mapped[list[AcademicPeriod]] = relationship(back_populates="curriculum")
 
     __table_args__ = (UniqueConstraint("program_id", "year", "version"),)
 
@@ -248,6 +256,11 @@ class Evidence(Base):
     confidence: Mapped[float] = mapped_column(Float)
     verdict: Mapped[str] = mapped_column(String(40), default="candidate")
     observation: Mapped[str] = mapped_column(Text, default="")
+    manual_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    manual_verdict: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    manual_observation: Mapped[str] = mapped_column(Text, default="")
+    reviewed_by_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 

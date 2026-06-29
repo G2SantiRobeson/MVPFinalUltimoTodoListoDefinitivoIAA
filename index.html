@@ -147,6 +147,10 @@
                 <span>Nuevo período</span>
                 <input id="newPeriodName" name="periodo" type="text" placeholder="Ej: 2026-1" autocomplete="off" />
               </label>
+              <label class="field">
+                <span>Matriz / carrera</span>
+                <select id="periodCurriculumSelect"></select>
+              </label>
               <button class="secondary-button" type="submit">
                 <i data-lucide="plus"></i>
                 <span>Crear</span>
@@ -156,6 +160,40 @@
             <div class="metric-value" id="metricTraceability">--</div>
             <p>Porcentaje promedio de tesis con evidencia explícita por criterio.</p>
             <div class="period-list" id="periodList"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="curriculaTitle">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Matrices de traza</p>
+                <h2 id="curriculaTitle">Mallas cargadas</h2>
+              </div>
+            </div>
+
+            <form class="matrix-upload-form" id="matrixUploadForm">
+              <label class="field">
+                <span>Nombre de la matriz</span>
+                <input id="matrixDisplayName" name="display_name" type="text" placeholder="Ej: PE 2026 Eléctrica" autocomplete="off" required />
+              </label>
+              <label class="field">
+                <span>Carrera</span>
+                <input id="matrixProgram" name="program" type="text" placeholder="Ej: Ingeniería Civil Eléctrica" autocomplete="off" required />
+              </label>
+              <label class="field">
+                <span>Año</span>
+                <input id="matrixYear" name="year" type="number" min="2000" max="2100" placeholder="2026" />
+              </label>
+              <label class="field">
+                <span>Archivo Excel</span>
+                <input id="matrixFileInput" name="file" type="file" accept=".xlsx" required />
+              </label>
+              <button class="secondary-button" type="submit">
+                <i data-lucide="upload"></i>
+                <span>Cargar matriz</span>
+              </button>
+            </form>
+
+            <div class="curriculum-list" id="curriculumList"></div>
           </section>
 
           <section class="panel" aria-labelledby="thesisTitle">

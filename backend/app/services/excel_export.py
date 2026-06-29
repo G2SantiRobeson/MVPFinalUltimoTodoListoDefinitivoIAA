@@ -130,10 +130,26 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
             ws.merge_range("A10:G10", "Mapa de Calor de Tributación", subtitle_format)
 
             # Fetch all mapped courses and competencies to build headers and rows
-            curriculum_courses = db.query(Course).order_by(Course.sort_order).all()
-            curriculum_competencies = db.query(Competency).order_by(Competency.sort_order).all()
+            curriculum_id = period.curriculum_id
+            curriculum_courses = (
+                db.query(Course)
+                .filter(Course.curriculum_id == curriculum_id)
+                .order_by(Course.sort_order)
+                .all()
+            )
+            curriculum_competencies = (
+                db.query(Competency)
+                .filter(Competency.curriculum_id == curriculum_id)
+                .order_by(Competency.sort_order)
+                .all()
+            )
             
-            course_comp_links = db.query(CourseCompetency).all()
+            course_comp_links = (
+                db.query(CourseCompetency)
+                .join(Course)
+                .filter(Course.curriculum_id == curriculum_id)
+                .all()
+            )
             valid_course_ids = {link.course_id for link in course_comp_links}
             valid_comp_ids = {link.competency_id for link in course_comp_links}
 
