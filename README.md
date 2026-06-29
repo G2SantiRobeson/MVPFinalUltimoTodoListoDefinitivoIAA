@@ -1,303 +1,346 @@
 # Plataforma de Validacion del Perfil de Egreso
 
 Aplicacion web para apoyar la validacion del perfil de egreso mediante analisis
-automatico/asistido de tesis o memorias academicas. El sistema cruza documentos,
-malla curricular, cursos, competencias y criterios de evaluacion para generar
-evidencia textual trazable y resultados agregados en un dashboard.
+documental de tesis, memorias o trabajos academicos. El sistema cruza documentos,
+mallas curriculares, cursos, competencias y criterios de evaluacion para generar
+evidencia textual trazable, un mapa de calor y reportes agregados.
+
+## Checklist de entrega
+
+Este repositorio contiene el codigo fuente completo del proyecto:
+
+- Frontend web: `index.html`, `styles.css`, `app.js`.
+- Backend FastAPI: `backend/app`.
+- Dependencias Python declaradas en `backend/pyproject.toml`.
+- Orquestacion local con Docker: `docker-compose.yml` y `backend/Dockerfile`.
+- Plantilla de variables de entorno: `backend/.env.example`.
+- Manuales complementarios: `docs/MANUAL_INSTALACION.md`, `docs/MANUAL_USUARIO.md` y `docs/ARCHITECTURE.md`.
+- Pruebas automatizadas: `backend/tests`.
 
 ## Que incluye
 
-- Frontend web en `index.html`, `styles.css` y `app.js`.
-- Backend FastAPI en `backend/app`.
-- Carga de matrices curriculares desde `matrices_tributacion/` y desde la interfaz web.
-- Subida de documentos PDF, DOCX o TXT.
-- Extraccion de texto, segmentacion en chunks y generacion de embeddings.
-- Analisis semantico de evidencia por criterio, curso y periodo academico.
-- Dashboard con mapa de calor, KPI y detalle de evidencia recuperada.
-- Modo demo: si el backend no esta disponible, el frontend puede abrirse igual con
-  datos simulados.
+- Carga de matrices curriculares desde `matrices_tributacion/` o desde la interfaz.
+- Creacion de periodos academicos asociados a una matriz curricular.
+- Subida de documentos PDF, DOCX y TXT.
+- Extraccion de texto, segmentacion en fragmentos y generacion de embeddings.
+- Embeddings semanticos locales con `BAAI/bge-m3` mediante Sentence-Transformers.
+- Analisis hibrido por similitud vectorial, coincidencia lexica y senales academicas.
+- Mapa de calor por ramo y competencia.
+- Detalle trazable por celda, con fragmentos, documento y pagina.
+- Revision manual de evidencias.
+- Indicadores por periodo y por competencia.
+- Exportacion de reportes Excel.
 
-## Requisitos
+## Dependencias necesarias
 
-- Python 3.11 o superior.
-- Docker Desktop, si se quiere usar PostgreSQL, Redis y MinIO con `docker compose`.
-- GPU NVIDIA con controladores compatibles y acceso GPU habilitado en Docker para acelerar BGE.
-- Navegador moderno.
-- Dependencias IA locales con `sentence-transformers` para ejecutar embeddings BGE.
-- Opcional: API key de Gemini u OpenAI para comentarios generados por LLM.
+### Requisitos base
 
-## Estructura del proyecto
+- Docker Desktop 24+ o Docker Engine 24+ con Docker Compose.
+- Navegador moderno: Chrome, Edge o Firefox.
+- Git, si se clona desde repositorio.
 
-| Ruta | Descripcion |
-| --- | --- |
-| `index.html` | Interfaz web principal. |
-| `styles.css` | Estilos del dashboard. |
-| `app.js` | Logica del frontend y conexion con la API. |
-| `backend/app` | API FastAPI. |
-| `backend/app/db/models.py` | Modelos de datos. |
-| `backend/app/services` | Servicios de matriz, storage, embeddings, analisis y reportes. |
-| `backend/app/api/routes` | Endpoints REST. |
-| `backend/scripts` | Scripts de utilidad y migracion. |
-| `docker-compose.yml` | Servicios locales: API, PostgreSQL/pgvector, Redis y MinIO. |
-| `docs/ARCHITECTURE.md` | Resumen tecnico de arquitectura. |
-| `docs/MANUAL_USUARIO.md` | Manual de usuario (orientado a usuarios finales). |
-| `docs/MANUAL_INSTALACION.md` | Manual de instalacion y despliegue (orientado a desarrolladores/administradores). |
-| `backend/.env.example` | Plantilla de configuracion (copiar a `.env`). |
+### Servicios usados por Docker Compose
 
-## Documentacion
+- API FastAPI.
+- PostgreSQL con pgvector.
+- Redis.
+- MinIO.
+- Volumen `huggingface_cache` para conservar la descarga del modelo `BAAI/bge-m3`.
 
-- `docs/MANUAL_USUARIO.md` — Manual orientado al usuario final con instrucciones paso a paso, capturas y casos de uso.
-- `docs/MANUAL_INSTALACION.md` — Manual tecnico con requisitos, instalacion (Docker y manual), configuracion y mantenimiento.
-- `docs/ARCHITECTURE.md` — Resumen de la arquitectura del sistema.
+### Dependencias Python del backend
 
-## Uso rapido sin backend
+Las dependencias se declaran en `backend/pyproject.toml`.
 
-Abre `index.html` directamente en el navegador. En este modo se puede revisar la
-interfaz y el flujo general, pero no se procesan documentos reales.
+Dependencias principales:
 
-## Ejecutar backend local con Python
+- `fastapi`
+- `uvicorn[standard]`
+- `pydantic-settings`
+- `SQLAlchemy`
+- `python-multipart`
+- `pypdf`
+- `python-docx`
+- `psycopg[binary]`
+- `XlsxWriter`
 
-Desde la raiz del repositorio:
+Dependencias IA opcionales para instalacion manual:
 
-```powershell
-docker compose up -d db redis minio
-```
+- `sentence-transformers`
+- `openai`
+- `google-genai`
 
-Luego instala y ejecuta la API:
+La imagen Docker instala PyTorch con soporte CUDA desde el indice oficial de
+PyTorch y luego instala el extra `.[ai]`.
 
-```powershell
-cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[ai]"
-uvicorn app.main:app --reload --port 8000
-```
+### GPU
 
-En macOS/Linux, activa el entorno con:
+El sistema puede funcionar en CPU o GPU:
 
-```bash
-source .venv/bin/activate
-```
+- Por defecto, `EMBEDDING_DEVICE=auto` detecta CUDA si el contenedor tiene acceso a GPU; si no, usa CPU.
+- Para usar GPU NVIDIA con Docker, descomenta `gpus: all` en `docker-compose.yml`.
+- En Windows con Docker Desktop normalmente basta con tener drivers NVIDIA y WSL2 habilitado.
+- En Linux nativo o Docker Engine dentro de WSL2 puede ser necesario instalar NVIDIA Container Toolkit.
 
-La documentacion interactiva queda disponible en:
+## Instalacion recomendada con Docker
 
-```text
-http://localhost:8000/docs
-```
-
-El frontend intenta conectarse por defecto a:
-
-```text
-http://localhost:8000/api/v1
-```
-
-## Ejecutar todo con Docker Compose
-
-Desde la raiz del repositorio:
+Desde la raiz del proyecto:
 
 ```powershell
 docker compose up --build
 ```
 
-La primera ejecucion descarga `BAAI/bge-m3`. Docker conserva esa descarga en el
-volumen `huggingface_cache` para reutilizarla al recrear la API.
-La API solicita la GPU NVIDIA del host y ejecuta BGE en CUDA. Puedes comprobarlo
-consultando `/api/v1/ai-status`, que debe informar `device: cuda`.
+La primera ejecucion puede tardar porque descarga imagenes Docker, dependencias
+CUDA/PyTorch y el modelo `BAAI/bge-m3`. La descarga del modelo queda persistida
+en el volumen `huggingface_cache`.
 
 Servicios principales:
 
 - API: `http://localhost:8000`
-- Swagger: `http://localhost:8000/docs`
-- PostgreSQL/pgvector: `localhost:5432`
+- Swagger UI: `http://localhost:8000/docs`
+- PostgreSQL: `localhost:5432`
 - Redis: `localhost:6379`
 - MinIO Console: `http://localhost:9001`
 
+Para detener los servicios sin borrar datos:
+
+```powershell
+docker compose down
+```
+
+Para borrar tambien datos y volumenes:
+
+```powershell
+docker compose down -v
+```
+
+## Activar GPU NVIDIA
+
+1. Verifica que Windows o el host vea la GPU:
+
+```powershell
+nvidia-smi
+```
+
+2. En `docker-compose.yml`, cambia:
+
+```yaml
+# gpus: all
+```
+
+por:
+
+```yaml
+gpus: all
+```
+
+3. Reconstruye y levanta la API:
+
+```powershell
+docker compose up --build
+```
+
+4. Verifica el dispositivo activo:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/api/v1/ai-status
+```
+
+Resultado esperado con GPU:
+
+```json
+{
+  "provider": "sentence-transformers",
+  "model": "BAAI/bge-m3",
+  "device": "cuda",
+  "is_real_ai": true
+}
+```
+
+Resultado esperado sin GPU:
+
+```json
+{
+  "provider": "sentence-transformers",
+  "model": "BAAI/bge-m3",
+  "device": "cpu",
+  "is_real_ai": true
+}
+```
+
+## Instalacion manual del backend
+
+Usa esta opcion solo si no quieres ejecutar la API dentro de Docker.
+
+1. Levanta servicios auxiliares:
+
+```powershell
+docker compose up -d db redis minio
+```
+
+2. Crea entorno virtual:
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+3. Instala dependencias:
+
+```powershell
+python -m pip install -e ".[ai]"
+```
+
+4. Crea configuracion local si necesitas cambiar valores:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+5. Ejecuta la API:
+
+```powershell
+uvicorn app.main:app --reload --port 8000
+```
+
 ## Configuracion
 
-El backend usa PostgreSQL por defecto:
+El backend lee variables desde `backend/.env` y desde el entorno.
+
+Variables utiles:
+
+| Variable | Uso | Valor por defecto |
+| --- | --- | --- |
+| `DATABASE_URL` | Conexion PostgreSQL | `postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso` |
+| `MATRICES_DIR` | Carpeta de matrices curriculares | `matrices_tributacion` |
+| `EMBEDDING_PROVIDER` | Proveedor de embeddings | `bge-m3` |
+| `EMBEDDING_MODEL_NAME` | Modelo semantico | `BAAI/bge-m3` |
+| `EMBEDDING_DEVICE` | `auto`, `cpu` o `cuda` | `auto` |
+| `LLM_PROVIDER` | `gemini` u `openai` | `gemini` |
+| `GEMINI_API_KEY` | API key para comentarios Gemini | vacio |
+| `OPENAI_API_KEY` | API key para comentarios OpenAI | vacio |
+
+Los comentarios LLM son opcionales. Sin API key, el sistema sigue funcionando con
+comentarios locales trazables.
+
+## Uso rapido
+
+1. Levanta el backend con Docker.
+2. Abre `index.html` en el navegador.
+3. Carga una matriz curricular desde la seccion de mallas.
+4. Crea un periodo academico asociado a esa matriz.
+5. Sube documentos PDF, DOCX o TXT.
+6. Espera a que terminen de procesarse.
+7. Ejecuta el analisis.
+8. Revisa el mapa de calor, evidencias e indicadores.
+9. Exporta el reporte Excel si necesitas respaldo.
+
+## Verificacion
+
+Health check:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/api/v1/health
+```
+
+Estado de IA:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/api/v1/ai-status
+```
+
+Pruebas del backend:
+
+```powershell
+cd backend
+pytest
+```
+
+## Estructura del proyecto
 
 ```text
-postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso
+MVPFinalUltimoTodoListoDefinitivoIAA/
+|-- index.html
+|-- app.js
+|-- styles.css
+|-- docker-compose.yml
+|-- backend/
+|   |-- Dockerfile
+|   |-- pyproject.toml
+|   |-- .env.example
+|   |-- app/
+|   |   |-- main.py
+|   |   |-- api/routes/
+|   |   |-- core/
+|   |   |-- db/
+|   |   |-- schemas/
+|   |   `-- services/
+|   |-- scripts/
+|   `-- tests/
+|-- docs/
+|   |-- ARCHITECTURE.md
+|   |-- MANUAL_INSTALACION.md
+|   `-- MANUAL_USUARIO.md
+`-- matrices_tributacion/
 ```
 
-Puedes sobreescribir esta configuracion con variables de entorno o creando
-`backend/.env`.
+## Comentarios relevantes en el codigo
 
-Ejemplo para comentarios con Gemini:
+El codigo incluye comentarios y docstrings en los puntos que concentran la logica
+del sistema:
 
-```env
-LLM_COMMENTS_ENABLED=true
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=tu_api_key
-GEMINI_MODEL=gemini-2.0-flash
-```
-
-Tambien se puede usar OpenAI cambiando:
-
-```env
-LLM_PROVIDER=openai
-OPENAI_API_KEY=tu_api_key
-```
-
-## Datos y almacenamiento
-
-La aplicacion persiste metadatos y resultados en la base de datos. Los archivos
-subidos no se guardan como blobs dentro de la BD; se almacenan en disco para evitar
-inflarla:
-
-```text
-backend/storage/documents/{period_id}/{document_id}/archivo.pdf
-```
-
-La base guarda:
-
-- `documents`: tesis o memorias registradas.
-- `document_versions`: version del archivo, nombre original, ruta, checksum, MIME,
-  paginas y calidad de extraccion.
-- `processing_jobs`: estado de extraccion, chunking y embeddings.
-- `document_chunks`: fragmentos textuales extraidos con pagina y offsets.
-- `chunk_embeddings`: vector IA de cada fragmento.
-- `evidence`: evidencia encontrada por criterio, curso y competencia.
-- `evaluation_results`: resultados del analisis por celda de la matriz.
-
-Para revisar el estado de la base:
-
-```powershell
-python backend\scripts\db_status.py
-```
-
-Para limitar la salida:
-
-```powershell
-python backend\scripts\db_status.py --limit 5
-```
-
-## Migracion desde SQLite
-
-Si existe una base SQLite previa en:
-
-```text
-backend/data/app.db
-```
-
-puedes migrarla a PostgreSQL con:
-
-```powershell
-docker compose up -d db
-python backend\scripts\migrate_sqlite_to_postgres.py --replace
-```
-
-Si las rutas de archivos guardadas en SQLite apuntan a otro equipo, usa rutas
-relativas al repositorio o reemplaza el prefijo de storage por la ruta del entorno
-actual. Ejemplo generico:
-
-```powershell
-python backend\scripts\migrate_sqlite_to_postgres.py --replace `
-  --rewrite-file-uri-from "<ruta-antigua-del-repo>\backend\storage" `
-  --rewrite-file-uri-to "<ruta-actual-del-repo>\backend\storage"
-```
-
-Si la API corre dentro de Docker, normalmente el destino debe apuntar al storage del
-contenedor:
-
-```powershell
-python backend\scripts\migrate_sqlite_to_postgres.py --replace `
-  --rewrite-file-uri-from "<ruta-antigua-del-repo>\backend\storage" `
-  --rewrite-file-uri-to "/app/storage"
-```
-
-## Tokens demo
-
-La API usa autenticacion demo mediante `Authorization: Bearer <token>`.
-
-| Rol | Token |
-| --- | --- |
-| Estudiante | `demo-student` |
-| Profesor guia | `demo-professor` |
-| Evaluador | `demo-evaluator` |
-| Administrador academico | `demo-academic-admin` |
-| Administrador tecnico | `demo-tech-admin` |
+- `backend/app/services/embeddings.py`: explica el proveedor BGE, el fallback local,
+  la seleccion de dispositivo (`auto`, `cpu`, `cuda`) y el metodo `embed`.
+- `backend/app/services/analysis.py`: documenta la orquestacion del analisis por
+  periodo, scoring y detalle trazable por celda.
+- `backend/app/services/document_processing.py`: documenta extraccion, chunking y
+  generacion de embeddings por documento.
+- `backend/app/services/llm_comments.py`: documenta el uso opcional de Gemini/OpenAI
+  para comentarios, sin enviar documentos completos.
+- `docker-compose.yml`: contiene comentarios para activar GPU solo cuando el entorno
+  tenga soporte NVIDIA.
+- `backend/Dockerfile`: documenta la instalacion de PyTorch CUDA y dependencias IA.
 
 ## Endpoints principales
 
 - `GET /api/v1/health`
+- `GET /api/v1/ai-status`
 - `GET /api/v1/auth/me`
 - `GET /api/v1/curricula`
 - `POST /api/v1/curricula`
 - `GET /api/v1/curricula/current/matrix`
-- `GET /api/v1/curricula/{id}/matrix`
 - `GET /api/v1/periods`
 - `POST /api/v1/periods`
 - `POST /api/v1/documents`
 - `GET /api/v1/documents/{id}/processing-status`
 - `POST /api/v1/periods/{id}/analysis/run`
 - `GET /api/v1/periods/{id}/analysis`
-- `GET /api/v1/periods/{id}/analysis/cell-detail?course_id=...&competency_id=...`
+- `GET /api/v1/periods/{id}/analysis/cell-detail`
 - `GET /api/v1/evidence`
 - `PATCH /api/v1/evidence/{id}`
 - `GET /api/v1/reports`
 
-## Estrategia IA
+## Datos y almacenamiento
 
-La implementacion inicial no entrena un modelo propio. Usa un pipeline reemplazable:
-
-1. Validacion y almacenamiento del archivo.
-2. Extraccion de texto desde PDF, DOCX o TXT.
-3. Estado `ocr_required` cuando no hay texto seleccionable.
-4. Segmentacion en chunks con pagina y offsets.
-5. Embeddings semanticos locales con `BAAI/bge-m3` mediante Sentence-Transformers.
-   La ejecucion normal exige que este proveedor pueda cargarse; el embedding hash
-   queda reservado para pruebas o configuraciones explicitas de desarrollo.
-6. Scoring hibrido: similitud vectorial, coincidencia lexica normalizada, frases
-   clave y senales de secciones academicas.
-7. Evidencia trazable por curso, competencia, criterio, documento, pagina y fragmento.
-8. Reporte agregado por periodo.
-
-Modelo configurado por defecto:
+Los documentos subidos se almacenan en:
 
 ```text
-BAAI/bge-m3
+backend/storage/documents/{period_id}/{document_id}/archivo.pdf
 ```
 
-Para instalar las dependencias IA:
-
-```powershell
-cd backend
-python -m pip install -e ".[ai]"
-```
-
-Puedes verificar el proveedor activo en:
-
-```text
-http://localhost:8000/api/v1/ai-status
-```
-
-Una ejecucion lista para analisis debe informar `provider: sentence-transformers`,
-`model: BAAI/bge-m3` e `is_real_ai: true`.
-
-## Comentarios generados por LLM
-
-El detalle trazable de cada celda puede redactarse con Gemini u OpenAI si se define
-una API key. La API no envia tesis completas para generar comentarios; solo envia el
-contexto minimo de la celda seleccionada: curso, competencia, criterio, score,
-confianza, fragmento recuperado, documento y pagina.
-
-Si no hay API key, si el SDK no esta instalado o si la llamada falla, el sistema vuelve
-automaticamente al comentario local trazable.
+La base de datos guarda documentos, versiones, chunks, embeddings, evidencias,
+resultados de evaluacion y revisiones manuales.
 
 ## Limitaciones actuales
 
-- OCR real aun debe integrarse con Tesseract, Azure Document Intelligence, AWS
-  Textract o equivalente.
-- La calidad academica debe validarse con una muestra historica revisada por
-  profesores o evaluadores.
-- Los umbrales de evidencia deben calibrarse con datos reales.
+- OCR real aun no esta integrado; los PDF escaneados se marcan como `ocr_required`.
+- Los umbrales de evidencia deben calibrarse con datos historicos revisados por humanos.
+- Los comentarios LLM requieren API key externa.
+- Para alto volumen se recomienda reemplazar `BackgroundTasks` por Celery o RQ.
+- El sistema usa autenticacion demo; para produccion se debe integrar SSO institucional.
 
-## Proximos pasos recomendados
+## Manuales complementarios
 
-- Agregar migraciones Alembic.
-- Integrar OCR efectivo.
-- Reemplazar `BackgroundTasks` por Celery/RQ si aumenta el volumen.
-- Implementar eliminacion y versionado completo desde el frontend.
-- Calibrar umbrales con memorias historicas revisadas por humanos.
-- Agregar pruebas automaticas de extraccion, chunking, scoring y permisos.
+- `docs/MANUAL_INSTALACION.md`: instalacion, GPU, variables de entorno y problemas frecuentes.
+- `docs/MANUAL_USUARIO.md`: flujo de uso para usuarios finales.
+- `docs/ARCHITECTURE.md`: componentes y arquitectura tecnica.
