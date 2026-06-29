@@ -44,6 +44,15 @@ def _extract_text_file(path: Path) -> tuple[list[tuple[int, str]], int, float]:
 
 
 def extract_pages(path: Path, mime_type: str) -> tuple[list[tuple[int, str]], int, float]:
+    """Extrae páginas y texto de un archivo según su formato.
+
+    Args:
+        path: Ruta al archivo.
+        mime_type: Tipo MIME del archivo.
+
+    Returns:
+        Tupla (lista de (página, texto), total_páginas, calidad_extracción).
+    """
     suffix = path.suffix.lower()
     if suffix == ".pdf" or "pdf" in mime_type:
         return _extract_pdf(path)
@@ -53,6 +62,17 @@ def extract_pages(path: Path, mime_type: str) -> tuple[list[tuple[int, str]], in
 
 
 def chunk_pages(pages: list[tuple[int, str]]) -> list[tuple[int, str, int, int, int]]:
+    """Segmenta páginas en fragmentos (chunks) con superposición.
+
+    Cada fragmento tiene un tamaño definido en palabras y un
+    solapamiento configurable entre chunks consecutivos.
+
+    Args:
+        pages: Lista de tuplas (página, texto).
+
+    Returns:
+        Lista de tuplas (página, texto, inicio, fin, token_count).
+    """
     settings = get_settings()
     chunks: list[tuple[int, str, int, int, int]] = []
     size = settings.chunk_words
@@ -129,6 +149,17 @@ def process_document_version(
     embedding_device: str | None = None,
     progress_callback: ProgressCallback | None = None,
 ) -> ProcessingJob:
+    """Procesa una versión de documento: extracción, chunking y embeddings.
+
+    Args:
+        db: Sesión de base de datos.
+        version_id: Identificador de la versión a procesar.
+        embedding_device: Dispositivo para embeddings (cuda/cpu).
+        progress_callback: Callback opcional para reportar progreso.
+
+    Returns:
+        Objeto ProcessingJob con el estado final del procesamiento.
+    """
     with sqlite_write_lock:
         return _process_document_version(db, version_id, embedding_device, progress_callback)
 

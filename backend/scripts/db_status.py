@@ -117,7 +117,6 @@ def print_status(limit: int) -> None:
             print(f"- {document.title}")
             print(f"  id: {document.id}")
             print(f"  periodo: {period_name}")
-            print(f"  autor: {document.author or 'sin autor'}")
             print(f"  estado: {document.status}")
             print(f"  creada: {document.created_at}")
             if not version:

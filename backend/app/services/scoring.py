@@ -90,17 +90,37 @@ class RankedChunk:
 
 
 def normalize_text(text: str) -> str:
+    """Normaliza texto eliminando tildes y convirtiendo a minúsculas."""
+
     decomposed = unicodedata.normalize("NFKD", text.lower())
     return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
 def tokenize(text: str) -> list[str]:
+    """Tokeniza y filtra palabras vacías de un texto.
+
+    Args:
+        text: Texto a tokenizar.
+
+    Returns:
+        Lista de tokens relevantes (longitud > 2, sin stopwords).
+    """
     normalized = normalize_text(text)
     tokens = TOKEN_RE.findall(normalized)
     return [token for token in tokens if len(token) > 2 and token not in STOPWORDS]
 
 
 def expand_tokens(tokens: list[str]) -> list[str]:
+    """Expande tokens con sinónimos de dominio académico.
+
+    Agrega términos relacionados (ej: "software" → "sistema", "aplicación").
+
+    Args:
+        tokens: Lista base de tokens.
+
+    Returns:
+        Lista expandida sin duplicados.
+    """
     expanded: list[str] = []
     seen: set[str] = set()
     for token in tokens:
@@ -130,6 +150,17 @@ def _token_weights(tokens: list[str]) -> dict[str, float]:
 
 
 def lexical_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> tuple[float, list[str]]:
+    """Calcula la superposición léxica ponderada entre consulta y fragmento.
+
+    Combina cobertura ponderada y similitud Jaccard.
+
+    Args:
+        query_tokens: Tokens de la consulta (criterio de evaluación).
+        chunk_tokens: Tokens del fragmento de documento.
+
+    Returns:
+        Tupla (puntaje de superposición, términos coincidentes).
+    """
     if not query_tokens or not chunk_tokens:
         return 0.0, []
 
@@ -148,6 +179,17 @@ def lexical_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> tuple[f
 
 
 def phrase_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> float:
+    """Calcula la superposición de bigramas entre consulta y fragmento.
+
+    Detecta coincidencias de frases cortas (pares de palabras consecutivas).
+
+    Args:
+        query_tokens: Tokens de la consulta.
+        chunk_tokens: Tokens del fragmento.
+
+    Returns:
+        Proporción de bigramas de la consulta presentes en el fragmento.
+    """
     if len(query_tokens) < 2 or len(chunk_tokens) < 2:
         return 0.0
 
@@ -159,6 +201,16 @@ def phrase_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> float:
 
 
 def section_signal(chunk_tokens: list[str]) -> float:
+    """Detecta si el fragmento pertenece a una sección académica relevante.
+
+    Busca términos como "análisis", "resultados", "conclusión".
+
+    Args:
+        chunk_tokens: Tokens del fragmento.
+
+    Returns:
+        Puntaje de señal de sección (0-1).
+    """
     if not chunk_tokens:
         return 0.0
     matches = len(set(chunk_tokens).intersection(ACADEMIC_SECTION_TERMS))
@@ -166,10 +218,10 @@ def section_signal(chunk_tokens: list[str]) -> float:
 
 
 class HybridEvidenceRanker:
-    """Ranks candidate chunks with vector and lexical evidence.
+    """Ranking híbrido de fragmentos candidatos usando evidencia vectorial y léxica.
 
-    This is still lightweight, but it is much less fragile than using only the
-    development embedding. It gives explicit reasons for every evidence match.
+    Combina cuatro señales (semántica, léxica, frases, secciones académicas)
+    para producir un score compuesto y términos coincidentes trazables.
     """
 
     def __init__(self, embedding_service: EmbeddingService | None = None) -> None:

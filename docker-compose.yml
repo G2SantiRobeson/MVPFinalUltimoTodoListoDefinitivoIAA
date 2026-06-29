@@ -2,7 +2,12 @@ services:
   api:
     build:
       context: ./backend
-    gpus: all
+    # GPU: descomenta solo si tienes GPU NVIDIA + NVIDIA Container Toolkit.
+    #   Linux nativo: toolkit instalado (ver manual 4.3.1)
+    #   WSL2: toolkit instalado + no-cgroups (ver manual 4.3.2)
+    #   Windows Docker Desktop: funciona directo, no necesitas toolkit.
+    # Sin GPU, comentala o borrala → funciona en CPU.
+    # gpus: all
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
@@ -13,7 +18,7 @@ services:
       EMBEDDING_MODEL_NAME: BAAI/bge-m3
       EMBEDDING_DIMENSIONS: 1024
       EMBEDDING_MAX_SEQUENCE_LENGTH: 8192
-      EMBEDDING_DEVICE: cuda
+      EMBEDDING_DEVICE: auto
       HF_HOME: /root/.cache/huggingface
       MATRICES_DIR: /workspace/matrices_tributacion
       CURRICULUM_XLSX_PATH: /workspace/matrices_tributacion/Matriz Tributación PE 2025 COMPUTACION.xlsx

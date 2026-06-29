@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     embedding_model_name: str = "BAAI/bge-m3"
     embedding_dimensions: int = 1024
     embedding_max_sequence_length: int = 8192
-    embedding_device: str = "cuda"
+    embedding_device: str = "auto"
     llm_comments_enabled: bool = True
     llm_provider: str = "gemini"
     gemini_api_key: str | None = None

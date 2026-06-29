@@ -161,6 +161,19 @@ def _cell_adjusted_score(
 
 
 def run_period_analysis(db: Session, period_id: str, embedding_device: str | None = None) -> dict:
+    """Ejecuta el análisis completo de un período académico.
+
+    Orquesta la carga de documentos, generación de embeddings, scoring
+    híbrido y almacenamiento de evidencias y resultados.
+
+    Args:
+        db: Sesión de base de datos.
+        period_id: Identificador del período a analizar.
+        embedding_device: Dispositivo para embeddings (cuda/cpu/None).
+
+    Returns:
+        Resumen del análisis con métricas de cobertura.
+    """
     with sqlite_write_lock:
         try:
             return _run_period_analysis(db, period_id, embedding_device)
@@ -819,6 +832,20 @@ def build_cell_detail(
     course_id: str,
     competency_id: str,
 ) -> dict:
+    """Construye el detalle trazable de una celda del heatmap.
+
+    Recupera evidencias, scores, comentarios (locales y LLM) y
+    metadatos para un par curso-competencia específico.
+
+    Args:
+        db: Sesión de base de datos.
+        period_id: Identificador del período.
+        course_id: Identificador del curso.
+        competency_id: Identificador de la competencia.
+
+    Returns:
+        Diccionario con score, evidencias, comentarios y metadatos.
+    """
     period = db.get(AcademicPeriod, period_id)
     course = db.get(Course, course_id)
     competency = db.get(Competency, competency_id)
@@ -994,6 +1021,18 @@ def build_cell_detail(
 
 
 def build_period_analysis(db: Session, period_id: str) -> dict:
+    """Ensambla el análisis completo de un período para el dashboard.
+
+    Agrega resultados por celda, calcula métricas de cobertura,
+    brechas críticas y cobertura por competencia.
+
+    Args:
+        db: Sesión de base de datos.
+        period_id: Identificador del período.
+
+    Returns:
+        Diccionario con celdas, métricas, status y metadatos.
+    """
     settings = get_settings()
     period = db.get(AcademicPeriod, period_id)
     if not period:

@@ -74,7 +74,6 @@ class DocumentOut(BaseModel):
     id: str
     period_id: str
     title: str
-    author: str
     status: str
     created_at: datetime
 

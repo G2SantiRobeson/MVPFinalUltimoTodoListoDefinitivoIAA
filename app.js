@@ -1126,12 +1126,12 @@ function renderAnalysisProgress() {
 function renderThesisTable() {
   const period = currentPeriod();
   if (!period) {
-    $("#thesisTable").innerHTML = `<tr><td colspan="5">No hay periodo seleccionado.</td></tr>`;
+    $("#thesisTable").innerHTML = `<tr><td colspan="4">No hay periodo seleccionado.</td></tr>`;
     return;
   }
   const progress = state.analysisProgress;
   const rows = period.thesis.map(
-    ([title, author, pages, status, documentId], index) => {
+    ([title, pages, status, documentId], index) => {
       const isCurrent =
         state.running &&
         progress?.period_id === period.id &&
@@ -1141,7 +1141,6 @@ function renderThesisTable() {
       return `
       <tr class="${isCurrent ? "current-thesis" : ""}">
         <td>${escapeHtml(title)}</td>
-        <td>${escapeHtml(author)}</td>
         <td>
           <div class="thesis-status">
             <span class="status-pill ${status.includes("reciente") ? "warning" : "ready"}">${escapeHtml(status)}</span>

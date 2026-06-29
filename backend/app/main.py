@@ -11,6 +11,14 @@ settings = get_settings()
 
 
 def create_app() -> FastAPI:
+    """Create and configure the FastAPI application.
+
+    Sets up CORS middleware, registers the API router, and initializes
+    the database schema on startup.
+
+    Returns:
+        Fully configured FastAPI application instance.
+    """
     app = FastAPI(title=settings.app_name)
     app.add_middleware(
         CORSMiddleware,
