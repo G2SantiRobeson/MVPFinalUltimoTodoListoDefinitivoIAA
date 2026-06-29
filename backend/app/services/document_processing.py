@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.db.models import ChunkEmbedding, DocumentChunk, DocumentVersion, Evidence, ProcessingJob
 from app.services.embeddings import EmbeddingService
-from app.services.locks import sqlite_write_lock
+from app.services.locks import document_processing_lock, sqlite_write_lock
 
 
 def _extract_pdf(path: Path) -> tuple[list[tuple[int, str]], int, float]:
@@ -160,8 +160,9 @@ def process_document_version(
     Returns:
         Objeto ProcessingJob con el estado final del procesamiento.
     """
-    with sqlite_write_lock:
-        return _process_document_version(db, version_id, embedding_device, progress_callback)
+    with document_processing_lock:
+        with sqlite_write_lock:
+            return _process_document_version(db, version_id, embedding_device, progress_callback)
 
 
 def _process_document_version(

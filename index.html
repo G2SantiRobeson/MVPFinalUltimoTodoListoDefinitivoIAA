@@ -72,6 +72,7 @@
             <i data-lucide="refresh-cw"></i>
             <span>Analizar con API</span>
           </button>
+          <span class="embedding-device-badge" id="embeddingDeviceBadge">Embeddings: --</span>
         </div>
       </header>
 
@@ -162,73 +163,79 @@
             <div class="period-list" id="periodList"></div>
           </section>
 
-          <section class="panel" aria-labelledby="curriculaTitle">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">Matrices de traza</p>
-                <h2 id="curriculaTitle">Mallas cargadas</h2>
+          <div class="right-panel-stack">
+            <section class="panel" aria-labelledby="thesisTitle">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Carga documental</p>
+                  <h2 id="thesisTitle">Tesis del período seleccionado</h2>
+                </div>
               </div>
-            </div>
 
-            <form class="matrix-upload-form" id="matrixUploadForm">
-              <label class="field">
-                <span>Nombre de la matriz</span>
-                <input id="matrixDisplayName" name="display_name" type="text" placeholder="Ej: PE 2026 Eléctrica" autocomplete="off" required />
+              <label class="upload-box" id="uploadBox">
+                <input id="fileInput" type="file" accept=".pdf,.docx,.txt" multiple />
+                <span class="upload-icon-wrap" aria-hidden="true">
+                  <i data-lucide="upload-cloud"></i>
+                </span>
+                <strong>Subir tesis o documentos</strong>
+                <span>Arrastra aqui archivos PDF, DOCX o TXT, o presiona el boton para seleccionarlos.</span>
+                <em>Seleccionar archivos</em>
               </label>
-              <label class="field">
-                <span>Carrera</span>
-                <input id="matrixProgram" name="program" type="text" placeholder="Ej: Ingeniería Civil Eléctrica" autocomplete="off" required />
-              </label>
-              <label class="field">
-                <span>Año</span>
-                <input id="matrixYear" name="year" type="number" min="2000" max="2100" placeholder="2026" />
-              </label>
-              <label class="field">
-                <span>Archivo Excel</span>
-                <input id="matrixFileInput" name="file" type="file" accept=".xlsx" required />
-              </label>
-              <button class="secondary-button" type="submit">
-                <i data-lucide="upload"></i>
-                <span>Cargar matriz</span>
-              </button>
-            </form>
 
-            <div class="curriculum-list" id="curriculumList"></div>
-          </section>
+              <div id="uploadProgress" class="upload-progress" aria-live="polite"></div>
 
-          <section class="panel" aria-labelledby="thesisTitle">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">Carga documental</p>
-                <h2 id="thesisTitle">Tesis del período seleccionado</h2>
+              <div id="analysisProgress" class="analysis-progress" aria-live="polite"></div>
+
+              <div class="table-wrap thesis-table-wrap">
+                <table>
+                  <thead>
+                      <tr>
+                        <th>Tesis</th>
+                        <th>Estado</th>
+                        <th>Páginas</th>
+                        <th></th>
+                      </tr>
+                  </thead>
+                  <tbody id="thesisTable"></tbody>
+                </table>
               </div>
-            </div>
+            </section>
 
-            <label class="upload-box" id="uploadBox">
-              <input id="fileInput" type="file" accept=".pdf,.docx,.txt" multiple />
-              <i data-lucide="upload-cloud"></i>
-              <strong>Arrastra o selecciona tesis</strong>
-              <span>Suelta varios archivos PDF, DOCX o TXT en este bloque, o haz clic para seleccionarlos.</span>
-            </label>
+            <section class="panel" aria-labelledby="curriculaTitle">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Matrices de traza</p>
+                  <h2 id="curriculaTitle">Mallas cargadas</h2>
+                </div>
+              </div>
 
-            <div id="uploadProgress" class="upload-progress" aria-live="polite"></div>
+              <form class="matrix-upload-form" id="matrixUploadForm">
+                <label class="field">
+                  <span>Nombre de la matriz</span>
+                  <input id="matrixDisplayName" name="display_name" type="text" placeholder="Ej: PE 2026 Eléctrica" autocomplete="off" required />
+                </label>
+                <label class="field">
+                  <span>Carrera</span>
+                  <input id="matrixProgram" name="program" type="text" placeholder="Ej: Ingeniería Civil Eléctrica" autocomplete="off" required />
+                </label>
+                <label class="field">
+                  <span>Año</span>
+                  <input id="matrixYear" name="year" type="number" min="2000" max="2100" placeholder="2026" />
+                </label>
+                <label class="field">
+                  <span>Archivo Excel</span>
+                  <input id="matrixFileInput" name="file" type="file" accept=".xlsx" required />
+                </label>
+                <button class="secondary-button" type="submit">
+                  <i data-lucide="upload"></i>
+                  <span>Cargar matriz</span>
+                </button>
+              </form>
 
-            <div id="analysisProgress" class="analysis-progress" aria-live="polite"></div>
+              <div class="curriculum-list" id="curriculumList"></div>
+            </section>
+          </div>
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                    <tr>
-                      <th>Tesis</th>
-                      <th>Estado</th>
-                      <th>Páginas</th>
-                      <th></th>
-                    </tr>
-                </thead>
-                <tbody id="thesisTable"></tbody>
-              </table>
-            </div>
-          </section>
         </div>
 
         <section class="panel pipeline-panel" aria-labelledby="pipelineTitle">

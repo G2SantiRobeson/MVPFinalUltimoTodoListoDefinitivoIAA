@@ -20,7 +20,7 @@ class UserOut(BaseModel):
 
 
 class PeriodCreate(BaseModel):
-    name: str = Field(min_length=3, max_length=40)
+    name: str = Field(min_length=1, max_length=40)
     curriculum_id: str = Field(min_length=1)
 
 

@@ -32,7 +32,8 @@ const state = {
   loadingCellDetail: null,
   analysisProgress: null,
   progressTimer: null,
-  lastProgressSignature: ""
+  lastProgressSignature: "",
+  embeddingStatus: null
 };
 
 const API_BASE_URL = "http://localhost:8000/api/v1";
@@ -124,6 +125,22 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+function normalizeEmbeddingDevice(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (["cuda", "gpu"].includes(normalized)) return "GPU";
+  if (normalized === "cpu") return "CPU";
+  if (normalized === "auto") return "AUTO";
+  return normalized ? normalized.toUpperCase() : "--";
+}
+
+function isApiHttpError(error) {
+  return /^API \d+:/.test(String(error?.message || ""));
+}
+
+function shouldMarkBackendDisconnected(error) {
+  return !isApiHttpError(error);
+}
+
 function normalizePeriodFromApi(period) {
   return {
     ...period,
@@ -213,13 +230,15 @@ function openEvidenceCell(courseId, competencyCode) {
 async function hydrateFromApi() {
   try {
     await apiRequest("/health");
-    const [apiCurricula, apiPeriods] = await Promise.all([
+    const [apiCurricula, apiPeriods, embeddingStatus] = await Promise.all([
       apiRequest("/curricula"),
-      apiRequest("/periods")
+      apiRequest("/periods"),
+      apiRequest("/ai-status")
     ]);
 
     curricula = apiCurricula.map(normalizeCurriculumFromApi);
     periods = apiPeriods.map(normalizePeriodFromApi);
+    state.embeddingStatus = embeddingStatus;
     state.apiReady = true;
     state.currentPeriodId = periods[0]?.id || null;
     await loadMatrixForCurrentPeriod();
@@ -228,6 +247,7 @@ async function hydrateFromApi() {
     renderAll();
   } catch (error) {
     state.apiReady = false;
+    state.embeddingStatus = null;
     state.currentPeriodId = null;
     state.currentCurriculumId = null;
     state.selectedCell = null;
@@ -558,6 +578,24 @@ function renderRuntimeState() {
   }
   if (buttonLabel && !state.running) {
     buttonLabel.textContent = state.apiReady ? "Analizar con API" : "Sin backend";
+  }
+
+  const embeddingBadge = $("#embeddingDeviceBadge");
+  if (embeddingBadge) {
+    const device = state.analysisProgress?.device || state.embeddingStatus?.device;
+    const provider = state.embeddingStatus?.provider;
+    const warning = state.embeddingStatus?.device_warning;
+    const label = state.apiReady ? normalizeEmbeddingDevice(device) : "--";
+    embeddingBadge.textContent = `Embeddings: ${label}`;
+    embeddingBadge.title = state.apiReady
+      ? [
+          provider ? `Proveedor: ${provider}` : "",
+          state.embeddingStatus?.model_name ? `Modelo: ${state.embeddingStatus.model_name}` : "",
+          warning ? `Aviso: ${warning}` : ""
+        ].filter(Boolean).join(" | ")
+      : "Backend desconectado";
+    embeddingBadge.classList.toggle("is-gpu", label === "GPU");
+    embeddingBadge.classList.toggle("is-cpu", label === "CPU");
   }
 
   const note = $(".sidebar-note");
@@ -1705,9 +1743,9 @@ async function uploadMatrix(files) {
 
 async function createPeriod(name) {
   const clean = name.trim();
-  if (!clean) return;
+  if (!clean) return false;
   const curriculumId = $("#periodCurriculumSelect")?.value || curricula[0]?.id || "";
-  if (!curriculumId) return;
+  if (!curriculumId) return false;
 
   if (state.apiReady) {
     try {
@@ -1723,13 +1761,17 @@ async function createPeriod(name) {
       state.selectedOverviewCompetencyIndex = null;
       await refreshApiAnalysis();
       renderAll();
-      return;
+      return true;
     } catch (error) {
-      state.apiReady = false;
+      console.error("[Periodos] No se pudo crear el periodo:", error);
+      if (shouldMarkBackendDisconnected(error)) {
+        state.apiReady = false;
+      }
     }
   }
 
   renderAll();
+  return false;
 }
 
 async function simulateAnalysis() {
@@ -1751,7 +1793,7 @@ async function simulateAnalysis() {
         step: "starting",
         ui_step: 0,
         progress: 0,
-        device: "cuda",
+        device: state.embeddingStatus?.device || "auto",
         current_document_id: null,
         current_document_title: "",
         current_index: 0,
@@ -1769,7 +1811,10 @@ async function simulateAnalysis() {
       state.running = false;
       state.activeStep = -1;
       state.analysisProgress = null;
-      state.apiReady = false;
+      console.error("[Análisis IA] No se pudo iniciar el análisis:", error);
+      if (shouldMarkBackendDisconnected(error)) {
+        state.apiReady = false;
+      }
     }
   }
   renderAll();
@@ -1878,8 +1923,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("#newPeriodForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-    await createPeriod($("#newPeriodName").value);
-    $("#newPeriodName").value = "";
+    const created = await createPeriod($("#newPeriodName").value);
+    if (created) {
+      $("#newPeriodName").value = "";
+    }
   });
 
   $("#periodCurriculumSelect")?.addEventListener("change", (event) => {
@@ -1909,7 +1956,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderAll();
         return;
       } catch (error) {
-        state.apiReady = false;
+        console.error("[Tesis] No se pudo eliminar la tesis:", error);
+        if (shouldMarkBackendDisconnected(error)) {
+          state.apiReady = false;
+        }
       }
     }
     period.thesis.splice(Number(button.dataset.index), 1);

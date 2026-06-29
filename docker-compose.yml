@@ -7,7 +7,7 @@ services:
     #   WSL2: toolkit instalado + no-cgroups (ver manual 4.3.2)
     #   Windows Docker Desktop: funciona directo, no necesitas toolkit.
     # Sin GPU, comentala o borrala → funciona en CPU.
-    # gpus: all
+    gpus: all
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"

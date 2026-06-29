@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from threading import RLock
+from threading import Lock, RLock
 
 from app.core.config import get_settings
 
@@ -22,3 +22,7 @@ class DatabaseWriteLock:
 # En PostgreSQL no bloqueamos a nivel de proceso; el motor maneja concurrencia.
 # En SQLite queda activo para desarrollo heredado o migraciones locales.
 sqlite_write_lock = DatabaseWriteLock()
+
+# El procesamiento documental carga modelos grandes y genera muchos embeddings.
+# Lo serializamos para evitar saturar conexiones SQL y memoria/GPU al subir varias tesis.
+document_processing_lock = Lock()
