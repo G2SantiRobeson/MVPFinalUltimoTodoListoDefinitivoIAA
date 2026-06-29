@@ -107,6 +107,21 @@ def _sheet_cells(zipped: zipfile.ZipFile, sheet_path: str) -> dict[tuple[int, in
 
 
 def load_matrix_from_xlsx(path: Path) -> CurriculumMatrix:
+    """Carga y parsea una matriz curricular desde un archivo XLSX.
+
+    Extrae las competencias (hoja columnas), cursos (filas) y la tributación
+    (celdas con X) para construir una representación en modelo de dominio.
+
+    Args:
+        path: Ruta al archivo .xlsx.
+
+    Returns:
+        Objeto CurriculumMatrix con competencias y cursos.
+
+    Raises:
+        FileNotFoundError: Si el archivo no existe.
+        ValueError: Si el XLSX no contiene hojas.
+    """
     if not path.exists():
         raise FileNotFoundError(f"No existe la matriz curricular: {path}")
 

@@ -41,10 +41,18 @@ def _load_sentence_transformer(
 
 
 class EmbeddingService:
-    """Embedding service with a real AI provider and deterministic fallback.
+    """Provee embeddings semánticos con respaldo determinístico.
 
-    Preferred provider: BAAI/bge-m3 via Sentence-Transformers for multilingual
-    semantic similarity. Fallback: local hash embedding for demos/offline runs.
+    Proveedor principal: BAAI/bge-m3 mediante Sentence-Transformers para
+    similitud semántica multilingüe. Respaldo: hash embedding local para
+    demostraciones o entornos sin GPU.
+
+    Attributes:
+        provider: Nombre del proveedor activo (sentence-transformers | local).
+        model_name: Nombre del modelo de embedding.
+        dimensions: Dimensionalidad del vector de embedding.
+        device: Dispositivo de cómputo (cuda | cpu).
+        fallback_reason: Razón del fallback si no se cargó el modelo real.
     """
 
     def __init__(self, dimensions: int | None = None, device: str | None = None) -> None:
@@ -109,6 +117,14 @@ class EmbeddingService:
 
     @staticmethod
     def _resolve_device(device: str | None) -> tuple[str | None, str | None]:
+        """Resuelve el dispositivo de cómputo (cuda/cpu) según la configuración.
+
+        Args:
+            device: Valor configurado (auto, cpu, gpu, cuda).
+
+        Returns:
+            Tupla (dispositivo_resuelto, advertencia).
+        """
         normalized = (device or "auto").strip().lower()
         if normalized in {"", "auto"}:
             try:
@@ -130,6 +146,16 @@ class EmbeddingService:
         raise ValueError("Dispositivo de embeddings invalido. Usa auto, cpu, gpu o cuda.")
 
     def embed(self, text: str) -> list[float]:
+        """Genera el vector de embedding para un texto dado.
+
+        Usa el proveedor activo (sentence-transformers o hash local).
+
+        Args:
+            text: Texto a convertir en embedding.
+
+        Returns:
+            Vector de embedding normalizado.
+        """
         if self.model is not None:
             vector = self.model.encode(text, normalize_embeddings=True)
             return [float(value) for value in vector.tolist()]
@@ -147,6 +173,8 @@ class EmbeddingService:
         return [value / norm for value in vector]
 
     def info(self) -> dict:
+        """Retorna metadatos del servicio de embeddings para diagnóstico."""
+
         return {
             "provider": self.provider,
             "model": self.model_name,
@@ -160,6 +188,15 @@ class EmbeddingService:
 
     @staticmethod
     def cosine(left: list[float], right: list[float]) -> float:
+        """Calcula la similitud coseno entre dos vectores.
+
+        Args:
+            left: Primer vector.
+            right: Segundo vector.
+
+        Returns:
+            Similitud coseno en [0, 1].
+        """
         if not left or not right or len(left) != len(right):
             return 0.0
         return sum(a * b for a, b in zip(left, right, strict=False))

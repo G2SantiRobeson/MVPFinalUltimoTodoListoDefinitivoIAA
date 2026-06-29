@@ -26,6 +26,7 @@ def _process_in_background(version_id: str) -> None:
 
 @router.get("", response_model=list[DocumentOut])
 def list_documents(period_id: str | None = None, db: Session = Depends(get_db)) -> list[Document]:
+    """Lista los documentos activos, opcionalmente filtrados por período."""
     query = db.query(Document).filter(Document.status != "deleted").order_by(Document.created_at.desc())
     if period_id:
         query = query.filter(Document.period_id == period_id)
@@ -37,7 +38,6 @@ async def upload_document(
     background_tasks: BackgroundTasks,
     period_id: str = Form(...),
     title: str | None = Form(default=None),
-    author: str | None = Form(default=None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_roles("student", "professor", "academic_admin")),
@@ -50,7 +50,6 @@ async def upload_document(
         period_id=period_id,
         owner_id=current_user.id,
         title=title or Path(file.filename or "Memoria").stem,
-        author=author or current_user.name,
         status="uploaded",
         updated_at=datetime.utcnow(),
     )

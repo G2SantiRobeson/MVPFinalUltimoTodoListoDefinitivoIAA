@@ -32,7 +32,18 @@ def _score_color(score: int | float | None) -> str:
 
 
 def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) -> bytes:
-    """Generate a multi-tab Excel file with period analyses."""
+    """Genera un archivo Excel con múltiples hojas de análisis por período.
+
+    Incluye resumen, mapa de calor, detalle por curso y competencia,
+    y brechas críticas.
+
+    Args:
+        db: Sesión de base de datos.
+        period_ids: Lista de IDs de períodos a exportar (None = todos).
+
+    Returns:
+        Bytes del archivo Excel generado.
+    """
     output = BytesIO()
     workbook = xlsxwriter.Workbook(output, {"in_memory": True})
 

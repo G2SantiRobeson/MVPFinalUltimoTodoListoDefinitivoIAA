@@ -40,6 +40,15 @@ evidencia textual trazable y resultados agregados en un dashboard.
 | `backend/scripts` | Scripts de utilidad y migracion. |
 | `docker-compose.yml` | Servicios locales: API, PostgreSQL/pgvector, Redis y MinIO. |
 | `docs/ARCHITECTURE.md` | Resumen tecnico de arquitectura. |
+| `docs/MANUAL_USUARIO.md` | Manual de usuario (orientado a usuarios finales). |
+| `docs/MANUAL_INSTALACION.md` | Manual de instalacion y despliegue (orientado a desarrolladores/administradores). |
+| `backend/.env.example` | Plantilla de configuracion (copiar a `.env`). |
+
+## Documentacion
+
+- `docs/MANUAL_USUARIO.md` — Manual orientado al usuario final con instrucciones paso a paso, capturas y casos de uso.
+- `docs/MANUAL_INSTALACION.md` — Manual tecnico con requisitos, instalacion (Docker y manual), configuracion y mantenimiento.
+- `docs/ARCHITECTURE.md` — Resumen de la arquitectura del sistema.
 
 ## Uso rapido sin backend
 

@@ -44,7 +44,6 @@ def _period_payload(db: Session, period: AcademicPeriod) -> dict:
     thesis = [
         [
             document.title,
-            document.author or "Sin autor",
             document.versions[-1].page_count if document.versions else 0,
             document.status,
             document.id,
@@ -110,6 +109,7 @@ def create_period(
 
 @router.get("/{period_id}/analysis", response_model=AnalysisOut)
 def get_analysis(period_id: str, db: Session = Depends(get_db)) -> dict:
+    """Obtiene el análisis completo de un período: celdas, métricas y brechas."""
     if not db.get(AcademicPeriod, period_id):
         raise HTTPException(status_code=404, detail="Periodo no encontrado.")
     return build_period_analysis(db, period_id)
@@ -122,6 +122,7 @@ def get_cell_detail(
     competency_id: str,
     db: Session = Depends(get_db),
 ) -> dict:
+    """Obtiene el detalle trazable de una celda curso-competencia del heatmap."""
     try:
         return build_cell_detail(db, period_id, course_id, competency_id)
     except ValueError as exc:
@@ -136,6 +137,7 @@ def run_analysis(
     db: Session = Depends(get_db),
     _user=Depends(require_roles("evaluator", "academic_admin", "technical_admin")),
 ) -> dict:
+    """Ejecuta (o encola) el análisis semántico de un período académico."""
     period = db.get(AcademicPeriod, period_id)
     if not period:
         raise HTTPException(status_code=404, detail="Periodo no encontrado.")
@@ -167,6 +169,7 @@ def analysis_progress(
     db: Session = Depends(get_db),
     _user=Depends(require_roles("evaluator", "academic_admin", "technical_admin")),
 ) -> dict:
+    """Retorna el progreso del análisis en ejecución para un período."""
     if not db.get(AcademicPeriod, period_id):
         raise HTTPException(status_code=404, detail="Periodo no encontrado.")
     return get_analysis_progress(period_id)

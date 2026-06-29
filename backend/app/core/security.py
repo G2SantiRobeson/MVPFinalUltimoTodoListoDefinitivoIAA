@@ -20,6 +20,18 @@ def get_current_user(
     authorization: str | None = Header(default=None),
     db: Session = Depends(get_db),
 ) -> User:
+    """Obtiene el usuario autenticado a partir del token Bearer.
+
+    Args:
+        authorization: Encabezado Authorization (Bearer token).
+        db: Sesión de base de datos.
+
+    Returns:
+        Objeto User correspondiente al token.
+
+    Raises:
+        HTTPException 401: Si el token es inválido o el usuario no existe.
+    """
     token = "demo-academic-admin"
     if authorization and authorization.lower().startswith("bearer "):
         token = authorization.split(" ", 1)[1].strip()
@@ -38,6 +50,17 @@ def get_current_user(
 
 
 def require_roles(*allowed_roles: str):
+    """Dependencia de FastAPI que restringe acceso por roles.
+
+    Args:
+        *allowed_roles: Roles que tienen permiso para acceder al endpoint.
+
+    Returns:
+        Función dependencia que retorna el usuario si tiene rol autorizado.
+
+    Raises:
+        HTTPException 403: Si el usuario no posee ninguno de los roles requeridos.
+    """
     def dependency(current_user: User = Depends(get_current_user)) -> User:
         role_names = {role.name for role in current_user.roles}
         if role_names.intersection(set(allowed_roles)):

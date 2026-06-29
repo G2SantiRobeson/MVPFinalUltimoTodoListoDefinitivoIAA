@@ -62,7 +62,11 @@ def _clean_field(payload: dict[str, Any], key: str, limit: int) -> str:
 
 
 class LLMCellCommentService:
-    """Genera redaccion con LLM usando solo evidencia ya recuperada."""
+    """Genera comentarios en lenguaje natural para celdas del heatmap usando LLM.
+
+    Utiliza Gemini u OpenAI para redactar justificaciones trazables basadas
+    únicamente en la evidencia ya recuperada por el sistema.
+    """
 
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -82,6 +86,14 @@ class LLMCellCommentService:
         return self.settings.llm_provider.strip().lower()
 
     def generate(self, data: CellCommentInput) -> CellComment | None:
+        """Genera un comentario LLM para una celda del heatmap.
+
+        Args:
+            data: Datos contextuales de la celda (curso, competencia, evidencia).
+
+        Returns:
+            Comentario estructurado o None si está deshabilitado o falla.
+        """
         if not self.enabled:
             return None
         if self.provider == "gemini":
