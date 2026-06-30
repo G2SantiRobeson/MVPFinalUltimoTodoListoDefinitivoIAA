@@ -132,6 +132,83 @@ def test_manual_evidence_review_recalculates_cell_result():
     assert result.status == "reviewed"
 
 
+def test_false_positive_review_is_excluded_from_cell_result():
+    """Una evidencia rechazada no debe bajar el promedio: deja de contar."""
+    db = _session()
+    curriculum, course, _competency, criterion = _curriculum_cell(
+        db,
+        "Ingenieria Civil Electrica",
+        "PE 2026 Electrica",
+        "IEL101",
+        "TIC1",
+    )
+    period = AcademicPeriod(name="2026-1", curriculum_id=curriculum.id, status="ready")
+    db.add(period)
+    db.flush()
+    kept_evidence = Evidence(
+        period_id=period.id,
+        chunk_id="chunk-active",
+        criterion_id=criterion.id,
+        course_id=course.id,
+        semantic_score=0.42,
+        confidence=0.42,
+        verdict="supporting",
+        manual_score=80,
+        manual_verdict="supporting",
+    )
+    rejected_evidence = Evidence(
+        period_id=period.id,
+        chunk_id="chunk-rejected",
+        criterion_id=criterion.id,
+        course_id=course.id,
+        semantic_score=0.35,
+        confidence=0.35,
+        verdict="supporting",
+    )
+    db.add_all([kept_evidence, rejected_evidence])
+    db.flush()
+    db.add(
+        EvaluationResult(
+            period_id=period.id,
+            document_id=None,
+            criterion_id=criterion.id,
+            course_id=course.id,
+            score=90,
+            confidence=0.90,
+            status="ready",
+        )
+    )
+    db.commit()
+
+    review_evidence_score(
+        db,
+        rejected_evidence.id,
+        manual_score=0,
+        manual_observation="",
+        actor_id=None,
+        manual_verdict="false_positive",
+    )
+
+    result = (
+        db.query(EvaluationResult)
+        .filter(
+            EvaluationResult.period_id == period.id,
+            EvaluationResult.course_id == course.id,
+            EvaluationResult.criterion_id == criterion.id,
+        )
+        .one()
+    )
+    db.refresh(rejected_evidence)
+
+    assert rejected_evidence.verdict == "false_positive"
+    assert rejected_evidence.manual_verdict == "false_positive"
+    assert result.score == 80
+    assert "falso positivo" in result.summary
+
+    analysis = build_period_analysis(db, period.id)
+    assert analysis["cells"][0]["evidence_count"] == 1
+
+
 def test_period_analysis_uses_only_the_period_curriculum():
     """Un periodo de una carrera no debe mostrar celdas de otra matriz cargada."""
     db = _session()

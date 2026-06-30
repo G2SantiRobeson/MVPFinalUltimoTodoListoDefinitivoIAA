@@ -20,6 +20,13 @@ def _process_in_background(version_id: str) -> None:
     db = SessionLocal()
     try:
         process_document_version(db, version_id)
+    except ValueError as exc:
+        if "No existe document_version" not in str(exc):
+            raise
+        print(
+            f"[IAAPLICADA] Procesamiento omitido: la version {version_id} ya fue eliminada.",
+            flush=True,
+        )
     finally:
         db.close()
 

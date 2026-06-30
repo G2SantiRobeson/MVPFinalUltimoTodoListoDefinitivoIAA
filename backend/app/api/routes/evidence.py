@@ -52,6 +52,7 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
                 "semantic_score",
                 "confidence",
                 "manual_score",
+                "manual_verdict",
                 "effective_score",
                 "verdict",
                 "observation",
@@ -87,7 +88,8 @@ def _evidence_payload(db: Session, evidence: Evidence) -> dict:
         document: Document = chunk.version.document
         document_title = document.title
 
-    effective_score = (
+    current_verdict = evidence.manual_verdict or evidence.verdict or "candidate"
+    effective_score = 0 if current_verdict == "false_positive" else (
         round(evidence.manual_score)
         if evidence.manual_score is not None
         else _score_to_percent(evidence.confidence or 0.0, settings.evidence_threshold)
@@ -114,8 +116,9 @@ def _evidence_payload(db: Session, evidence: Evidence) -> dict:
         "semantic_score": evidence.semantic_score,
         "confidence": effective_score / 100.0,
         "manual_score": round(evidence.manual_score) if evidence.manual_score is not None else None,
+        "manual_verdict": evidence.manual_verdict,
         "effective_score": effective_score,
-        "verdict": evidence.verdict,
+        "verdict": current_verdict,
         "observation": evidence.observation,
         "manual_observation": evidence.manual_observation or "",
         "reviewed_at": evidence.reviewed_at.isoformat() if evidence.reviewed_at else None,
@@ -167,6 +170,7 @@ def update_evidence_review(
             evidence_id=evidence_id,
             manual_score=payload.manual_score,
             manual_observation=payload.manual_observation,
+            manual_verdict=payload.manual_verdict,
             actor_id=current_user.id,
         )
     except ValueError as exc:

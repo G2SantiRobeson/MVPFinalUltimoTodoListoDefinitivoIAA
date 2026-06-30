@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
@@ -41,6 +42,17 @@ from app.services.scoring import (
     tokenize,
 )
 from app.services.document_processing import process_document_version
+
+
+FALSE_POSITIVE_VERDICT = "false_positive"
+VALID_EVIDENCE_VERDICTS = {"supporting", "candidate", FALSE_POSITIVE_VERDICT}
+
+
+def _active_evidence_filters():
+    return (
+        or_(Evidence.verdict.is_(None), Evidence.verdict != FALSE_POSITIVE_VERDICT),
+        or_(Evidence.manual_verdict.is_(None), Evidence.manual_verdict != FALSE_POSITIVE_VERDICT),
+    )
 
 
 def _score_to_percent(score: float, threshold: float = 0.22) -> int:
@@ -560,6 +572,7 @@ def _competency_evidence_summary(
             Evidence.period_id == period_id,
             Evidence.criterion_id == criterion.id,
             Document.status != "deleted",
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
         .limit(180)
@@ -676,22 +689,52 @@ def review_evidence_score(
     manual_score: int,
     manual_observation: str,
     actor_id: str | None,
+    manual_verdict: str | None = None,
 ) -> Evidence:
     evidence = db.get(Evidence, evidence_id)
     if not evidence:
         raise ValueError("Evidencia no encontrada.")
 
     score = max(0, min(100, manual_score))
-    evidence.manual_score = score
-    evidence.manual_verdict = "supporting" if score >= 55 else "candidate"
-    evidence.manual_observation = manual_observation.strip()
-    evidence.reviewed_by_id = actor_id
-    evidence.reviewed_at = datetime.utcnow()
-    evidence.verdict = evidence.manual_verdict
-    if evidence.manual_observation:
-        evidence.observation = evidence.manual_observation
+    verdict = manual_verdict or ("supporting" if score >= 55 else "candidate")
+    if verdict not in VALID_EVIDENCE_VERDICTS:
+        raise ValueError("Veredicto manual no valido.")
+    if verdict == FALSE_POSITIVE_VERDICT:
+        score = 0
 
-    _recalculate_reviewed_cell(db, evidence)
+    observation = manual_observation.strip()
+    if verdict == FALSE_POSITIVE_VERDICT and not observation:
+        observation = "Marcado como falso positivo por el evaluador."
+
+    target_evidence = (
+        db.query(Evidence)
+        .filter(
+            Evidence.period_id == evidence.period_id,
+            Evidence.criterion_id == evidence.criterion_id,
+            Evidence.chunk_id == evidence.chunk_id,
+        )
+        .all()
+    )
+
+    reviewed_at = datetime.utcnow()
+    for item in target_evidence:
+        item.manual_score = score
+        item.manual_verdict = verdict
+        item.manual_observation = observation
+        item.reviewed_by_id = actor_id
+        item.reviewed_at = reviewed_at
+        item.verdict = verdict
+        if item.manual_observation:
+            item.observation = item.manual_observation
+
+    affected_cells = {(item.course_id, item.criterion_id) for item in target_evidence}
+    for course_id, criterion_id in affected_cells:
+        item = next(
+            row
+            for row in target_evidence
+            if row.course_id == course_id and row.criterion_id == criterion_id
+        )
+        _recalculate_reviewed_cell(db, item)
 
     period = db.get(AcademicPeriod, evidence.period_id)
     if period:
@@ -708,6 +751,8 @@ def review_evidence_score(
                 "course_id": evidence.course_id,
                 "criterion_id": evidence.criterion_id,
                 "manual_score": score,
+                "manual_verdict": verdict,
+                "affected_evidence": len(target_evidence),
             },
         )
     )
@@ -725,12 +770,56 @@ def _recalculate_reviewed_cell(db: Session, evidence: Evidence) -> EvaluationRes
             Evidence.course_id == evidence.course_id,
             Evidence.criterion_id == evidence.criterion_id,
             Evidence.manual_score.isnot(None),
+            *_active_evidence_filters(),
         )
         .all()
         if row.manual_score is not None
     ]
-    score = round(sum(reviewed_scores) / len(reviewed_scores)) if reviewed_scores else 0
-    confidence = score / 100
+    rejected_count = (
+        db.query(Evidence)
+        .filter(
+            Evidence.period_id == evidence.period_id,
+            Evidence.course_id == evidence.course_id,
+            Evidence.criterion_id == evidence.criterion_id,
+            Evidence.manual_verdict == FALSE_POSITIVE_VERDICT,
+        )
+        .count()
+    )
+    if reviewed_scores:
+        score = round(sum(reviewed_scores) / len(reviewed_scores))
+        confidence = score / 100
+        summary = (
+            "Resultado ajustado por revision manual de evidencia. "
+            f"Promedio de {len(reviewed_scores)} evidencia(s) revisada(s): {score}%."
+        )
+    else:
+        active_evidence = (
+            db.query(Evidence)
+            .filter(
+                Evidence.period_id == evidence.period_id,
+                Evidence.course_id == evidence.course_id,
+                Evidence.criterion_id == evidence.criterion_id,
+                *_active_evidence_filters(),
+            )
+            .all()
+        )
+        criterion = db.get(EvaluationCriterion, evidence.criterion_id)
+        settings = get_settings()
+        threshold = max(
+            criterion.threshold if criterion else settings.evidence_threshold,
+            settings.evidence_threshold,
+            settings.evidence_relevance_threshold,
+        )
+        if active_evidence:
+            score = max(_score_to_percent(row.confidence or 0.0, threshold) for row in active_evidence)
+            confidence = max(row.confidence or 0.0 for row in active_evidence)
+        else:
+            score = 0
+            confidence = 0
+        summary = (
+            "Resultado recalculado tras revision manual. "
+            f"Se usaron {len(active_evidence)} evidencia(s) automatica(s) no rechazadas: {score}%."
+        )
     result = (
         db.query(EvaluationResult)
         .filter(
@@ -741,10 +830,8 @@ def _recalculate_reviewed_cell(db: Session, evidence: Evidence) -> EvaluationRes
         )
         .first()
     )
-    summary = (
-        "Resultado ajustado por revision manual de evidencia. "
-        f"Promedio de {len(reviewed_scores)} evidencia(s) revisada(s): {score}%."
-    )
+    if rejected_count:
+        summary += f" {rejected_count} evidencia(s) marcada(s) como falso positivo no se consideraron."
     if not result:
         result = EvaluationResult(
             period_id=evidence.period_id,
@@ -780,6 +867,7 @@ def _cell_evidence_chunks(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion_id,
+            *_active_evidence_filters(),
         )
         .all()
     )
@@ -879,6 +967,7 @@ def build_cell_detail(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion.id,
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
         .first()
@@ -970,6 +1059,7 @@ def build_cell_detail(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion.id,
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
         .limit(3)
@@ -986,6 +1076,7 @@ def build_cell_detail(
             frag_origin = ch.version.document.title
         evidence_fragments.append(
             {
+                "id": ev.id,
                 "text": _trim_text(ch.text),
                 "origin": frag_origin,
                 "page": frag_page,
@@ -1043,7 +1134,11 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     result_by_cell = {(result.course_id, result.criterion_id): result for result in results}
 
     evidence_counts: dict[tuple[str, str], int] = defaultdict(int)
-    for evidence in db.query(Evidence).filter(Evidence.period_id == period_id).all():
+    for evidence in (
+        db.query(Evidence)
+        .filter(Evidence.period_id == period_id, *_active_evidence_filters())
+        .all()
+    ):
         evidence_counts[(evidence.course_id, evidence.criterion_id)] += 1
 
     total_docs = db.query(Document).filter(Document.period_id == period_id, Document.status != "deleted").count()
@@ -1054,7 +1149,8 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         .join(Document, DocumentVersion.document_id == Document.id)
         .filter(
             Evidence.period_id == period_id,
-            Document.status != "deleted"
+            Document.status != "deleted",
+            *_active_evidence_filters(),
         )
         .distinct()
         .all()
