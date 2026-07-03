@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import create_engine, func, insert, select
+from sqlalchemy import create_engine, func, insert, select, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
@@ -33,6 +33,13 @@ def _table_count(engine: Engine, table) -> int:
 
 def _database_has_data(engine: Engine) -> bool:
     return any(_table_count(engine, table) > 0 for table in Base.metadata.sorted_tables)
+
+
+def _ensure_pgvector_extension(engine: Engine) -> None:
+    if engine.dialect.name != "postgresql":
+        return
+    with engine.begin() as connection:
+        connection.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
 
 
 def _rewrite_file_uri(
@@ -71,6 +78,7 @@ def migrate(
     source_engine = create_engine(_sqlite_url(source_sqlite_path), future=True)
     target_connect_args = {"connect_timeout": 5} if target_url.startswith("postgresql") else {}
     target_engine = create_engine(target_url, connect_args=target_connect_args, future=True)
+    _ensure_pgvector_extension(target_engine)
     Base.metadata.create_all(bind=target_engine)
 
     if replace:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from datetime import datetime
 from uuid import uuid4
 
@@ -13,9 +14,13 @@ from sqlalchemy import (
     String,
     Table,
     Text,
+    TypeDecorator,
     UniqueConstraint,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
+PGVECTOR_DIMENSIONS = int(os.getenv("EMBEDDING_DIMENSIONS", "1024"))
 
 
 def uuid_str() -> str:
@@ -24,6 +29,41 @@ def uuid_str() -> str:
 
 class Base(DeclarativeBase):
     pass
+
+
+class EmbeddingVector(TypeDecorator):
+    """Store embeddings as pgvector in PostgreSQL and JSON in SQLite tests."""
+
+    impl = JSON
+    cache_ok = True
+
+    def __init__(self, dimensions: int = PGVECTOR_DIMENSIONS) -> None:
+        super().__init__()
+        self.dimensions = dimensions
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            try:
+                from pgvector.sqlalchemy import Vector
+            except ModuleNotFoundError as exc:
+                raise RuntimeError(
+                    "Falta la dependencia pgvector. Instala el backend con: "
+                    "python -m pip install -e ."
+                ) from exc
+            return dialect.type_descriptor(Vector(self.dimensions))
+        return dialect.type_descriptor(JSON())
+
+    def process_bind_param(self, value, _dialect):
+        if value is None:
+            return None
+        return [float(item) for item in value]
+
+    def process_result_value(self, value, _dialect):
+        if value is None:
+            return None
+        if hasattr(value, "tolist"):
+            value = value.tolist()
+        return [float(item) for item in value]
 
 
 user_roles = Table(
@@ -238,7 +278,7 @@ class ChunkEmbedding(Base):
     chunk_id: Mapped[str] = mapped_column(ForeignKey("document_chunks.id"), unique=True)
     model: Mapped[str] = mapped_column(String(120), default="local-hash-embedding")
     dimensions: Mapped[int] = mapped_column(Integer, default=64)
-    vector: Mapped[list[float]] = mapped_column(JSON)
+    vector: Mapped[list[float]] = mapped_column(EmbeddingVector(PGVECTOR_DIMENSIONS))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     chunk: Mapped[DocumentChunk] = relationship(back_populates="embedding")

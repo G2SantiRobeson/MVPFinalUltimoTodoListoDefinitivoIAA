@@ -1,15 +1,24 @@
 from sqlalchemy import inspect, text
 from sqlalchemy.orm import Session
 
+from app.core.config import get_settings
 from app.db.models import Base
 from app.db.session import engine
 from app.services.seed import seed_demo_data
 
 
 def init_db(db: Session) -> None:
+    ensure_pgvector_extension(db)
     Base.metadata.create_all(bind=engine)
     ensure_schema_compatibility(db)
     seed_demo_data(db)
+
+
+def ensure_pgvector_extension(db: Session) -> None:
+    if engine.dialect.name != "postgresql":
+        return
+    db.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+    db.commit()
 
 
 def ensure_schema_compatibility(db: Session) -> None:
@@ -44,6 +53,9 @@ def ensure_schema_compatibility(db: Session) -> None:
             },
         )
 
+    if "chunk_embeddings" in table_names:
+        _ensure_chunk_embedding_vector_type(db)
+
     db.commit()
 
 
@@ -61,4 +73,30 @@ def _replace_legacy_period_name_index(db: Session) -> None:
     db.execute(text("DROP INDEX IF EXISTS ix_academic_periods_name"))
     db.execute(
         text("CREATE INDEX IF NOT EXISTS ix_academic_periods_name ON academic_periods (name)")
+    )
+
+
+def _ensure_chunk_embedding_vector_type(db: Session) -> None:
+    if engine.dialect.name != "postgresql":
+        return
+
+    columns = inspect(engine).get_columns("chunk_embeddings")
+    vector_column = next((column for column in columns if column["name"] == "vector"), None)
+    if not vector_column:
+        return
+
+    column_type = str(vector_column["type"]).lower()
+    if column_type.startswith("vector"):
+        return
+
+    dimensions = int(get_settings().embedding_dimensions)
+    db.execute(
+        text(
+            "ALTER TABLE chunk_embeddings "
+            f"ALTER COLUMN vector TYPE vector({dimensions}) "
+            "USING CASE "
+            "WHEN vector IS NULL THEN NULL "
+            f"ELSE vector::text::vector({dimensions}) "
+            "END"
+        )
     )
