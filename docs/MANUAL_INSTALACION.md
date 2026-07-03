@@ -52,15 +52,9 @@ Backend en Python/FastAPI, frontend vanilla JS, base de datos PostgreSQL con pgv
 
 ### ¿CPU o GPU?
 
-El sistema funciona en **CPU por defecto** sin necesidad de configuración adicional.
+El backend usa `EMBEDDING_DEVICE=auto`: si Docker expone una GPU NVIDIA, los embeddings usan CUDA; si no, usan CPU.
 
-Si tienes una **GPU NVIDIA** y quieres acelerar los embeddings, solo necesitas:
-1. Tener drivers NVIDIA (`nvidia-smi` debe funcionar)
-2. Instalar NVIDIA Container Toolkit (una vez)
-3. Descomentar `gpus: all` en `docker-compose.yml` (un paso)
-
-El sistema detecta la GPU automáticamente con `EMBEDDING_DEVICE=auto`.
-Si no activas la GPU, funciona igual en CPU.
+El `docker-compose.yml` del repositorio trae `gpus: all` activo para acelerar el procesamiento cuando el entorno lo soporta. Si tu equipo no tiene GPU NVIDIA o Docker falla al solicitar GPU, comenta o elimina esa línea y el sistema funcionará en CPU.
 
 > Revisa la sección [4.3. Activar GPU](#43-activar-gpu-solo-si-tienes-gpu-nvidia) para las instrucciones completas.
 
@@ -95,20 +89,17 @@ GEMINI_API_KEY=AIzaSy...
 
 Sin esto, el sistema funciona igual con comentarios locales.
 
-### Paso 3: Activa la GPU (solo si tienes GPU NVIDIA)
+### Paso 3: Revisa la configuración de GPU
 
-**Windows + Docker Desktop:** Ya tienes el soporte. Solo descomenta `gpus: all`.
+Si tienes GPU NVIDIA y Docker la soporta, deja `gpus: all` activo en `docker-compose.yml`.
 
-**WSL2 + Docker Engine en WSL2:** Igual que Linux + un paso extra.
-**Linux nativo:** Sigue las instrucciones de la sección [4.3.2](#432-linux-nativo-ubuntudebian).
-
-En todos los casos termina descomentando `gpus: all` en `docker-compose.yml`:
+Si no tienes GPU o Docker muestra un error relacionado con NVIDIA, comenta o elimina esa línea:
 
 ```yaml
-    # gpus: all          →  gpus: all
+    # gpus: all
 ```
 
-Si no tienes GPU, **no toques nada** y sigue al paso 4.
+Con `EMBEDDING_DEVICE=auto`, el backend seguirá funcionando en CPU.
 
 ### Paso 4: Levanta todo con Docker
 
@@ -116,7 +107,7 @@ Si no tienes GPU, **no toques nada** y sigue al paso 4.
 docker compose up --build
 ```
 
-La primera ejecución descarga las imágenes (PostgreSQL, Redis, MinIO) y el modelo de IA `BAAI/bge-m3` (~2 GB). Esto toma unos minutos.
+La primera ejecución descarga PostgreSQL con pgvector, construye la imagen del backend y descarga el modelo de IA `BAAI/bge-m3` (~2 GB). Esto toma unos minutos.
 
 [SCREENSHOT: Terminal mostrando docker compose up --build ejecutándose]
 
@@ -162,7 +153,7 @@ MVPFinalUltimoTodoListoDefinitivoIAA/
 | `EMBEDDING_DEVICE` | No | `auto` (detecta GPU), `cpu` o `cuda` | `auto` |
 | `LOG_LEVEL` | No | Nivel de logging | `INFO` |
 
-> **Con Docker Compose**, las variables de BD, Redis y MinIO se configuran solas. Solo necesitas tocar las de arriba.
+> **Con Docker Compose**, la variable de conexión a la base de datos se configura sola. Solo necesitas tocar las variables de LLM y embeddings si quieres personalizarlas.
 
 ### 3.3. Ejemplo completo de `backend/.env`
 
@@ -202,7 +193,7 @@ cp backend/.env.example backend/.env
 ### 4.3. Activar GPU (solo si tienes GPU NVIDIA)
 
 Si quieres acelerar los embeddings con tu GPU, sigue los pasos según tu entorno.
-**Si no tienes GPU o no te interesa, salta directo a [4.4. Iniciar servicios](#44-iniciar-servicios).**
+**Si no tienes GPU o no te interesa, revisa [4.3.4](#434-revisar-gpus-all-en-docker-composeyml) para comentar `gpus: all` y luego salta a [4.4. Iniciar servicios](#44-iniciar-servicios).**
 
 > **¿No sabes qué entorno tienes?**
 > - Si instalaste Docker desde `docker.com` → **Docker Desktop**
@@ -218,7 +209,7 @@ GPU si tienes:
 2. WSL2 configurado como backend de Docker Desktop
 3. Integración WSL2 activada en Docker Desktop Settings → Resources → WSL Integration
 
-**Listo, salta a [4.3.4](#434-descomentar-gpus-all-en-docker-composeyml).**
+**Listo, salta a [4.3.4](#434-revisar-gpus-all-en-docker-composeyml).**
 
 #### 4.3.2. Linux nativo (Ubuntu/Debian)
 
@@ -256,25 +247,30 @@ sudo systemctl restart docker
 Sin este paso, Docker fallará al iniciar contenedores con GPU en WSL2 con el
 error `libdxcore.so: no such file or directory`.
 
-#### 4.3.4. Descomentar `gpus: all` en `docker-compose.yml`
+#### 4.3.4. Revisar `gpus: all` en `docker-compose.yml`
 
-Abre `docker-compose.yml` y cambia:
+El archivo trae `gpus: all` activo para usar GPU cuando esté disponible:
 
 ```yaml
-    # gpus: all          →  gpus: all
+    gpus: all
+```
+
+Si tu equipo no tiene GPU NVIDIA o Docker falla al iniciar por falta de soporte NVIDIA, comenta o elimina esa línea:
+
+```yaml
+    # gpus: all
 ```
 
 ### 4.4. Iniciar servicios
 
 ```bash
-# 3. Iniciar todo (con o sin GPU, funciona igual)
+# 3. Iniciar todo
 docker compose up --build
 ```
 
 [SCREENSHOT: Terminal mostrando docker compose up --build]
 
-El sistema ya trae `EMBEDDING_DEVICE=auto`, que detecta la GPU automáticamente
-si está disponible. No necesitas cambiar nada más para que funcione en CPU o GPU.
+El sistema ya trae `EMBEDDING_DEVICE=auto`, que detecta la GPU automáticamente si está disponible. Para ejecutar en CPU, basta con comentar o eliminar `gpus: all` si tu Docker no soporta GPU.
 
 Para verificar que la GPU quedó activa:
 
@@ -290,9 +286,6 @@ curl http://localhost:8000/api/v1/ai-status
 |----------|--------|-------------|
 | API (FastAPI) | `8000` | Backend de la aplicación |
 | PostgreSQL / pgvector | `5432` | Base de datos |
-| Redis | `6379` | Caché / cola |
-| MinIO API | `9000` | Almacenamiento de objetos |
-| MinIO Console | `9001` | Admin web de MinIO |
 
 ### 4.6. Comandos útiles
 
@@ -326,7 +319,6 @@ Usa este método si no puedes o no quieres usar Docker.
 
 - Python 3.11+ instalado
 - PostgreSQL 15+ con extensión pgvector instalada y corriendo
-- Redis 7+ instalado y corriendo
 - Git
 
 ### 5.2. Pasos de instalación
@@ -352,8 +344,8 @@ DATABASE_URL=postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso
 EMBEDDING_DEVICE=auto
 EOF
 
-# 5. Iniciar servicios externos (usa Docker solo para estos)
-docker compose up -d db redis minio
+# 5. Iniciar PostgreSQL con pgvector (usa Docker solo para la base de datos)
+docker compose up -d db
 
 # 6. Iniciar la API
 uvicorn app.main:app --reload --port 8000
@@ -443,9 +435,8 @@ curl http://localhost:8000/api/v1/ai-status
 | **sentence-transformers tarda mucho** | Primera descarga del modelo (~2 GB) | Es normal. Docker lo cachea en el volumen `huggingface_cache`. |
 | **El frontend no conecta** | Backend no está en `localhost:8000` | Verifica que la API esté corriendo y en ese puerto. |
 | **Los documentos se marcan "ocr_required"** | PDF escaneado, sin texto seleccionable | Usa PDF digital o DOCX en vez de escaneado. |
-| **El análisis no comienza** | Documentos no terminaron de procesarse | Espera a que el pipeline llegue a "completed". |
+| **El análisis no comienza** | Documentos no terminaron de procesarse | Espera a que los documentos queden en estado `ready`. |
 | **Error "No module named 'torch'"** | Dependencias de IA no instaladas (solo manual) | `pip install -e ".[ai]"` |
-| **Redis connection refused** | Redis no está corriendo | Con Docker: `docker compose up -d redis`. |
 | **El token demo no funciona** | `DEMO_AUTH_ENABLED` en `false` | No debería pasar con la configuración por defecto. |
 
 ---
