@@ -7,6 +7,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 PROJECT_DIR = BACKEND_DIR.parent
 
+DEFAULT_MAX_UPLOAD_MB = 40
+DEFAULT_CHUNK_WORDS = 220
+DEFAULT_CHUNK_OVERLAP_WORDS = 45
+DEFAULT_EMBEDDING_DIMENSIONS = 1024
+DEFAULT_EMBEDDING_MAX_SEQUENCE_LENGTH = 8192
+DEFAULT_OPENAI_TIMEOUT_SECONDS = 20
+DEFAULT_EVIDENCE_THRESHOLD = 0.22
+DEFAULT_EVIDENCE_SAMPLE_RATIO = 0.30
+DEFAULT_EVIDENCE_RELEVANCE_THRESHOLD = 0.25
+
 
 class Settings(BaseSettings):
     app_name: str = "Validacion Perfil de Egreso API"
@@ -25,13 +35,13 @@ class Settings(BaseSettings):
         "null",
     ]
 
-    max_upload_mb: int = 40
-    chunk_words: int = 220
-    chunk_overlap_words: int = 45
+    max_upload_mb: int = DEFAULT_MAX_UPLOAD_MB
+    chunk_words: int = DEFAULT_CHUNK_WORDS
+    chunk_overlap_words: int = DEFAULT_CHUNK_OVERLAP_WORDS
     embedding_provider: str = "bge-m3"
     embedding_model_name: str = "BAAI/bge-m3"
-    embedding_dimensions: int = 1024
-    embedding_max_sequence_length: int = 8192
+    embedding_dimensions: int = DEFAULT_EMBEDDING_DIMENSIONS
+    embedding_max_sequence_length: int = DEFAULT_EMBEDDING_MAX_SEQUENCE_LENGTH
     embedding_device: str = "auto"
     llm_comments_enabled: bool = True
     llm_provider: str = "gemini"
@@ -39,10 +49,10 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.0-flash"
     openai_api_key: str | None = None
     openai_model: str = "gpt-5.5"
-    openai_timeout_seconds: int = 20
-    evidence_threshold: float = 0.22
-    evidence_sample_ratio: float = 0.30
-    evidence_relevance_threshold: float = 0.25
+    openai_timeout_seconds: int = DEFAULT_OPENAI_TIMEOUT_SECONDS
+    evidence_threshold: float = DEFAULT_EVIDENCE_THRESHOLD
+    evidence_sample_ratio: float = DEFAULT_EVIDENCE_SAMPLE_RATIO
+    evidence_relevance_threshold: float = DEFAULT_EVIDENCE_RELEVANCE_THRESHOLD
 
     demo_auth_enabled: bool = True
 

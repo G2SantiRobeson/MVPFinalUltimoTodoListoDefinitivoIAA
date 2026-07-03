@@ -137,6 +137,10 @@ function isApiHttpError(error) {
   return /^API \d+:/.test(String(error?.message || ""));
 }
 
+function isApiStatus(error, status) {
+  return new RegExp(`^API ${status}:`).test(String(error?.message || ""));
+}
+
 function shouldMarkBackendDisconnected(error) {
   return !isApiHttpError(error);
 }
@@ -225,6 +229,38 @@ function openEvidenceCell(courseId, competencyCode) {
     selectedButton.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
     selectedButton.focus();
   });
+}
+
+function evidenceVerdictMeta(verdict) {
+  if (verdict === "false_positive") {
+    return { label: "Falso positivo rechazado", className: "false-positive", rejected: true };
+  }
+  if (verdict === "supporting") {
+    return { label: "Evidencia suficiente", className: "supporting", rejected: false };
+  }
+  return { label: "Candidato para revision", className: "candidate", rejected: false };
+}
+
+async function rejectEvidence(evidenceId) {
+  if (!evidenceId) return;
+  const confirmed = window.confirm(
+    "Marcar este fragmento como falso positivo? No contara para los porcentajes de cumplimiento."
+  );
+  if (!confirmed) return;
+  try {
+    await apiRequest(`/evidence/${encodeURIComponent(evidenceId)}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        manual_score: 0,
+        manual_verdict: "false_positive",
+        manual_observation: "Marcado como falso positivo por el evaluador."
+      })
+    });
+    await refreshApiAnalysis();
+    renderAll();
+  } catch (error) {
+    console.error("[Evidencia] No se pudo rechazar el fragmento:", error);
+  }
 }
 
 async function hydrateFromApi() {
@@ -1025,15 +1061,25 @@ function renderCellDetail() {
     ? `
       <div class="quote-box evidence-fragments-box">
         <strong>Evidencia textual (${fragments.length} fragmento${fragments.length > 1 ? "s" : ""} recuperado${fragments.length > 1 ? "s" : ""})</strong>
-        ${visibleFragments.map((frag, i) => `
-          <div class="evidence-fragment ${frag.verdict === 'supporting' ? 'supporting' : 'candidate'}">
+        ${visibleFragments.map((frag, i) => {
+          const verdictMeta = evidenceVerdictMeta(frag.verdict);
+          return `
+          <div class="evidence-fragment ${verdictMeta.className}">
             <div class="fragment-meta">
               <span class="fragment-origin">${escapeHtml(frag.origin)}${frag.page ? ` · Pág. ${frag.page}` : ""}</span>
-              <span class="fragment-confidence ${frag.confidence >= 60 ? 'conf-high' : frag.confidence >= 35 ? 'conf-mid' : 'conf-low'}">${frag.confidence}% confianza</span>
+              <div class="fragment-actions">
+                <span class="fragment-confidence ${frag.confidence >= 60 ? 'conf-high' : frag.confidence >= 35 ? 'conf-mid' : 'conf-low'}">${frag.confidence}% confianza</span>
+                ${frag.id ? `
+                  <button class="fragment-reject-button reject-evidence-fragment" type="button" data-evidence-id="${escapeHtml(frag.id)}">
+                    Rechazar
+                  </button>
+                ` : ""}
+              </div>
             </div>
             <p class="fragment-text">${escapeHtml(frag.text)}</p>
           </div>
-        `).join("")}
+        `;
+        }).join("")}
         ${fragments.length > 1 ? `
           <button class="text-toggle toggle-fragments" type="button" data-detail-key="${escapeHtml(detailKey)}">
             ${showAllFragments ? "Ver menos" : `Ver ${fragments.length - 1} fragmento${fragments.length - 1 > 1 ? "s" : ""} más`}
@@ -1113,8 +1159,9 @@ function renderPeriodList() {
     .map((period) => {
       const meta = statusMeta(period.status);
       return `
-        <button class="period-item ${period.id === state.currentPeriodId ? "active" : ""}" data-period="${period.id}" type="button">
-          <strong>${period.name}</strong>
+        <article class="period-item ${period.id === state.currentPeriodId ? "active" : ""}" data-period="${period.id}">
+          <button class="period-select-button" data-period="${period.id}" type="button">
+          <strong>${escapeHtml(period.name)}</strong>
           <span class="status-pill ${meta.className}">${meta.label}</span>
           <span class="period-meta">
             ${period.program ? `<span>${escapeHtml(period.program)}</span>` : ""}
@@ -1122,7 +1169,11 @@ function renderPeriodList() {
             <span>${period.metrics.thesis} tesis</span>
             <span>Última actualización: ${period.updatedAt}</span>
           </span>
-        </button>
+          </button>
+          <button class="icon-button delete-period" data-period="${period.id}" data-period-name="${escapeHtml(period.name)}" type="button" aria-label="Eliminar periodo ${escapeHtml(period.name)}">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </article>
       `;
     })
     .join("")
@@ -1284,18 +1335,18 @@ function renderEvidence() {
                 : [];
             const isGrouped = item.occurrence_count > 1;
             const hasManyCrossings = relatedCells.length > 6;
-            const verdictLabel = item.verdict === "supporting" ? "Evidencia suficiente" : "Candidato para revisión";
-            const reviewScore = item.manual_score ?? item.effective_score ?? confPct;
+            const verdictMeta = evidenceVerdictMeta(item.verdict);
+            const reviewScore = verdictMeta.rejected ? 0 : (item.manual_score ?? item.effective_score ?? confPct);
             const reviewedMeta = item.reviewed_at ? `<span>Revisada manualmente</span>` : "";
             return `
-              <article class="evidence-item ${isGrouped ? "grouped" : ""}">
+              <article class="evidence-item ${isGrouped ? "grouped" : ""} ${verdictMeta.rejected ? "rejected" : ""}">
                 <div class="evidence-header">
                   <div class="evidence-title">
                     <span class="evidence-tag">${escapeHtml(item.competency_code)}</span>
                     <h3>${escapeHtml(sourceTitle)}</h3>
                   </div>
                   <div class="evidence-status">
-                    <span class="evidence-verdict ${item.verdict === "supporting" ? "supporting" : "candidate"}">${verdictLabel}</span>
+                    <span class="evidence-verdict ${verdictMeta.className}">${verdictMeta.label}</span>
                     <span class="evidence-badge ${confidenceClass(item.confidence)}">${confPct}% confianza</span>
                   </div>
                 </div>
@@ -1307,6 +1358,7 @@ function renderEvidence() {
                 </div>
                 <p class="evidence-text">${escapeHtml(item.text)}</p>
                 <form class="evidence-review-form" data-evidence-id="${escapeHtml(item.id)}">
+                  ${verdictMeta.rejected ? `<input type="hidden" name="manual_verdict" value="false_positive" />` : ""}
                   <label>
                     <span>Puntaje</span>
                     <input name="manual_score" type="number" min="0" max="100" step="1" value="${escapeHtml(String(reviewScore))}" />
@@ -1318,6 +1370,14 @@ function renderEvidence() {
                   <button class="secondary-button compact-action" type="submit">
                     <i data-lucide="save"></i>
                     <span>Guardar opini&oacute;n</span>
+                  </button>
+                  <button
+                    class="danger-action compact-action reject-evidence"
+                    type="button"
+                    data-evidence-id="${escapeHtml(item.id)}"
+                    ${verdictMeta.rejected ? "disabled" : ""}
+                  >
+                    ${verdictMeta.rejected ? "Rechazado" : "Rechazar fragmento"}
                   </button>
                 </form>
                 <div class="evidence-crossings">
@@ -1559,13 +1619,25 @@ function startAnalysisProgressPolling(periodId) {
   stopAnalysisProgressPolling();
   state.lastProgressSignature = "";
   pollAnalysisProgress(periodId).catch((error) => {
+    if (handleDeletedProgressPoll(error)) return;
     console.warn("[Análisis IA] No se pudo leer el progreso inicial.", error);
   });
   state.progressTimer = window.setInterval(() => {
     pollAnalysisProgress(periodId).catch((error) => {
+      if (handleDeletedProgressPoll(error)) return;
       console.warn("[Análisis IA] No se pudo actualizar el progreso.", error);
     });
   }, 1200);
+}
+
+function handleDeletedProgressPoll(error) {
+  if (!isApiStatus(error, 404)) return false;
+  stopAnalysisProgressPolling();
+  state.running = false;
+  state.activeStep = -1;
+  state.analysisProgress = null;
+  renderAll();
+  return true;
 }
 
 function renderUploadProgress(fileStatuses) {
@@ -1774,6 +1846,36 @@ async function createPeriod(name) {
   return false;
 }
 
+async function deletePeriod(periodId) {
+  if (!periodId || !state.apiReady) return;
+  try {
+    if (state.analysisProgress?.period_id === periodId || state.currentPeriodId === periodId) {
+      stopAnalysisProgressPolling();
+      state.running = false;
+      state.activeStep = -1;
+      state.analysisProgress = null;
+    }
+    await apiRequest(`/periods/${periodId}`, { method: "DELETE" });
+    const apiPeriods = await apiRequest("/periods");
+    periods = apiPeriods.map(normalizePeriodFromApi);
+    if (state.currentPeriodId === periodId) {
+      state.currentPeriodId = periods[0]?.id || null;
+      state.currentCurriculumId = null;
+      state.selectedCell = null;
+      state.selectedOverviewCompetencyIndex = null;
+    }
+    await loadMatrixForCurrentPeriod();
+    await refreshApiAnalysis();
+    renderAll();
+  } catch (error) {
+    console.error("[Periodos] No se pudo eliminar el periodo:", error);
+    if (shouldMarkBackendDisconnected(error)) {
+      state.apiReady = false;
+    }
+    renderAll();
+  }
+}
+
 async function simulateAnalysis() {
   if (state.running) return;
   const period = currentPeriod();
@@ -1860,6 +1962,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $("#cellDetail").addEventListener("click", (event) => {
+    const rejectBtn = event.target.closest(".reject-evidence-fragment");
+    if (rejectBtn) {
+      rejectEvidence(rejectBtn.dataset.evidenceId);
+      return;
+    }
     const commentBtn = event.target.closest(".toggle-general-comment");
     if (commentBtn) {
       const key = commentBtn.dataset.detailKey;
@@ -1890,7 +1997,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $("#periodList").addEventListener("click", (event) => {
-    const button = event.target.closest(".period-item");
+    const deleteButton = event.target.closest(".delete-period");
+    if (deleteButton) {
+      const periodName = deleteButton.dataset.periodName || "este periodo";
+      const confirmed = window.confirm(
+        `Eliminar ${periodName}? Tambien se eliminaran sus tesis, embeddings, evidencias y resultados.`
+      );
+      if (confirmed) {
+        deletePeriod(deleteButton.dataset.period);
+      }
+      return;
+    }
+
+    const button = event.target.closest(".period-select-button");
     if (!button) return;
     setPeriod(button.dataset.period);
   });
@@ -1974,6 +2093,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $("#evidenceList").addEventListener("click", (event) => {
+    const rejectButton = event.target.closest(".reject-evidence");
+    if (rejectButton) {
+      rejectEvidence(rejectButton.dataset.evidenceId);
+      return;
+    }
     const button = event.target.closest(".evidence-cell-link");
     if (!button) return;
     openEvidenceCell(button.dataset.courseId, button.dataset.competencyCode);
@@ -1988,12 +2112,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const manualScore = Number(formData.get("manual_score"));
     if (!evidenceId || Number.isNaN(manualScore)) return;
     try {
+      const manualVerdict = String(formData.get("manual_verdict") || "");
+      const payload = {
+        manual_score: manualScore,
+        manual_observation: String(formData.get("manual_observation") || "")
+      };
+      if (manualVerdict) {
+        payload.manual_verdict = manualVerdict;
+      }
       await apiRequest(`/evidence/${encodeURIComponent(evidenceId)}`, {
         method: "PATCH",
-        body: JSON.stringify({
-          manual_score: manualScore,
-          manual_observation: String(formData.get("manual_observation") || "")
-        })
+        body: JSON.stringify(payload)
       });
       await refreshApiAnalysis();
       renderAll();

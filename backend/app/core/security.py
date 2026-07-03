@@ -14,6 +14,7 @@ DEMO_TOKENS = {
     "demo-academic-admin": "academico@demo.local",
     "demo-tech-admin": "tecnico@demo.local",
 }
+DEFAULT_DEMO_TOKEN = "demo-academic-admin"
 
 
 def get_current_user(
@@ -32,7 +33,7 @@ def get_current_user(
     Raises:
         HTTPException 401: Si el token es inválido o el usuario no existe.
     """
-    token = "demo-academic-admin"
+    token = DEFAULT_DEMO_TOKEN
     if authorization and authorization.lower().startswith("bearer "):
         token = authorization.split(" ", 1)[1].strip()
 
@@ -45,7 +46,10 @@ def get_current_user(
 
     user = db.query(User).filter(User.email == email).first()
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario demo no existe.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Usuario demo no existe.",
+        )
     return user
 
 

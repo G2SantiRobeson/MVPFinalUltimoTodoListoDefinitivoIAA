@@ -5,9 +5,14 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from app.core.config import get_settings
+from app.core.config import (
+    DEFAULT_EVIDENCE_SAMPLE_RATIO,
+    DEFAULT_EVIDENCE_THRESHOLD,
+    get_settings,
+)
 from app.db.models import (
     AcademicPeriod,
     AuditLog,
@@ -43,7 +48,91 @@ from app.services.scoring import (
 from app.services.document_processing import process_document_version
 
 
-def _score_to_percent(score: float, threshold: float = 0.22) -> int:
+FALSE_POSITIVE_VERDICT = "false_positive"
+VALID_EVIDENCE_VERDICTS = {"supporting", "candidate", FALSE_POSITIVE_VERDICT}
+
+LOW_SCORE_CUTOFF = 55
+HIGH_SCORE_CUTOFF = 75
+HIGH_CONFIDENCE_CUTOFF = 0.50
+
+MIN_SCORE_THRESHOLD = 0.05
+MAX_SCORE_THRESHOLD = 0.6
+DASHBOARD_SCORE_FLOOR = 25
+BELOW_THRESHOLD_PERCENT_SPAN = 34
+THRESHOLD_PERCENT = 60
+MID_SCORE_RAW_CUTOFF = 0.55
+MID_SCORE_PERCENT_SPAN = 24
+HIGH_SCORE_RAW_CUTOFF = 0.80
+HIGH_SCORE_PERCENT = 84
+HIGH_SCORE_PERCENT_SPAN = 10
+TOP_SCORE_PERCENT = 94
+TOP_SCORE_PERCENT_SPAN = 4
+
+OBSERVATION_EXCERPT_CHARS = 220
+
+RANKED_SIGNAL_HYBRID_WEIGHT = 0.50
+RANKED_SIGNAL_LEXICAL_WEIGHT = 0.22
+RANKED_SIGNAL_SEMANTIC_WEIGHT = 0.18
+RANKED_SIGNAL_PHRASE_WEIGHT = 0.07
+RANKED_SIGNAL_SECTION_WEIGHT = 0.03
+TOPK_SIGNAL_WEIGHTS = (0.50, 0.24, 0.14, 0.08, 0.04)
+
+UINT16_MAX = 65535
+TIEBREAKER_CENTER = 0.5
+CELL_TIEBREAKER_SPAN = 0.035
+COURSE_SIGNAL_DELTA_WEIGHT = 0.42
+CURRICULAR_ALIGNMENT_WEIGHT = 0.08
+
+DOCUMENT_PROGRESS_END = 60
+EMBEDDING_LOAD_PROGRESS = 65
+MATRIX_PROGRESS_START = 70
+MATRIX_PROGRESS_SPAN = 25
+
+COMMENT_TERM_LIMIT = 8
+COMMENT_TOKEN_MIN_LENGTH = 5
+COMPETENCY_SUMMARY_ROW_LIMIT = 180
+TOP_DOCUMENTS_LIMIT = 5
+CONTEXT_DOCUMENTS_LIMIT = 4
+TOPIC_TERMS_LIMIT = 6
+TITLE_TRIM_CHARS = 72
+SUMMARY_SNIPPET_CHARS = 230
+CONTEXT_SNIPPET_CHARS = 260
+COMMENT_TRIM_CHARS = 1350
+
+CELL_DETAIL_EVIDENCE_LIMIT = 3
+BEST_CELL_RELEVANCE_RATIO = 0.82
+BEST_CELL_RELEVANCE_DELTA = 0.08
+BEST_CELL_SELECTION_LIMIT = 5
+BEST_CELL_COURSE_SORT_FACTOR = 7
+BEST_CELL_COMPETENCY_SORT_FACTOR = 11
+BEST_CELL_CONFIDENCE_WEIGHT = 0.25
+BEST_CELL_LEXICAL_WEIGHT = 0.55
+BEST_CELL_PHRASE_WEIGHT = 0.12
+BEST_CELL_SECTION_WEIGHT = 0.08
+
+CONFIDENCE_PERCENT_DENOMINATOR = 100
+TOP_GAPS_LIMIT = 5
+
+
+def _active_evidence_filters():
+    return (
+        or_(Evidence.verdict.is_(None), Evidence.verdict != FALSE_POSITIVE_VERDICT),
+        or_(Evidence.manual_verdict.is_(None), Evidence.manual_verdict != FALSE_POSITIVE_VERDICT),
+    )
+
+
+def _evidence_threshold(criterion: EvaluationCriterion | None = None) -> float:
+    settings = get_settings()
+    thresholds = [
+        settings.evidence_threshold,
+        settings.evidence_relevance_threshold,
+    ]
+    if criterion:
+        thresholds.append(criterion.threshold)
+    return max(thresholds)
+
+
+def _score_to_percent(score: float, threshold: float = DEFAULT_EVIDENCE_THRESHOLD) -> int:
     """Convert an internal hybrid score into a dashboard percentage.
 
     Hybrid scores are conservative because they combine partial semantic, lexical,
@@ -52,15 +141,27 @@ def _score_to_percent(score: float, threshold: float = 0.22) -> int:
     """
 
     score = max(0.0, min(1.0, score))
-    threshold = max(0.05, min(0.6, threshold))
+    threshold = max(MIN_SCORE_THRESHOLD, min(MAX_SCORE_THRESHOLD, threshold))
 
     if score < threshold:
-        return round(25 + (score / threshold) * 34)
-    if score < 0.55:
-        return round(60 + ((score - threshold) / (0.55 - threshold)) * 24)
-    if score < 0.80:
-        return round(84 + ((score - 0.55) / 0.25) * 10)
-    return round(94 + ((score - 0.80) / 0.20) * 4)
+        return round(DASHBOARD_SCORE_FLOOR + (score / threshold) * BELOW_THRESHOLD_PERCENT_SPAN)
+    if score < MID_SCORE_RAW_CUTOFF:
+        return round(
+            THRESHOLD_PERCENT
+            + ((score - threshold) / (MID_SCORE_RAW_CUTOFF - threshold))
+            * MID_SCORE_PERCENT_SPAN
+        )
+    if score < HIGH_SCORE_RAW_CUTOFF:
+        return round(
+            HIGH_SCORE_PERCENT
+            + ((score - MID_SCORE_RAW_CUTOFF) / (HIGH_SCORE_RAW_CUTOFF - MID_SCORE_RAW_CUTOFF))
+            * HIGH_SCORE_PERCENT_SPAN
+        )
+    return round(
+        TOP_SCORE_PERCENT
+        + ((score - HIGH_SCORE_RAW_CUTOFF) / (1.0 - HIGH_SCORE_RAW_CUTOFF))
+        * TOP_SCORE_PERCENT_SPAN
+    )
 
 
 def _period_curriculum_id(db: Session, period: AcademicPeriod) -> str:
@@ -75,25 +176,31 @@ def _period_curriculum_id(db: Session, period: AcademicPeriod) -> str:
     return period.curriculum_id
 
 
-def _evidence_candidate_limit(total_candidates: int, ratio: float = 0.30) -> int:
+def _evidence_candidate_limit(
+    total_candidates: int,
+    ratio: float = DEFAULT_EVIDENCE_SAMPLE_RATIO,
+) -> int:
     if total_candidates <= 0:
         return 0
     ratio = max(0.01, min(1.0, ratio))
     return min(total_candidates, max(1, round(total_candidates * ratio)))
 
 
-def _ranked_above_threshold(ranked_chunks: list[RankedChunk], threshold: float) -> list[RankedChunk]:
+def _ranked_above_threshold(
+    ranked_chunks: list[RankedChunk],
+    threshold: float,
+) -> list[RankedChunk]:
     return [item for item in ranked_chunks if item.hybrid_score >= threshold]
 
 
 def _observation(course: Course, competency: Competency, score: int, ranked: RankedChunk) -> str:
-    if score >= 75:
+    if score >= HIGH_SCORE_CUTOFF:
         level = "alta"
-    elif score >= 55:
+    elif score >= LOW_SCORE_CUTOFF:
         level = "media"
     else:
         level = "baja"
-    excerpt = ranked.chunk.text[:220].replace("\n", " ").strip()
+    excerpt = ranked.chunk.text[:OBSERVATION_EXCERPT_CHARS].replace("\n", " ").strip()
     terms = ", ".join(ranked.matched_terms[:6]) if ranked.matched_terms else "sin terminos directos"
     return (
         f"Evidencia {level} para {course.title} respecto de {competency.code}. "
@@ -105,21 +212,23 @@ def _observation(course: Course, competency: Competency, score: int, ranked: Ran
 
 def _ranked_signal(ranked: RankedChunk) -> float:
     return (
-        ranked.hybrid_score * 0.50
-        + ranked.lexical_score * 0.22
-        + ranked.semantic_score * 0.18
-        + ranked.phrase_score * 0.07
-        + ranked.section_score * 0.03
+        ranked.hybrid_score * RANKED_SIGNAL_HYBRID_WEIGHT
+        + ranked.lexical_score * RANKED_SIGNAL_LEXICAL_WEIGHT
+        + ranked.semantic_score * RANKED_SIGNAL_SEMANTIC_WEIGHT
+        + ranked.phrase_score * RANKED_SIGNAL_PHRASE_WEIGHT
+        + ranked.section_score * RANKED_SIGNAL_SECTION_WEIGHT
     )
 
 
 def _weighted_topk_signal(ranked_chunks: list[RankedChunk]) -> float:
     if not ranked_chunks:
         return 0.0
-    weights = [0.50, 0.24, 0.14, 0.08, 0.04]
-    usable = ranked_chunks[: len(weights)]
-    total_weight = sum(weights[: len(usable)])
-    return sum(_ranked_signal(item) * weight for item, weight in zip(usable, weights, strict=False)) / total_weight
+    usable = ranked_chunks[: len(TOPK_SIGNAL_WEIGHTS)]
+    weights = TOPK_SIGNAL_WEIGHTS[: len(usable)]
+    total_weight = sum(weights)
+    return sum(
+        _ranked_signal(item) * weight for item, weight in zip(usable, weights, strict=False)
+    ) / total_weight
 
 
 def _curricular_alignment(course: Course, criterion: EvaluationCriterion) -> float:
@@ -136,8 +245,8 @@ def _curricular_alignment(course: Course, criterion: EvaluationCriterion) -> flo
 
 def _stable_cell_tiebreaker(course_id: str, criterion_id: str) -> float:
     digest = hashlib.blake2b(f"{course_id}:{criterion_id}".encode("utf-8"), digest_size=2).digest()
-    value = int.from_bytes(digest, "big") / 65535
-    return (value - 0.5) * 0.035
+    value = int.from_bytes(digest, "big") / UINT16_MAX
+    return (value - TIEBREAKER_CENTER) * CELL_TIEBREAKER_SPAN
 
 
 def _cell_adjusted_score(
@@ -156,7 +265,12 @@ def _cell_adjusted_score(
 
     # Keep the competency evidence as the anchor, but reward or penalize the cell
     # when the course-specific signal is meaningfully different.
-    adjusted = base_score + (course_signal - competency_signal) * 0.42 + alignment * 0.08 + tiebreaker
+    adjusted = (
+        base_score
+        + (course_signal - competency_signal) * COURSE_SIGNAL_DELTA_WEIGHT
+        + alignment * CURRICULAR_ALIGNMENT_WEIGHT
+        + tiebreaker
+    )
     return max(0.0, min(1.0, adjusted))
 
 
@@ -207,7 +321,9 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
     )
     for document in documents:
         if document.versions:
-            latest_versions.append(sorted(document.versions, key=lambda item: item.version_number)[-1])
+            latest_versions.append(
+                sorted(document.versions, key=lambda item: item.version_number)[-1]
+            )
 
     embedding_service = EmbeddingService(device=embedding_device)
     version_ids = [version.id for version in latest_versions]
@@ -227,7 +343,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
         total_versions = max(len(latest_versions), 1)
         for index, version in enumerate(latest_versions, start=1):
             document = version.document
-            base_progress = int(((index - 1) / total_versions) * 60)
+            base_progress = int(((index - 1) / total_versions) * DOCUMENT_PROGRESS_END)
             update_analysis_progress(
                 period_id,
                 step="checking_document",
@@ -241,8 +357,13 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
             )
             metas = embedding_meta_by_version.get(version.id, set())
             if metas != {(embedding_service.model_name, embedding_service.dimensions)}:
+
                 def _document_progress(step: str, progress: int, message: str) -> None:
-                    overall = int(((index - 1) + progress / 100) / total_versions * 60)
+                    overall = int(
+                        ((index - 1) + progress / CONFIDENCE_PERCENT_DENOMINATOR)
+                        / total_versions
+                        * DOCUMENT_PROGRESS_END
+                    )
                     ui_step = {
                         "extracting": 1,
                         "chunking": 2,
@@ -268,23 +389,27 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                     progress_callback=_document_progress,
                 )
             else:
+                cached_message = (
+                    f"Tesis {index}/{len(latest_versions)} ya tenia embeddings vigentes: "
+                    f"{document.title}"
+                )
                 update_analysis_progress(
                     period_id,
                     step="document_cached",
                     ui_step=3,
-                    progress=int((index / total_versions) * 60),
+                    progress=int((index / total_versions) * DOCUMENT_PROGRESS_END),
                     current_document_id=document.id,
                     current_document_title=document.title,
                     current_index=index,
                     total_documents=len(latest_versions),
-                    message=f"Tesis {index}/{len(latest_versions)} ya tenia embeddings vigentes: {document.title}",
+                    message=cached_message,
                 )
 
     update_analysis_progress(
         period_id,
         step="loading_embeddings",
         ui_step=3,
-        progress=65,
+        progress=EMBEDDING_LOAD_PROGRESS,
         current_document_id=None,
         current_document_title="",
         current_index=len(latest_versions),
@@ -342,12 +467,16 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
             period_id,
             step="analysis_matrix",
             ui_step=4,
-            progress=70 + int(((criterion_index - 1) / total_criteria) * 25),
+            progress=MATRIX_PROGRESS_START
+            + int(((criterion_index - 1) / total_criteria) * MATRIX_PROGRESS_SPAN),
             current_document_id=None,
             current_document_title="",
             current_index=len(latest_versions),
             total_documents=len(latest_versions),
-            message=f"Evaluando competencia {criterion_index}/{len(criteria)}: {criterion.competency.code}",
+            message=(
+                f"Evaluando competencia {criterion_index}/{len(criteria)}: "
+                f"{criterion.competency.code}"
+            ),
         )
         competency_query_text = "\n".join(
             [
@@ -377,11 +506,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                 course_query_vector,
                 chunks,
             )
-            threshold = max(
-                criterion.threshold,
-                settings.evidence_threshold,
-                settings.evidence_relevance_threshold,
-            )
+            threshold = _evidence_threshold(criterion)
             best_competency = competency_ranked_chunks[0]
             adjusted_score = _cell_adjusted_score(
                 best_competency.hybrid_score,
@@ -439,7 +564,7 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
                 evidence_count += 1
 
     average = round(sum(result_scores) / len(result_scores)) if result_scores else 0
-    low = len([score for score in result_scores if score < 55])
+    low = len([score for score in result_scores if score < LOW_SCORE_CUTOFF])
     period.status = "ready"
     period.analyzed_at = datetime.utcnow()
     period.updated_at = datetime.utcnow()
@@ -472,9 +597,9 @@ def _run_period_analysis(db: Session, period_id: str, embedding_device: str | No
 def _score_level(score: int | None) -> str:
     if score is None:
         return "pendiente"
-    if score >= 75:
+    if score >= HIGH_SCORE_CUTOFF:
         return "alta"
-    if score >= 55:
+    if score >= LOW_SCORE_CUTOFF:
         return "media"
     return "baja"
 
@@ -523,11 +648,11 @@ _COMMENT_STOPWORDS = {
 }
 
 
-def _top_comment_terms(texts: list[str], limit: int = 8) -> list[str]:
+def _top_comment_terms(texts: list[str], limit: int = COMMENT_TERM_LIMIT) -> list[str]:
     counts: Counter[str] = Counter()
     for text in texts:
         for token in tokenize(text):
-            if len(token) < 5 or token in _COMMENT_STOPWORDS:
+            if len(token) < COMMENT_TOKEN_MIN_LENGTH or token in _COMMENT_STOPWORDS:
                 continue
             counts[token] += 1
     return [term for term, _count in counts.most_common(limit)]
@@ -540,12 +665,7 @@ def _competency_evidence_summary(
     competency: Competency,
     criterion: EvaluationCriterion,
 ) -> CompetencyEvidenceSummary:
-    settings = get_settings()
-    threshold = max(
-        criterion.threshold,
-        settings.evidence_threshold,
-        settings.evidence_relevance_threshold,
-    )
+    threshold = _evidence_threshold(criterion)
     reviewed_documents = (
         db.query(Document)
         .filter(Document.period_id == period_id, Document.status != "deleted")
@@ -560,9 +680,10 @@ def _competency_evidence_summary(
             Evidence.period_id == period_id,
             Evidence.criterion_id == criterion.id,
             Document.status != "deleted",
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
-        .limit(180)
+        .limit(COMPETENCY_SUMMARY_ROW_LIMIT)
         .all()
     )
 
@@ -586,7 +707,7 @@ def _competency_evidence_summary(
         if chunk.page:
             item["pages"].add(chunk.page)
         if len(item["snippets"]) < 2:
-            snippet = _trim_text(chunk.text, 230)
+            snippet = _trim_text(chunk.text, SUMMARY_SNIPPET_CHARS)
             item["snippets"].append(snippet)
             representative_texts.append(snippet)
 
@@ -594,9 +715,10 @@ def _competency_evidence_summary(
     evidence_count = len(seen_chunks)
     if not evidence_documents:
         comment = (
-            f"El sistema reviso {reviewed_documents} tesis del periodo y no encontro evidencia textual "
-            f"suficiente para resumir la competencia {competency.code}. En este estado, la celda debe "
-            "interpretarse como una alerta de cobertura: no hay respaldo agregado confiable para el "
+            f"El sistema reviso {reviewed_documents} tesis del periodo y no encontro "
+            "evidencia textual suficiente para resumir la competencia "
+            f"{competency.code}. En este estado, la celda debe interpretarse como "
+            "una alerta de cobertura: no hay respaldo agregado confiable para el "
             f"cruce con {course.code or course.title}."
         )
         context = "- No hay documentos con evidencia recuperada para esta competencia."
@@ -608,39 +730,54 @@ def _competency_evidence_summary(
         reverse=True,
     )
     document_bits = [
-        f"{_trim_text(item['title'], 72)} ({_score_to_percent(item['max_confidence'], threshold)}%)"
-        for item in top_documents[:5]
+        (
+            f"{_trim_text(item['title'], TITLE_TRIM_CHARS)} "
+            f"({_score_to_percent(item['max_confidence'], threshold)}%)"
+        )
+        for item in top_documents[:TOP_DOCUMENTS_LIMIT]
     ]
     terms = _top_comment_terms(representative_texts)
-    topic_text = ", ".join(terms[:6]) if terms else "los temas tecnicos recuperados"
+    topic_text = (
+        ", ".join(terms[:TOPIC_TERMS_LIMIT])
+        if terms
+        else "los temas tecnicos recuperados"
+    )
     coverage = (
         f"{evidence_documents} de {reviewed_documents} tesis"
         if reviewed_documents
         else f"{evidence_documents} tesis"
     )
     comment = (
-        f"Para la competencia {competency.code}, el sistema reviso {reviewed_documents} tesis del periodo "
-        f"y encontro evidencia asociada en {coverage}, con {evidence_count} fragmentos unicos considerados. "
+        f"Para la competencia {competency.code}, el sistema reviso {reviewed_documents} "
+        f"tesis del periodo y encontro evidencia asociada en {coverage}, con "
+        f"{evidence_count} fragmentos unicos considerados. "
         f"Los indicios mas fuertes aparecen en {', '.join(document_bits)} en escala calibrada. "
-        f"En conjunto, los fragmentos se concentran en {topic_text}, por lo que el resultado resume una "
+        f"En conjunto, los fragmentos se concentran en {topic_text}, por lo que el "
+        "resultado resume una "
         "tendencia agregada del grupo y no una sola memoria aislada. "
-        f"Al leerlo junto al cruce {course.code or course.title} - {competency.code}, conviene validar si la "
+        f"Al leerlo junto al cruce {course.code or course.title} - {competency.code}, "
+        "conviene validar si la "
         "evidencia distribuida realmente cubre el alcance completo de la competencia tributada."
     )
     context_lines = [
         f"- Documentos principales: {', '.join(document_bits)}",
         f"- Temas frecuentes: {topic_text}",
     ]
-    for item in top_documents[:4]:
+    for item in top_documents[:CONTEXT_DOCUMENTS_LIMIT]:
         pages = sorted(item["pages"])
-        page_text = f"paginas {', '.join(str(page) for page in pages[:3])}" if pages else "sin pagina"
+        page_text = (
+            f"paginas {', '.join(str(page) for page in pages[:3])}"
+            if pages
+            else "sin pagina"
+        )
         if item["snippets"]:
             context_lines.append(
-                f"- {_trim_text(item['title'], 72)} ({page_text}): {_trim_text(item['snippets'][0], 260)}"
+                f"- {_trim_text(item['title'], TITLE_TRIM_CHARS)} ({page_text}): "
+                f"{_trim_text(item['snippets'][0], CONTEXT_SNIPPET_CHARS)}"
             )
 
     return CompetencyEvidenceSummary(
-        comment=_trim_text(comment, 1350),
+        comment=_trim_text(comment, COMMENT_TRIM_CHARS),
         context="\n".join(context_lines),
         reviewed_documents=reviewed_documents,
         evidence_documents=evidence_documents,
@@ -654,12 +791,12 @@ def _cell_action(score: int | None, confidence: float | None, has_evidence: bool
             "Revisar manualmente la celda y pedir evidencias explicitas en futuras memorias; "
             "el sistema no encontro fragmentos suficientes para justificar este cruce."
         )
-    if score >= 75 and (confidence or 0) >= 0.50:
+    if score >= HIGH_SCORE_CUTOFF and (confidence or 0) >= HIGH_CONFIDENCE_CUTOFF:
         return (
             "Mantener la tributacion y usar los fragmentos recuperados como respaldo trazable "
             "en el informe curricular."
         )
-    if score >= 55:
+    if score >= LOW_SCORE_CUTOFF:
         return (
             "Mantener la celda en observacion y solicitar que las memorias expliciten mejor "
             "la relacion entre el trabajo realizado, el curso y la competencia."
@@ -676,22 +813,52 @@ def review_evidence_score(
     manual_score: int,
     manual_observation: str,
     actor_id: str | None,
+    manual_verdict: str | None = None,
 ) -> Evidence:
     evidence = db.get(Evidence, evidence_id)
     if not evidence:
         raise ValueError("Evidencia no encontrada.")
 
-    score = max(0, min(100, manual_score))
-    evidence.manual_score = score
-    evidence.manual_verdict = "supporting" if score >= 55 else "candidate"
-    evidence.manual_observation = manual_observation.strip()
-    evidence.reviewed_by_id = actor_id
-    evidence.reviewed_at = datetime.utcnow()
-    evidence.verdict = evidence.manual_verdict
-    if evidence.manual_observation:
-        evidence.observation = evidence.manual_observation
+    score = max(0, min(CONFIDENCE_PERCENT_DENOMINATOR, manual_score))
+    verdict = manual_verdict or ("supporting" if score >= LOW_SCORE_CUTOFF else "candidate")
+    if verdict not in VALID_EVIDENCE_VERDICTS:
+        raise ValueError("Veredicto manual no valido.")
+    if verdict == FALSE_POSITIVE_VERDICT:
+        score = 0
 
-    _recalculate_reviewed_cell(db, evidence)
+    observation = manual_observation.strip()
+    if verdict == FALSE_POSITIVE_VERDICT and not observation:
+        observation = "Marcado como falso positivo por el evaluador."
+
+    target_evidence = (
+        db.query(Evidence)
+        .filter(
+            Evidence.period_id == evidence.period_id,
+            Evidence.criterion_id == evidence.criterion_id,
+            Evidence.chunk_id == evidence.chunk_id,
+        )
+        .all()
+    )
+
+    reviewed_at = datetime.utcnow()
+    for item in target_evidence:
+        item.manual_score = score
+        item.manual_verdict = verdict
+        item.manual_observation = observation
+        item.reviewed_by_id = actor_id
+        item.reviewed_at = reviewed_at
+        item.verdict = verdict
+        if item.manual_observation:
+            item.observation = item.manual_observation
+
+    affected_cells = {(item.course_id, item.criterion_id) for item in target_evidence}
+    for course_id, criterion_id in affected_cells:
+        item = next(
+            row
+            for row in target_evidence
+            if row.course_id == course_id and row.criterion_id == criterion_id
+        )
+        _recalculate_reviewed_cell(db, item)
 
     period = db.get(AcademicPeriod, evidence.period_id)
     if period:
@@ -708,6 +875,8 @@ def review_evidence_score(
                 "course_id": evidence.course_id,
                 "criterion_id": evidence.criterion_id,
                 "manual_score": score,
+                "manual_verdict": verdict,
+                "affected_evidence": len(target_evidence),
             },
         )
     )
@@ -725,12 +894,54 @@ def _recalculate_reviewed_cell(db: Session, evidence: Evidence) -> EvaluationRes
             Evidence.course_id == evidence.course_id,
             Evidence.criterion_id == evidence.criterion_id,
             Evidence.manual_score.isnot(None),
+            *_active_evidence_filters(),
         )
         .all()
         if row.manual_score is not None
     ]
-    score = round(sum(reviewed_scores) / len(reviewed_scores)) if reviewed_scores else 0
-    confidence = score / 100
+    rejected_count = (
+        db.query(Evidence)
+        .filter(
+            Evidence.period_id == evidence.period_id,
+            Evidence.course_id == evidence.course_id,
+            Evidence.criterion_id == evidence.criterion_id,
+            Evidence.manual_verdict == FALSE_POSITIVE_VERDICT,
+        )
+        .count()
+    )
+    if reviewed_scores:
+        score = round(sum(reviewed_scores) / len(reviewed_scores))
+        confidence = score / CONFIDENCE_PERCENT_DENOMINATOR
+        summary = (
+            "Resultado ajustado por revision manual de evidencia. "
+            f"Promedio de {len(reviewed_scores)} evidencia(s) revisada(s): {score}%."
+        )
+    else:
+        active_evidence = (
+            db.query(Evidence)
+            .filter(
+                Evidence.period_id == evidence.period_id,
+                Evidence.course_id == evidence.course_id,
+                Evidence.criterion_id == evidence.criterion_id,
+                *_active_evidence_filters(),
+            )
+            .all()
+        )
+        criterion = db.get(EvaluationCriterion, evidence.criterion_id)
+        threshold = _evidence_threshold(criterion)
+        if active_evidence:
+            score = max(
+                _score_to_percent(row.confidence or 0.0, threshold)
+                for row in active_evidence
+            )
+            confidence = max(row.confidence or 0.0 for row in active_evidence)
+        else:
+            score = 0
+            confidence = 0
+        summary = (
+            "Resultado recalculado tras revision manual. "
+            f"Se usaron {len(active_evidence)} evidencia(s) automatica(s) no rechazadas: {score}%."
+        )
     result = (
         db.query(EvaluationResult)
         .filter(
@@ -741,10 +952,11 @@ def _recalculate_reviewed_cell(db: Session, evidence: Evidence) -> EvaluationRes
         )
         .first()
     )
-    summary = (
-        "Resultado ajustado por revision manual de evidencia. "
-        f"Promedio de {len(reviewed_scores)} evidencia(s) revisada(s): {score}%."
-    )
+    if rejected_count:
+        summary += (
+            f" {rejected_count} evidencia(s) marcada(s) como falso positivo "
+            "no se consideraron."
+        )
     if not result:
         result = EvaluationResult(
             period_id=evidence.period_id,
@@ -780,6 +992,7 @@ def _cell_evidence_chunks(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion_id,
+            *_active_evidence_filters(),
         )
         .all()
     )
@@ -812,16 +1025,31 @@ def _best_cell_ranked_chunk(
         lexical, _matched = lexical_overlap(query_tokens, chunk_tokens)
         phrase = phrase_overlap(query_tokens, chunk_tokens)
         section = section_signal(chunk_tokens)
-        score = evidence.confidence * 0.25 + lexical * 0.55 + phrase * 0.12 + section * 0.08
+        score = (
+            evidence.confidence * BEST_CELL_CONFIDENCE_WEIGHT
+            + lexical * BEST_CELL_LEXICAL_WEIGHT
+            + phrase * BEST_CELL_PHRASE_WEIGHT
+            + section * BEST_CELL_SECTION_WEIGHT
+        )
         ranked.append((score, chunk))
     ranked.sort(key=lambda item: item[0], reverse=True)
     if not ranked:
         return None
 
     top_score = ranked[0][0]
-    relevant = [item for item in ranked if item[0] >= max(top_score * 0.82, top_score - 0.08)]
-    relevant = relevant[: min(len(relevant), 5)]
-    selected_index = (course.sort_order * 7 + competency.sort_order * 11) % len(relevant)
+    relevant = [
+        item
+        for item in ranked
+        if item[0] >= max(
+            top_score * BEST_CELL_RELEVANCE_RATIO,
+            top_score - BEST_CELL_RELEVANCE_DELTA,
+        )
+    ]
+    relevant = relevant[: min(len(relevant), BEST_CELL_SELECTION_LIMIT)]
+    selected_index = (
+        course.sort_order * BEST_CELL_COURSE_SORT_FACTOR
+        + competency.sort_order * BEST_CELL_COMPETENCY_SORT_FACTOR
+    ) % len(relevant)
     selected = relevant[selected_index]
     return (selected[1], selected[0])
 
@@ -879,6 +1107,7 @@ def build_cell_detail(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion.id,
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
         .first()
@@ -970,9 +1199,10 @@ def build_cell_detail(
             Evidence.period_id == period_id,
             Evidence.course_id == course_id,
             Evidence.criterion_id == criterion.id,
+            *_active_evidence_filters(),
         )
         .order_by(Evidence.confidence.desc(), Evidence.semantic_score.desc())
-        .limit(3)
+        .limit(CELL_DETAIL_EVIDENCE_LIMIT)
         .all()
     )
     seen_frag_ids: set[str] = set()
@@ -986,10 +1216,11 @@ def build_cell_detail(
             frag_origin = ch.version.document.title
         evidence_fragments.append(
             {
+                "id": ev.id,
                 "text": _trim_text(ch.text),
                 "origin": frag_origin,
                 "page": frag_page,
-                "confidence": round((ev.confidence or 0) * 100),
+                "confidence": round((ev.confidence or 0) * CONFIDENCE_PERCENT_DENOMINATOR),
                 "verdict": ev.verdict or "candidate",
             }
         )
@@ -1043,10 +1274,18 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     result_by_cell = {(result.course_id, result.criterion_id): result for result in results}
 
     evidence_counts: dict[tuple[str, str], int] = defaultdict(int)
-    for evidence in db.query(Evidence).filter(Evidence.period_id == period_id).all():
+    for evidence in (
+        db.query(Evidence)
+        .filter(Evidence.period_id == period_id, *_active_evidence_filters())
+        .all()
+    ):
         evidence_counts[(evidence.course_id, evidence.criterion_id)] += 1
 
-    total_docs = db.query(Document).filter(Document.period_id == period_id, Document.status != "deleted").count()
+    total_docs = (
+        db.query(Document)
+        .filter(Document.period_id == period_id, Document.status != "deleted")
+        .count()
+    )
     evidence_query = (
         db.query(Evidence.criterion_id, DocumentVersion.document_id)
         .join(DocumentChunk, Evidence.chunk_id == DocumentChunk.id)
@@ -1054,7 +1293,8 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         .join(Document, DocumentVersion.document_id == Document.id)
         .filter(
             Evidence.period_id == period_id,
-            Document.status != "deleted"
+            Document.status != "deleted",
+            *_active_evidence_filters(),
         )
         .distinct()
         .all()
@@ -1130,7 +1370,7 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
 
     if criteria_evaluated and total_docs > 0:
         sum_traceability = sum(
-            (docs_by_criterion[crit_id] / total_docs) * 100
+            (docs_by_criterion[crit_id] / total_docs) * CONFIDENCE_PERCENT_DENOMINATOR
             for crit_id in criteria_evaluated
         )
         avg_traceability = round(sum_traceability / len(criteria_evaluated))
@@ -1142,11 +1382,15 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
     # coverage_rate: % of tributed cells whose evaluated result reaches the threshold.
     cells_with_evidence = sum(value["with_evidence"] for value in competency_cells.values())
     total_cells = len(cells)
-    coverage_rate = round((cells_with_evidence / total_cells) * 100) if total_cells > 0 else 0
+    coverage_rate = (
+        round((cells_with_evidence / total_cells) * CONFIDENCE_PERCENT_DENOMINATOR)
+        if total_cells > 0
+        else 0
+    )
 
     # top_gaps: the 5 lowest-scoring cells (most critical gaps)
     scored_cells = [c for c in cells if c["score"] is not None]
-    top_gaps = sorted(scored_cells, key=lambda c: c["score"])[:5]
+    top_gaps = sorted(scored_cells, key=lambda c: c["score"])[:TOP_GAPS_LIMIT]
     top_gaps_out = [
         {
             "course_code": g["course_code"],
@@ -1167,7 +1411,11 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
                 "group": v["group"],
                 "total_cells": v["total"],
                 "cells_with_evidence": v["with_evidence"],
-                "coverage_pct": round((v["with_evidence"] / v["total"]) * 100) if v["total"] > 0 else 0,
+                "coverage_pct": (
+                    round((v["with_evidence"] / v["total"]) * CONFIDENCE_PERCENT_DENOMINATOR)
+                    if v["total"] > 0
+                    else 0
+                ),
                 "avg_score": round(sum(v["scores"]) / len(v["scores"])) if v["scores"] else None,
             }
             for v in competency_cells.values()
@@ -1179,10 +1427,12 @@ def build_period_analysis(db: Session, period_id: str) -> dict:
         "average": round(sum(scores) / len(scores)) if scores else 0,
         "traceability": avg_traceability,
         "evaluated_cells": len(scores),
-        "gaps": len([score for score in scores if score < 55]),
-        "high": len([score for score in scores if score >= 75]),
-        "medium": len([score for score in scores if 55 <= score < 75]),
-        "low": len([score for score in scores if score < 55]),
+        "gaps": len([score for score in scores if score < LOW_SCORE_CUTOFF]),
+        "high": len([score for score in scores if score >= HIGH_SCORE_CUTOFF]),
+        "medium": len(
+            [score for score in scores if LOW_SCORE_CUTOFF <= score < HIGH_SCORE_CUTOFF]
+        ),
+        "low": len([score for score in scores if score < LOW_SCORE_CUTOFF]),
         "coverage_rate": coverage_rate,
         "top_gaps": top_gaps_out,
         "competency_coverage": competency_coverage_out,

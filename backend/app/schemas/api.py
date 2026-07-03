@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -111,6 +112,7 @@ class EvidenceOut(BaseModel):
     semantic_score: float
     confidence: float
     manual_score: int | None = None
+    manual_verdict: str | None = None
     effective_score: int
     verdict: str
     observation: str
@@ -121,6 +123,7 @@ class EvidenceOut(BaseModel):
 class EvidenceReviewIn(BaseModel):
     manual_score: int = Field(ge=0, le=100)
     manual_observation: str = Field(default="", max_length=1000)
+    manual_verdict: Literal["supporting", "candidate", "false_positive"] | None = None
 
 
 class HeatmapCellOut(BaseModel):

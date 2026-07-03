@@ -1,11 +1,11 @@
-from pathlib import Path
-
 from app.services.curriculum_loader import load_matrix_from_xlsx
+from app.services.curriculum_matrices import resolve_initial_matrix_paths
 
 
 def test_loads_real_curriculum_matrix():
-    project_root = Path(__file__).resolve().parents[2]
-    path = project_root / "matrices_tributacion" / "Matriz Tributación PE 2025 COMPUTACION.xlsx"
+    path = next(
+        path for path in resolve_initial_matrix_paths() if "COMPUTACION" in path.stem.upper()
+    )
     matrix = load_matrix_from_xlsx(path)
 
     assert len(matrix.competencies) == 19

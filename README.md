@@ -61,6 +61,7 @@ Dependencias principales:
 - `pypdf`
 - `python-docx`
 - `psycopg[binary]`
+- `pgvector`
 - `XlsxWriter`
 
 Dependencias IA opcionales para instalacion manual:

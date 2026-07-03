@@ -13,6 +13,14 @@ from app.services.embeddings import EmbeddingService
 from app.services.locks import document_processing_lock, sqlite_write_lock
 
 
+PROGRESS_EXTRACTING = 10
+PROGRESS_CHUNKING = 35
+PROGRESS_EMBEDDING = 65
+PROGRESS_DONE = 100
+FAILED_PROGRESS_CAP = 99
+OCR_REQUIRED_QUALITY = 0
+
+
 def _extract_pdf(path: Path) -> tuple[list[tuple[int, str]], int, float]:
     reader = PdfReader(str(path))
     pages: list[tuple[int, str]] = []
@@ -113,7 +121,7 @@ def _mark_processing_failed(
         version.document.status = "failed"
     job.status = "failed"
     job.step = "failed"
-    job.progress = min(job.progress or 0, 99)
+    job.progress = min(job.progress or 0, FAILED_PROGRESS_CAP)
     job.error_message = str(error)
     job.finished_at = datetime.utcnow()
     db.commit()
@@ -125,7 +133,7 @@ def _mark_processing_skipped(db: Session, version: DocumentVersion, reason: str)
         version_id=version.id,
         status="skipped",
         step="skipped",
-        progress=100,
+        progress=PROGRESS_DONE,
         error_message=reason,
         started_at=datetime.utcnow(),
         finished_at=datetime.utcnow(),
@@ -183,7 +191,7 @@ def _process_document_version(
             version_id=version.id,
             status="running",
             step="extracting",
-            progress=10,
+            progress=PROGRESS_EXTRACTING,
             started_at=datetime.utcnow(),
         )
         db.add(job)
@@ -191,18 +199,28 @@ def _process_document_version(
         db.commit()
         db.refresh(job)
         job_id = job.id
-        _notify(progress_callback, "extracting", 10, f"Extrayendo texto de {version.document.title}.")
+        _notify(
+            progress_callback,
+            "extracting",
+            PROGRESS_EXTRACTING,
+            f"Extrayendo texto de {version.document.title}.",
+        )
 
         path = Path(version.file_uri)
         pages, page_count, quality = extract_pages(path, version.mime_type)
         version.page_count = page_count
         version.extraction_quality = quality
         job.step = "chunking"
-        job.progress = 35
+        job.progress = PROGRESS_CHUNKING
         db.commit()
-        _notify(progress_callback, "chunking", 35, f"Segmentando tesis {version.document.title}.")
+        _notify(
+            progress_callback,
+            "chunking",
+            PROGRESS_CHUNKING,
+            f"Segmentando tesis {version.document.title}.",
+        )
 
-        if quality == 0:
+        if quality == OCR_REQUIRED_QUALITY:
             version.document.status = "ocr_required"
             job.status = "failed"
             job.step = "ocr_required"
@@ -214,13 +232,16 @@ def _process_document_version(
         chunks = chunk_pages(pages)
         embedding_service = EmbeddingService(device=embedding_device)
         job.step = "embedding"
-        job.progress = 65
+        job.progress = PROGRESS_EMBEDDING
         db.commit()
         _notify(
             progress_callback,
             "embedding",
-            65,
-            f"Generando embeddings de {version.document.title} en {embedding_service.device or 'auto'}.",
+            PROGRESS_EMBEDDING,
+            (
+                f"Generando embeddings de {version.document.title} "
+                f"en {embedding_service.device or 'auto'}."
+            ),
         )
 
         existing_chunk_ids = [
@@ -265,7 +286,7 @@ def _process_document_version(
         if version.document.status == "deleted":
             job.status = "skipped"
             job.step = "skipped"
-            job.progress = 100
+            job.progress = PROGRESS_DONE
             job.error_message = "Documento eliminado durante el procesamiento."
             job.finished_at = datetime.utcnow()
             db.commit()
@@ -274,10 +295,15 @@ def _process_document_version(
         version.document.status = "ready"
         job.status = "completed"
         job.step = "ready"
-        job.progress = 100
+        job.progress = PROGRESS_DONE
         job.finished_at = datetime.utcnow()
         db.commit()
-        _notify(progress_callback, "ready", 100, f"Tesis lista: {version.document.title}.")
+        _notify(
+            progress_callback,
+            "ready",
+            PROGRESS_DONE,
+            f"Tesis lista: {version.document.title}.",
+        )
         return job
     except Exception as exc:
         return _mark_processing_failed(db, version_id, job_id, exc)

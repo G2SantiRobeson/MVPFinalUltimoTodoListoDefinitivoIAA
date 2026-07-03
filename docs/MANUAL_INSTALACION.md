@@ -54,15 +54,9 @@ Backend en Python/FastAPI, frontend vanilla JS, base de datos PostgreSQL con pgv
 
 ### ¿CPU o GPU?
 
-El sistema funciona en **CPU sin problemas**. No necesitas GPU para nada.
+El backend usa `EMBEDDING_DEVICE=auto`: si Docker expone una GPU NVIDIA, los embeddings usan CUDA; si no, usan CPU.
 
-Si tienes una **GPU NVIDIA** y quieres acelerar los embeddings (~3-5× más rápido):
-
-| Requisito | Detalle |
-|-----------|---------|
-| Drivers NVIDIA | `nvidia-smi` debe funcionar desde terminal |
-| NVIDIA Container Toolkit | Instalado una vez (ver [4.3.2](#432-linux-nativo-ubuntudebian)) |
-| VRAM mínima | 4 GB (recomendado 8 GB para el modelo BGE-M3) |
+El `docker-compose.yml` del repositorio trae `gpus: all` activo para acelerar el procesamiento cuando el entorno lo soporta. Si tu equipo no tiene GPU NVIDIA o Docker falla al solicitar GPU, comenta o elimina esa línea y el sistema funcionará en CPU.
 
 > **Atención:** El `docker-compose.yml` viene con `gpus: all` activado por defecto.
 > Si **no** tienes GPU NVIDIA, debes **comentar o eliminar** esa línea en
@@ -126,12 +120,17 @@ GEMINI_API_KEY=AIzaSy...
 
 Sin esto, el sistema funciona igual con comentarios locales.
 
-### Paso 3: Levanta todo con Docker
+### Paso 3: Revisa la configuración de GPU
 
-```bash
-# Clona el repositorio (si no lo has hecho)
-git clone https://github.com/G2SantiRobeson/MVPFinalUltimoTodoListoDefinitivoIAA.git
-cd MVPFinalUltimoTodoListoDefinitivoIAA
+Si tienes GPU NVIDIA y Docker la soporta, deja `gpus: all` activo en `docker-compose.yml`.
+
+Si no tienes GPU o Docker muestra un error relacionado con NVIDIA, comenta o elimina esa línea:
+
+```yaml
+    # gpus: all
+```
+
+Con `EMBEDDING_DEVICE=auto`, el backend seguirá funcionando en CPU.
 
 # (Opcional) Si NO tienes GPU NVIDIA, comenta `gpus: all` en docker-compose.yml
 # antes de continuar (ver sección 4.3)
@@ -140,9 +139,7 @@ cd MVPFinalUltimoTodoListoDefinitivoIAA
 docker compose up --build
 ```
 
-La primera ejecución descarga las imágenes (PostgreSQL con pgvector, Redis, MinIO) y el modelo de IA `BAAI/bge-m3` (~2 GB). Esto toma entre 5 y 15 minutos, según tu conexión.
-
-**En Windows + PowerShell**, el comando es el mismo. Asegúrate de ejecutarlo desde la carpeta del repositorio.
+La primera ejecución descarga PostgreSQL con pgvector, construye la imagen del backend y descarga el modelo de IA `BAAI/bge-m3` (~2 GB). Esto toma unos minutos.
 
 **En WSL2**, ejecuta el comando desde la terminal de WSL2 (Ubuntu), no desde PowerShell.
 
@@ -187,7 +184,7 @@ MVPFinalUltimoTodoListoDefinitivoIAA/
 | `EMBEDDING_DEVICE` | No | `auto` (detecta GPU), `cpu` o `cuda` | `auto` |
 | `LOG_LEVEL` | No | Nivel de logging | `INFO` |
 
-> **Con Docker Compose**, las variables de BD, Redis y MinIO se configuran solas. Solo necesitas tocar las de arriba.
+> **Con Docker Compose**, la variable de conexión a la base de datos se configura sola. Solo necesitas tocar las variables de LLM y embeddings si quieres personalizarlas.
 
 ### 3.3. Ejemplo completo de `backend/.env`
 
@@ -261,15 +258,8 @@ cp backend/.env.example backend/.env
 
 ### 4.3. GPU (solo si tienes GPU NVIDIA)
 
-> **⚠️ Importante:** El archivo `docker-compose.yml` (línea 10) tiene
-> `gpus: all` **activo por defecto**. Si no tienes GPU NVIDIA o no has
-> instalado NVIDIA Container Toolkit, Docker fallará con:
-> `no available devices` o `libnvidia-ml.so.1 not found`.
->
-> **Solución rápida:** Abre `docker-compose.yml` y **comenta la línea 10**
-> (`# gpus: all`) antes de ejecutar `docker compose up`.
->
-> Si quieres usar GPU, sigue los pasos abajo según tu plataforma.
+Si quieres acelerar los embeddings con tu GPU, sigue los pasos según tu entorno.
+**Si no tienes GPU o no te interesa, revisa [4.3.4](#434-revisar-gpus-all-en-docker-composeyml) para comentar `gpus: all` y luego salta a [4.4. Iniciar servicios](#44-iniciar-servicios).**
 
 > **¿No sabes qué entorno tienes?** Preguntas guía:
 > - ¿Instalaste Docker desde docker.com? → **Docker Desktop**
@@ -282,16 +272,7 @@ cp backend/.env.example backend/.env
 No necesitas instalar nada extra. Docker Desktop para Windows ya incluye el
 soporte GPU si cumples todo esto:
 
-1. **Drivers NVIDIA** instalados en Windows (desde nvidia.com) — funciona con
-   cualquier GPU NVIDIA (GTX, RTX, Quadro, Tesla).
-2. **WSL2 como backend** de Docker Desktop (Settings → General → "Use WSL 2
-   based engine").
-3. **Integración WSL2** activada: Docker Desktop → Settings → Resources →
-   WSL Integration → activa tu distribución (ej: `Ubuntu-24.04`).
-4. **Dentro de WSL2**, ejecuta `nvidia-smi` para verificar que la GPU es visible
-   desde la terminal de Linux.
-
-Si todo funciona, `docker compose up --build` usará la GPU automáticamente.
+**Listo, salta a [4.3.4](#434-revisar-gpus-all-en-docker-composeyml).**
 
 #### 4.3.2. Linux nativo (Ubuntu/Debian)
 
@@ -342,38 +323,30 @@ sudo systemctl restart docker
 Sin este paso, Docker fallará con `libdxcore.so: no such file or directory`
 al iniciar contenedores con GPU.
 
-#### 4.3.4. Verificar que la GPU está activa
+#### 4.3.4. Revisar `gpus: all` en `docker-compose.yml`
 
-```bash
-# Una vez que los servicios estén arriba:
-curl http://localhost:8000/api/v1/ai-status
+El archivo trae `gpus: all` activo para usar GPU cuando esté disponible:
 
-# Respuestas posibles:
-# {"device": "cuda", "provider": "sentence-transformers", ...}
-#   → GPU NVIDIA activa y funcionando
-#
-# {"device": "cpu", "provider": "sentence-transformers", ...}
-#   → Funcionando en CPU (normal si no activaste GPU o no tienes una)
+```yaml
+    gpus: all
+```
+
+Si tu equipo no tiene GPU NVIDIA o Docker falla al iniciar por falta de soporte NVIDIA, comenta o elimina esa línea:
+
+```yaml
+    # gpus: all
 ```
 
 ### 4.4. Iniciar servicios
 
 ```bash
-# Antes de ejecutar, asegúrate de:
-# 1. Estar en la carpeta del repositorio (MVPFinalUltimoTodoListoDefinitivoIAA)
-# 2. Si no tienes GPU, haber comentado gpus: all en docker-compose.yml
-# 3. Tener Docker corriendo
-
+# 3. Iniciar todo
 docker compose up --build
 ```
 
 [SCREENSHOT: Terminal mostrando docker compose up --build]
 
-**Primera ejecución:**
-1. Docker construye la imagen de la API (descarga Python 3.12, instala PyTorch, sentence-transformers)
-2. Descarga e inicia PostgreSQL con pgvector, Redis y MinIO
-3. Dentro de la API, se descarga el modelo `BAAI/bge-m3` (~2 GB) de HuggingFace
-4. La base de datos se inicializa automáticamente con tablas y datos de prueba
+El sistema ya trae `EMBEDDING_DEVICE=auto`, que detecta la GPU automáticamente si está disponible. Para ejecutar en CPU, basta con comentar o eliminar `gpus: all` si tu Docker no soporta GPU.
 
 **Tiempo estimado (primera vez):**
 | Conexión | Tiempo |
@@ -388,9 +361,6 @@ docker compose up --build
 |----------|--------|-------------|
 | API (FastAPI) | `8000` | Backend de la aplicación |
 | PostgreSQL / pgvector | `5432` | Base de datos |
-| Redis | `6379` | Caché / cola |
-| MinIO API | `9000` | Almacenamiento de objetos |
-| MinIO Console | `9001` | Admin web de MinIO |
 
 ### 4.6. Comandos útiles
 
@@ -423,28 +393,9 @@ configurar cada servicio por separado.
 
 ### 5.1. Requisitos previos
 
-| Componente | Versión mínima | Linux (apt) | Windows | macOS |
-|-----------|---------------|-------------|---------|-------|
-| **Python** | 3.11+ | `sudo apt install python3 python3-pip python3-venv` | Descargar desde python.org (marcar "Add to PATH") | `brew install python@3.12` |
-| **PostgreSQL + pgvector** | 15+ | `sudo apt install postgresql postgresql-client postgresql-16-pgvector` | Descargar desde postgresql.org + pgvector desde Stack Builder o pip | `brew install postgresql@16 pgvector` |
-| **Redis** | 7+ | `sudo apt install redis-server` | Descargar desde redis.io (MSI) o vía WSL2 | `brew install redis` |
-| **Git** | cualquiera | `sudo apt install git` | Descargar desde git-scm.com | `brew install git` |
-
-### 5.2. Preparar la base de datos (PostgreSQL + pgvector)
-
-```bash
-# Linux / WSL2
-sudo -u postgres psql -c "CREATE USER perfil WITH PASSWORD 'perfil';"
-sudo -u postgres psql -c "CREATE DATABASE perfil_egreso OWNER perfil;"
-sudo -u postgres psql -d perfil_egreso -c "CREATE EXTENSION vector;"
-
-# Windows (desde psql.exe o PowerShell con psql en PATH)
-# psql -U postgres -c "CREATE USER perfil WITH PASSWORD 'perfil';"
-# psql -U postgres -c "CREATE DATABASE perfil_egreso OWNER perfil;"
-# psql -U postgres -d perfil_egreso -c "CREATE EXTENSION vector;"
-```
-
-### 5.3. Pasos de instalación
+- Python 3.11+ instalado
+- PostgreSQL 15+ con extensión pgvector instalada y corriendo
+- Git
 
 **Linux / macOS / WSL2:**
 
@@ -468,30 +419,8 @@ EMBEDDING_DEVICE=auto
 LOG_LEVEL=INFO
 EOF
 
-# 5. Iniciar servicios externos (si no los tienes ya)
-# PostgreSQL:
-sudo systemctl start postgresql    # Linux con systemd
-# pg_ctl -D /usr/local/var/postgresql@16 start  # macOS (Homebrew)
-
-# Redis:
-sudo systemctl start redis-server  # Linux con systemd
-# brew services start redis        # macOS
-
-# 6. Inicializar la base de datos
-cd ..
-python -c "from app.db.init_db import init_database; from app.db.session import SessionLocal; init_database(next(SessionLocal()))"
-
-# 7. Iniciar la API
-cd backend
-uvicorn app.main:app --reload --port 8000
-```
-
-**Windows (PowerShell):**
-
-```powershell
-# 1. Clonar
-git clone https://github.com/G2SantiRobeson/MVPFinalUltimoTodoListoDefinitivoIAA.git
-cd MVPFinalUltimoTodoListoDefinitivoIAA
+# 5. Iniciar PostgreSQL con pgvector (usa Docker solo para la base de datos)
+docker compose up -d db
 
 # 2. Entorno virtual
 python -m venv venv
@@ -634,10 +563,9 @@ curl http://localhost:8000/api/v1/ai-status
 | **sentence-transformers tarda mucho** | Primera descarga del modelo (~2 GB) | Normal. Docker lo cachea en `huggingface_cache`. Ejecuciones siguientes son rápidas. |
 | **El frontend no conecta** | Backend no está en `localhost:8000` | Verifica que la API esté corriendo. Revisa `docker compose ps` o `curl localhost:8000/api/v1/health`. |
 | **Los documentos se marcan "ocr_required"** | PDF escaneado, sin texto seleccionable | Usa PDF digital o DOCX en vez de escaneado. |
-| **El análisis no comienza** | Documentos no terminaron de procesarse | Espera a que el pipeline llegue a estado "completed". |
+| **El análisis no comienza** | Documentos no terminaron de procesarse | Espera a que los documentos queden en estado `ready`. |
 | **Error "No module named 'torch'"** | Dependencias de IA no instaladas (solo manual) | `pip install -e ".[ai]"` |
-| **Redis connection refused** | Redis no está corriendo | Docker: `docker compose up -d redis`. Manual: `sudo systemctl start redis-server`. |
-| **El token demo no funciona** | `DEMO_AUTH_ENABLED` en `false` | Verifica que no se haya cambiado la config por defecto. |
+| **El token demo no funciona** | `DEMO_AUTH_ENABLED` en `false` | No debería pasar con la configuración por defecto. |
 
 ---
 

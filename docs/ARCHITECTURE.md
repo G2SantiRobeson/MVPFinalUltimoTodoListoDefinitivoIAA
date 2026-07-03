@@ -8,7 +8,7 @@ procesamiento documental, evidencia trazable y APIs para dashboard.
 ```mermaid
 flowchart LR
   UI[Frontend existente] --> API[FastAPI]
-  API --> DB[(PostgreSQL/SQLite)]
+  API --> DB[(PostgreSQL + pgvector)]
   API --> FS[(Storage local/S3 futuro)]
   API --> BG[Background tasks]
   BG --> DOC[Extraccion PDF/DOCX/TXT]
@@ -22,6 +22,8 @@ flowchart LR
 ## Lo implementado
 
 - Backend FastAPI bajo `backend/app`.
+- PostgreSQL con pgvector como base principal para persistencia y embeddings.
+- SQLite queda disponible solo para pruebas o desarrollo local heredado.
 - Modelo de datos inicial para usuarios, roles, periodos, mallas, cursos,
   competencias, criterios, documentos, versiones, chunks, embeddings, evidencias,
   resultados, reportes y auditoria.
@@ -34,6 +36,8 @@ flowchart LR
 - Scoring hibrido por similitud vectorial, cobertura lexica, frases clave y senales de seccion academica.
 - Evidencia con fragmento de origen y razones de coincidencia.
 - API para matriz, periodos, documentos, analisis, evidencia, reportes y usuario demo.
+- Exportacion Excel con hojas separadas de resumen, mapa de calor, detalle por curso,
+  detalle por competencia y brechas.
 
 ## Pendiente para produccion
 
