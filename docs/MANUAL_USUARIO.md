@@ -213,35 +213,20 @@ La **matriz curricular** (o "matriz de tributación") es un archivo Excel que de
 
 ### 4.1. Formato esperado del archivo
 
-El archivo Excel (`.xlsx`) debe contener las siguientes hojas con estos encabezados:
+El archivo Excel (`.xlsx`) debe contener la matriz de tributación en la primera hoja del libro. El sistema utiliza la primera hoja disponible, por lo que el nombre de la hoja es configurable.
 
-**Hoja 1 — Cursos** (nombre configurable):
+| Ubicación | Contenido esperado |
+|-----------|--------------------|
+| Fila 1, columnas D en adelante | Grupo o categoría de competencias. |
+| Fila 2, columnas D en adelante | Descripción de cada competencia. |
+| Columna A, desde fila 3 | Código de la asignatura. |
+| Columna B, desde fila 3 | Nombre de la asignatura. |
+| Columna C, desde fila 3 | Semestre en que se imparte. |
+| Columnas D en adelante, desde fila 3 | Marcar con `X` cuando la asignatura tributa a la competencia correspondiente. |
 
-| Columna | Descripción |
-|---------|-------------|
-| `COD_ASIG` | Código de la asignatura |
-| `ASIGNATURA` | Nombre del curso |
-| `SEMESTRE` | Semestre en que se imparte |
-| `AREA` | Área de formación |
-| `HRS_SEMANALES` | Horas semanales |
+El sistema interpreta cada `X` como una relación de tributación entre la asignatura de esa fila y la competencia de esa columna. Las celdas vacías indican que no existe tributación declarada.
 
-**Hoja 2 — Competencias** (nombre configurable):
-
-| Columna | Descripción |
-|---------|-------------|
-| `COD_COMP` | Código de la competencia |
-| `COMPETENCIA` | Nombre de la competencia |
-| `DESCRIPCION` | Descripción detallada |
-| `TIPO` | Tipo (genérica, específica, sello) |
-
-**Hoja 3 — Tributación** (nombre configurable):
-
-| Columna | Descripción |
-|---------|-------------|
-| `COD_ASIG` | Código de la asignatura (debe coincidir con el de Cursos) |
-| `COD_COMP` | Código de la competencia (debe coincidir con el de Competencias) |
-
-[SCREENSHOT: Ejemplo de archivo Excel abierto mostrando las hojas y su estructura]
+[SCREENSHOT: Ejemplo de archivo Excel abierto mostrando la matriz de tributación]
 
 Puede usar los archivos de ejemplo incluidos en `matrices_tributacion/` como referencia.
 
@@ -292,14 +277,15 @@ Una vez subidos, los documentos pasan por varias etapas:
 
 | Estado | Significado |
 |--------|-------------|
-| `pending` | Esperando ser procesado. |
+| `uploaded` | Archivo cargado y registrado en el sistema, pendiente de procesamiento. |
 | `extracting` | Extrayendo texto del archivo. |
-| `extracted` | Texto extraído correctamente. |
-| `chunking` | Segmentando el texto en fragmentos. |
-| `embedding` | Generando vectores de embedding. |
-| `completed` | Procesamiento completado. |
-| `error` | Ocurrió un error durante el procesamiento. |
 | `ocr_required` | El PDF no tiene texto seleccionable; se necesita OCR. |
+| `ready` | Documento procesado correctamente y disponible para análisis. |
+| `failed` | Ocurrió un error durante el procesamiento del documento. |
+| `running` | Tarea interna de procesamiento en ejecución. |
+| `completed` | Tarea interna de procesamiento completada correctamente. |
+
+> **Nota**: `ready` es el estado del documento cuando ya puede ser usado en el análisis. `running` y `completed` corresponden a la tarea interna de procesamiento.
 
 En el pipeline visual de la vista "Períodos y tesis" puede ver el avance general de todos los documentos.
 
@@ -319,7 +305,7 @@ Antes de ejecutar un análisis, asegúrese de tener:
 
 1. Un **período académico** creado y seleccionado.
 2. Una **matriz curricular** cargada y asociada al período.
-3. Al menos un **documento** subido y procesado (estado `completed`).
+3. Al menos un **documento** subido y procesado (estado `ready`).
 
 ### 6.2. Iniciar el análisis
 
@@ -595,7 +581,7 @@ El archivo Excel contiene:
 
 6. **Sin antivirus**: los archivos subidos no pasan por un escáner de virus. En producción, debe agregarse un paso de verificación.
 
-7. **Dependencia de GPU**: los embeddings con `BAAI/bge-m3` se ejecutan en GPU por defecto. Sin GPU, el proceso es significativamente más lento.
+7. **Uso de CPU/GPU**: los embeddings con `BAAI/bge-m3` usan `EMBEDDING_DEVICE=auto`; el sistema utiliza GPU si está disponible y configurada, y en caso contrario ejecuta en CPU con menor rendimiento.
 
 8. **Calidad académica no validada**: el sistema encuentra similitud textual, pero la relevancia académica real debe ser validada por evaluadores humanos.
 
@@ -607,9 +593,9 @@ El archivo Excel contiene:
 |----------|---------------|----------|
 | **No se carga la interfaz** | El backend no está disponible. | Abra el frontend igualmente; usará datos simulados. Si necesita datos reales, verifique que el backend esté corriendo. |
 | **No puedo crear un período** | No hay matrices cargadas. | Primero cargue al menos una matriz curricular en la sección "Mallas cargadas". |
-| **La matriz no se carga** | El archivo Excel no tiene el formato esperado. | Verifique que el Excel tenga hojas con los nombres y encabezados correctos (ver sección 4.1). |
+| **La matriz no se carga** | El archivo Excel no tiene el formato esperado. | Verifique que la primera hoja tenga cursos en filas, competencias en columnas y marcas `X` según la sección 4.1. |
 | **Un documento aparece como "ocr_required"** | El PDF no tiene texto seleccionable. | Use un PDF con texto real (no escaneado) o convierta el documento a DOCX. |
-| **El análisis no comienza** | No hay documentos procesados. | Espere a que los documentos terminen de procesarse (estado "completed"). |
+| **El análisis no comienza** | No hay documentos procesados. | Espere a que los documentos terminen de procesarse (estado `ready`). |
 | **El heatmap está vacío** | No se ha ejecutado el análisis o no hay evidencias. | Ejecute el análisis y verifique que los documentos contengan texto relevante. |
 | **No aparecen comentarios LLM** | API key no configurada. | Contacte al administrador técnico. El sistema usará comentarios locales. |
 | **La exportación falla** | No hay datos para el período. | Asegúrese de haber ejecutado el análisis al menos una vez. |
