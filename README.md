@@ -43,8 +43,6 @@ Este repositorio contiene el codigo fuente completo del proyecto:
 
 - API FastAPI.
 - PostgreSQL con pgvector.
-- Redis.
-- MinIO.
 - Volumen `huggingface_cache` para conservar la descarga del modelo `BAAI/bge-m3`.
 
 ### Dependencias Python del backend
@@ -78,7 +76,8 @@ PyTorch y luego instala el extra `.[ai]`.
 El sistema puede funcionar en CPU o GPU:
 
 - Por defecto, `EMBEDDING_DEVICE=auto` detecta CUDA si el contenedor tiene acceso a GPU; si no, usa CPU.
-- Para usar GPU NVIDIA con Docker, descomenta `gpus: all` en `docker-compose.yml`.
+- El `docker-compose.yml` trae `gpus: all` activo para usar GPU NVIDIA cuando el entorno lo soporta.
+- Si no tienes GPU NVIDIA o Docker falla al solicitar GPU, comenta o elimina `gpus: all`; el backend seguirá funcionando en CPU.
 - En Windows con Docker Desktop normalmente basta con tener drivers NVIDIA y WSL2 habilitado.
 - En Linux nativo o Docker Engine dentro de WSL2 puede ser necesario instalar NVIDIA Container Toolkit.
 
@@ -99,8 +98,6 @@ Servicios principales:
 - API: `http://localhost:8000`
 - Swagger UI: `http://localhost:8000/docs`
 - PostgreSQL: `localhost:5432`
-- Redis: `localhost:6379`
-- MinIO Console: `http://localhost:9001`
 
 Para detener los servicios sin borrar datos:
 
@@ -122,17 +119,13 @@ docker compose down -v
 nvidia-smi
 ```
 
-2. En `docker-compose.yml`, cambia:
-
-```yaml
-# gpus: all
-```
-
-por:
+2. En `docker-compose.yml`, deja activa la línea:
 
 ```yaml
 gpus: all
 ```
+
+Si no tienes GPU NVIDIA, comenta o elimina esa línea antes de levantar Docker.
 
 3. Reconstruye y levanta la API:
 
@@ -172,10 +165,10 @@ Resultado esperado sin GPU:
 
 Usa esta opcion solo si no quieres ejecutar la API dentro de Docker.
 
-1. Levanta servicios auxiliares:
+1. Levanta PostgreSQL con pgvector:
 
 ```powershell
-docker compose up -d db redis minio
+docker compose up -d db
 ```
 
 2. Crea entorno virtual:

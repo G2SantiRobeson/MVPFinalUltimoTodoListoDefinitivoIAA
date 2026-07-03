@@ -69,8 +69,6 @@ El `docker-compose.yml` del repositorio trae `gpus: all` activo para acelerar el
 |----------|-----|---------------|
 | **API** (FastAPI) | Backend principal, orquesta el análisis | Construida desde `backend/Dockerfile` |
 | **PostgreSQL + pgvector** | Base de datos con extension vectorial | `pgvector/pgvector:pg16` |
-| **Redis** | Caché y cola de tareas | `redis:7-alpine` |
-| **MinIO** | Almacenamiento de documentos subidos | `minio/minio:latest` |
 
 ---
 
@@ -388,8 +386,7 @@ curl http://localhost:8000/api/v1/ai-status
 
 ## 5. Instalación Manual (sin Docker)
 
-Usa este método si no puedes o no quieres usar Docker. Requiere instalar y
-configurar cada servicio por separado.
+Usa este método si no quieres ejecutar la API dentro de Docker. Requiere Python y una base PostgreSQL con pgvector disponible.
 
 ### 5.1. Requisitos previos
 
@@ -397,67 +394,73 @@ configurar cada servicio por separado.
 - PostgreSQL 15+ con extensión pgvector instalada y corriendo
 - Git
 
+### 5.2. Preparar la base de datos
+
+Si ya tienes PostgreSQL instalado, crea la base de datos y habilita pgvector:
+
+```bash
+psql -U postgres -c "CREATE USER perfil WITH PASSWORD 'perfil';"
+psql -U postgres -c "CREATE DATABASE perfil_egreso OWNER perfil;"
+psql -U postgres -d perfil_egreso -c "CREATE EXTENSION IF NOT EXISTS vector;"
+```
+
+También puedes levantar solo PostgreSQL con Docker:
+
+```bash
+docker compose up -d db
+```
+
+### 5.3. Pasos de instalación
+
 **Linux / macOS / WSL2:**
 
 ```bash
-# 1. Clonar
 git clone https://github.com/G2SantiRobeson/MVPFinalUltimoTodoListoDefinitivoIAA.git
-cd MVPFinalUltimoTodoListoDefinitivoIAA
+cd MVPFinalUltimoTodoListoDefinitivoIAA/backend
 
-# 2. Entorno virtual
 python3 -m venv venv
 source venv/bin/activate
 
-# 3. Instalar backend con todas las dependencias de IA
-cd backend
 pip install -e ".[ai]"
 
-# 4. Crear .env con la conexión a BD
 cat > .env << 'EOF'
 DATABASE_URL=postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso
 EMBEDDING_DEVICE=auto
 LOG_LEVEL=INFO
 EOF
 
-# 5. Iniciar PostgreSQL con pgvector (usa Docker solo para la base de datos)
-docker compose up -d db
+uvicorn app.main:app --reload --port 8000
+```
 
-# 2. Entorno virtual
-python -m venv venv
-.\venv\Scripts\Activate.ps1
+**Windows PowerShell:**
 
-# 3. Instalar backend con todas las dependencias de IA
-cd backend
-pip install -e ".[ai]"
+```powershell
+git clone https://github.com/G2SantiRobeson/MVPFinalUltimoTodoListoDefinitivoIAA.git
+cd MVPFinalUltimoTodoListoDefinitivoIAA\backend
 
-# 4. Crear .env con la conexión a BD
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install -e ".[ai]"
+
 @"
 DATABASE_URL=postgresql+psycopg://perfil:perfil@localhost:5432/perfil_egreso
 EMBEDDING_DEVICE=auto
 LOG_LEVEL=INFO
 "@ | Out-File -FilePath .env -Encoding utf8
 
-# 5. Iniciar PostgreSQL y Redis (deben estar instalados como servicios de Windows)
-#    Normalmente ya arrancan automáticamente al iniciar Windows
-
-# 6. Inicializar la base de datos
-cd ..
-python -c "from app.db.init_db import init_database; from app.db.session import SessionLocal; init_database(next(SessionLocal()))"
-
-# 7. Iniciar la API
-cd backend
 uvicorn app.main:app --reload --port 8000
 ```
 
 ### 5.4. Alternativa mixta (backend fuera de Docker, servicios en Docker)
 
-Si ya tienes Python pero no quieres instalar PostgreSQL y Redis nativos:
+Si ya tienes Python pero no quieres instalar PostgreSQL nativo:
 
 ```bash
-docker compose up -d db redis minio
+docker compose up -d db
 ```
 
-Esto levanta solo los servicios de infraestructura. Luego sigue los pasos
+Esto levanta solo la base de datos. Luego sigue los pasos
 5.3 desde el paso 2 (entorno virtual) para correr la API fuera del contenedor.
 
 Abre `index.html` desde tu navegador (doble clic).
