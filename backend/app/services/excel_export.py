@@ -8,27 +8,35 @@ from app.db.models import AcademicPeriod, Competency, Course, CourseCompetency, 
 from app.services.analysis import build_cell_detail, build_period_analysis
 
 
+LOW_SCORE_CUTOFF = 55
+HIGH_SCORE_CUTOFF = 75
+
+PENDING_SCORE_COLOR = "#f8faf8"
+HIGH_SCORE_COLOR = "#78b66b"
+MEDIUM_SCORE_COLOR = "#f4ce7a"
+LOW_SCORE_COLOR = "#f1c7bf"
+NOT_APPLICABLE_COLOR = "#e1e7e2"
+NOT_APPLICABLE_FILL = "#dfe7e1"
+
+
 def _score_level(score: int | float | None) -> str:
     if score is None:
         return "Pendiente"
-    if score >= 75:
+    if score >= HIGH_SCORE_CUTOFF:
         return "Alta"
-    if score >= 55:
+    if score >= LOW_SCORE_CUTOFF:
         return "Media"
     return "Baja"
 
 
 def _score_color(score: int | float | None) -> str:
     if score is None:
-        return "#f8faf8"  # blank/pending
-    if score >= 75:
-        # Green
-        return "#78b66b"
-    if score >= 55:
-        # Yellow
-        return "#f4ce7a"
-    # Red
-    return "#f1c7bf"
+        return PENDING_SCORE_COLOR
+    if score >= HIGH_SCORE_CUTOFF:
+        return HIGH_SCORE_COLOR
+    if score >= LOW_SCORE_CUTOFF:
+        return MEDIUM_SCORE_COLOR
+    return LOW_SCORE_COLOR
 
 
 def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) -> bytes:
@@ -48,53 +56,79 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
     workbook = xlsxwriter.Workbook(output, {"in_memory": True})
 
     # Formats
-    header_format = workbook.add_format({
-        "bold": True,
-        "bg_color": "#17201c",
-        "font_color": "#ffffff",
-        "align": "center",
-        "valign": "vcenter",
-        "text_wrap": True,
-        "border": 1,
-    })
-    
-    title_format = workbook.add_format({
-        "bold": True,
-        "font_size": 16,
-        "font_color": "#0f766e",
-        "bottom": 2,
-        "bottom_color": "#0f766e"
-    })
+    header_format = workbook.add_format(
+        {
+            "bold": True,
+            "bg_color": "#17201c",
+            "font_color": "#ffffff",
+            "align": "center",
+            "valign": "vcenter",
+            "text_wrap": True,
+            "border": 1,
+        }
+    )
 
-    subtitle_format = workbook.add_format({
-        "bold": True,
-        "font_size": 12,
-        "font_color": "#17201c",
-        "top": 1,
-        "bottom": 1
-    })
+    title_format = workbook.add_format(
+        {
+            "bold": True,
+            "font_size": 16,
+            "font_color": "#0f766e",
+            "bottom": 2,
+            "bottom_color": "#0f766e",
+        }
+    )
+
+    subtitle_format = workbook.add_format(
+        {
+            "bold": True,
+            "font_size": 12,
+            "font_color": "#17201c",
+            "top": 1,
+            "bottom": 1,
+        }
+    )
+
+    def _center_cell_format(bg_color: str, bold: bool = False, **overrides: object) -> object:
+        properties = {
+            "bg_color": bg_color,
+            "border": 1,
+            "align": "center",
+            "valign": "vcenter",
+        }
+        if bold:
+            properties["bold"] = True
+        properties.update(overrides)
+        return workbook.add_format(properties)
 
     cell_formats = {
-        "Pendiente": workbook.add_format({"bg_color": _score_color(None), "border": 1, "align": "center", "valign": "vcenter"}),
-        "Alta": workbook.add_format({"bg_color": _score_color(80), "border": 1, "align": "center", "valign": "vcenter", "bold": True}),
-        "Media": workbook.add_format({"bg_color": _score_color(60), "border": 1, "align": "center", "valign": "vcenter", "bold": True}),
-        "Baja": workbook.add_format({"bg_color": _score_color(40), "border": 1, "align": "center", "valign": "vcenter", "bold": True}),
-        "N/A": workbook.add_format({"bg_color": "#e1e7e2", "border": 1, "align": "center", "valign": "vcenter", "pattern": 3, "fg_color": "#dfe7e1"}),
+        "Pendiente": _center_cell_format(_score_color(None)),
+        "Alta": _center_cell_format(_score_color(80), bold=True),
+        "Media": _center_cell_format(_score_color(60), bold=True),
+        "Baja": _center_cell_format(_score_color(40), bold=True),
+        "N/A": _center_cell_format(
+            NOT_APPLICABLE_COLOR,
+            pattern=3,
+            fg_color=NOT_APPLICABLE_FILL,
+        ),
     }
 
-    text_wrap_format = workbook.add_format({
-        "text_wrap": True,
-        "valign": "top",
-        "border": 1
-    })
-    
-    bold_wrap_format = workbook.add_format({
-        "bold": True,
-        "text_wrap": True,
-        "valign": "top",
-        "border": 1,
-        "bg_color": "#eef3ef"
-    })
+    text_wrap_format = workbook.add_format(
+        {
+            "text_wrap": True,
+            "valign": "top",
+            "border": 1,
+        }
+    )
+
+    bold_wrap_format = workbook.add_format(
+        {
+            "bold": True,
+            "text_wrap": True,
+            "valign": "top",
+            "border": 1,
+            "bg_color": "#eef3ef",
+        }
+    )
 
     # Disable LLM globally for the export to ensure fast generation
     settings = get_settings()
@@ -121,8 +155,9 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
             score_map = {(c["course_id"], c["competency_id"]): c for c in cells_data}
 
             # 2. Write General Metrics
-            ws.write("A1", f"Reporte de Validación de Perfil de Egreso - Período: {period.name}", title_format)
-            ws.merge_range("A1:G1", f"Reporte de Validación de Perfil de Egreso - Período: {period.name}", title_format)
+            report_title = f"Reporte de Validación de Perfil de Egreso - Período: {period.name}"
+            ws.write("A1", report_title, title_format)
+            ws.merge_range("A1:G1", report_title, title_format)
             
             ws.write("A3", "Métricas Generales", subtitle_format)
             ws.merge_range("A3:C3", "Métricas Generales", subtitle_format)
@@ -202,7 +237,11 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
             # 4. Detailed Evidence List
             detail_start = current_row + 2
             ws.write(detail_start, 0, "Detalle Trazable por Celda", subtitle_format)
-            ws.merge_range(f"A{detail_start + 1}:G{detail_start + 1}", "Detalle Trazable por Celda", subtitle_format)
+            ws.merge_range(
+                f"A{detail_start + 1}:G{detail_start + 1}",
+                "Detalle Trazable por Celda",
+                subtitle_format,
+            )
 
             headers = [
                 "Curso", "Competencia", "Puntaje", "Nivel", 
@@ -229,10 +268,15 @@ def export_periods_to_excel(db: Session, period_ids: list[str] | None = None) ->
                 except Exception:
                     detail = {}
 
-                ws.write(detail_row, 0, f"{cell_info['course_code']} - {cell_info['course_title']}", text_wrap_format)
+                course_label = f"{cell_info['course_code']} - {cell_info['course_title']}"
+                ws.write(detail_row, 0, course_label, text_wrap_format)
                 ws.write(detail_row, 1, cell_info["competency_code"], text_wrap_format)
-                ws.write(detail_row, 2, f"{score}%" if score is not None else "Pendiente", cell_formats[level] if score is not None else cell_formats["Pendiente"])
-                ws.write(detail_row, 3, level, cell_formats[level] if score is not None else cell_formats["Pendiente"])
+                score_text = f"{score}%" if score is not None else "Pendiente"
+                score_format = (
+                    cell_formats[level] if score is not None else cell_formats["Pendiente"]
+                )
+                ws.write(detail_row, 2, score_text, score_format)
+                ws.write(detail_row, 3, level, score_format)
                 ws.write(detail_row, 4, detail.get("justification", ""), text_wrap_format)
                 ws.write(detail_row, 5, detail.get("general_comment", ""), text_wrap_format)
                 ws.write(detail_row, 6, detail.get("evidence_text", ""), text_wrap_format)

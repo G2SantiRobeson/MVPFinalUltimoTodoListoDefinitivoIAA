@@ -14,10 +14,33 @@ from app.db.models import (
 )
 from app.db.session import get_db
 from app.schemas.api import EvidenceOut, EvidenceReviewIn
-from app.services.analysis import review_evidence_score
+from app.services.analysis import _score_to_percent, review_evidence_score
 
 
 router = APIRouter()
+
+DEFAULT_EVIDENCE_LIMIT = 50
+MAX_EVIDENCE_RESPONSE_LIMIT = 100
+QUERY_LIMIT_MULTIPLIER = 8
+MIN_EVIDENCE_QUERY_LIMIT = 100
+MAX_EVIDENCE_QUERY_LIMIT = 500
+EFFECTIVE_SCORE_DENOMINATOR = 100.0
+
+MERGED_EVIDENCE_FIELDS = (
+    "id",
+    "course_id",
+    "course_code",
+    "course_title",
+    "semantic_score",
+    "confidence",
+    "manual_score",
+    "manual_verdict",
+    "effective_score",
+    "verdict",
+    "observation",
+    "manual_observation",
+    "reviewed_at",
+)
 
 
 def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
@@ -44,21 +67,7 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
         if not any(cell["course_id"] == item["course_id"] for cell in existing["related_cells"]):
             existing["related_cells"].append(related_cell)
         if item["confidence"] > existing["confidence"]:
-            for field in [
-                "id",
-                "course_id",
-                "course_code",
-                "course_title",
-                "semantic_score",
-                "confidence",
-                "manual_score",
-                "manual_verdict",
-                "effective_score",
-                "verdict",
-                "observation",
-                "manual_observation",
-                "reviewed_at",
-            ]:
+            for field in MERGED_EVIDENCE_FIELDS:
                 if field in item:
                     existing[field] = item[field]
 
@@ -77,8 +86,6 @@ def _merge_duplicate_fragments(items: list[dict]) -> list[dict]:
 
 def _evidence_payload(db: Session, evidence: Evidence) -> dict:
     settings = get_settings()
-    from app.services.analysis import _score_to_percent
-
     criterion = db.get(EvaluationCriterion, evidence.criterion_id)
     competency = db.get(Competency, criterion.competency_id) if criterion else None
     course = db.get(Course, evidence.course_id)
@@ -114,7 +121,7 @@ def _evidence_payload(db: Session, evidence: Evidence) -> dict:
         "page": chunk.page if chunk else 0,
         "text": chunk.text if chunk else "",
         "semantic_score": evidence.semantic_score,
-        "confidence": effective_score / 100.0,
+        "confidence": effective_score / EFFECTIVE_SCORE_DENOMINATOR,
         "manual_score": round(evidence.manual_score) if evidence.manual_score is not None else None,
         "manual_verdict": evidence.manual_verdict,
         "effective_score": effective_score,
@@ -125,13 +132,24 @@ def _evidence_payload(db: Session, evidence: Evidence) -> dict:
     }
 
 
+def _query_limit(limit: int) -> int:
+    return min(
+        max(limit * QUERY_LIMIT_MULTIPLIER, MIN_EVIDENCE_QUERY_LIMIT),
+        MAX_EVIDENCE_QUERY_LIMIT,
+    )
+
+
+def _response_limit(limit: int) -> int:
+    return min(limit, MAX_EVIDENCE_RESPONSE_LIMIT)
+
+
 @router.get("", response_model=list[EvidenceOut])
 def list_evidence(
     period_id: str | None = None,
     criterion_id: str | None = None,
     competency_code: str | None = None,
     course_id: str | None = None,
-    limit: int = 50,
+    limit: int = DEFAULT_EVIDENCE_LIMIT,
     db: Session = Depends(get_db),
 ) -> list[dict]:
     query = db.query(Evidence)
@@ -148,13 +166,13 @@ def list_evidence(
     if course_id:
         query = query.filter(Evidence.course_id == course_id)
 
-    rows = query.order_by(Evidence.confidence.desc()).limit(min(max(limit * 8, 100), 500)).all()
+    rows = query.order_by(Evidence.confidence.desc()).limit(_query_limit(limit)).all()
     payload = [_evidence_payload(db, evidence) for evidence in rows]
     if not course_id:
         payload = _merge_duplicate_fragments(payload)
     for item in payload:
         item.pop("_chunk_id", None)
-    return payload[: min(limit, 100)]
+    return payload[: _response_limit(limit)]
 
 
 @router.patch("/{evidence_id}", response_model=EvidenceOut)
