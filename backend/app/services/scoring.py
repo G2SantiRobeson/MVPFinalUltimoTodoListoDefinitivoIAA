@@ -10,6 +10,26 @@ from app.services.embeddings import EmbeddingService
 
 TOKEN_RE = re.compile(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+")
 
+TOKEN_MIN_LENGTH = 3
+
+NUMERIC_TOKEN_WEIGHT = 0.5
+MEDIUM_TOKEN_MIN_LENGTH = 6
+MEDIUM_TOKEN_WEIGHT = 1.15
+LONG_TOKEN_MIN_LENGTH = 9
+LONG_TOKEN_WEIGHT = 1.35
+DEFAULT_TOKEN_WEIGHT = 1.0
+
+LEXICAL_COVERAGE_WEIGHT = 0.85
+LEXICAL_JACCARD_WEIGHT = 0.15
+MAX_MATCHED_TERMS = 12
+
+SECTION_SIGNAL_NORMALIZER = 3
+
+HYBRID_SEMANTIC_WEIGHT = 0.42
+HYBRID_LEXICAL_WEIGHT = 0.42
+HYBRID_PHRASE_WEIGHT = 0.10
+HYBRID_SECTION_WEIGHT = 0.06
+
 STOPWORDS = {
     "a",
     "al",
@@ -107,7 +127,7 @@ def tokenize(text: str) -> list[str]:
     """
     normalized = normalize_text(text)
     tokens = TOKEN_RE.findall(normalized)
-    return [token for token in tokens if len(token) > 2 and token not in STOPWORDS]
+    return [token for token in tokens if len(token) >= TOKEN_MIN_LENGTH and token not in STOPWORDS]
 
 
 def expand_tokens(tokens: list[str]) -> list[str]:
@@ -138,13 +158,13 @@ def _token_weights(tokens: list[str]) -> dict[str, float]:
     weights: dict[str, float] = {}
     for token in tokens:
         if token.isdigit():
-            weight = 0.5
-        elif len(token) >= 9:
-            weight = 1.35
-        elif len(token) >= 6:
-            weight = 1.15
+            weight = NUMERIC_TOKEN_WEIGHT
+        elif len(token) >= LONG_TOKEN_MIN_LENGTH:
+            weight = LONG_TOKEN_WEIGHT
+        elif len(token) >= MEDIUM_TOKEN_MIN_LENGTH:
+            weight = MEDIUM_TOKEN_WEIGHT
         else:
-            weight = 1.0
+            weight = DEFAULT_TOKEN_WEIGHT
         weights[token] = max(weights.get(token, 0.0), weight)
     return weights
 
@@ -175,7 +195,8 @@ def lexical_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> tuple[f
         len(set(query_tokens).union(chunk_set)),
         1,
     )
-    return min(1.0, coverage * 0.85 + jaccard * 0.15), matched[:12]
+    score = coverage * LEXICAL_COVERAGE_WEIGHT + jaccard * LEXICAL_JACCARD_WEIGHT
+    return min(1.0, score), matched[:MAX_MATCHED_TERMS]
 
 
 def phrase_overlap(query_tokens: list[str], chunk_tokens: list[str]) -> float:
@@ -214,7 +235,7 @@ def section_signal(chunk_tokens: list[str]) -> float:
     if not chunk_tokens:
         return 0.0
     matches = len(set(chunk_tokens).intersection(ACADEMIC_SECTION_TERMS))
-    return min(1.0, matches / 3)
+    return min(1.0, matches / SECTION_SIGNAL_NORMALIZER)
 
 
 class HybridEvidenceRanker:
@@ -244,7 +265,12 @@ class HybridEvidenceRanker:
             section = section_signal(chunk_tokens)
 
             # Semantic signal helps recall; lexical/phrase evidence prevents vague matches.
-            hybrid = semantic * 0.42 + lexical * 0.42 + phrase * 0.10 + section * 0.06
+            hybrid = (
+                semantic * HYBRID_SEMANTIC_WEIGHT
+                + lexical * HYBRID_LEXICAL_WEIGHT
+                + phrase * HYBRID_PHRASE_WEIGHT
+                + section * HYBRID_SECTION_WEIGHT
+            )
             hybrid = max(0.0, min(1.0, hybrid))
             ranked.append(
                 RankedChunk(

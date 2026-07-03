@@ -11,6 +11,7 @@ NS = {
     "a": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
     "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
 }
+SPREADSHEET_TEXT_NODE = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"
 
 COMPETENCY_CODES = [
     "U1",
@@ -33,6 +34,7 @@ COMPETENCY_CODES = [
     "TCC2",
     "TCC3",
 ]
+MAX_MATRIX_ROWS = 300
 
 
 @dataclass(frozen=True)
@@ -75,7 +77,7 @@ def _sheet_cells(zipped: zipfile.ZipFile, sheet_path: str) -> dict[tuple[int, in
         for item in root.findall("a:si", NS):
             text = "".join(
                 node.text or ""
-                for node in item.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t")
+                for node in item.iter(SPREADSHEET_TEXT_NODE)
             )
             shared_strings.append(text)
 
@@ -94,9 +96,7 @@ def _sheet_cells(zipped: zipfile.ZipFile, sheet_path: str) -> dict[tuple[int, in
         elif kind == "inlineStr" and inline_node is not None:
             value = "".join(
                 node.text or ""
-                for node in inline_node.iter(
-                    "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"
-                )
+                for node in inline_node.iter(SPREADSHEET_TEXT_NODE)
             )
         elif value_node is not None:
             value = value_node.text or ""
@@ -160,7 +160,7 @@ def load_matrix_from_xlsx(path: Path) -> CurriculumMatrix:
 
     courses: list[MatrixCourse] = []
     row = 3
-    while row < 300:
+    while row < MAX_MATRIX_ROWS:
         code = cells.get((row, 1), "")
         title = cells.get((row, 2), "")
         semester = cells.get((row, 3), "")
